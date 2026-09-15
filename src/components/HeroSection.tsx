@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Download, ChevronDown } from 'lucide-react';
+import { ArrowRight, Download } from 'lucide-react';
 import { Language } from '../types';
 
 interface HeroSectionProps {
@@ -132,16 +132,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       </div>
 
-      {/* Subtle Scroll Cue at the bottom */}
-      <a
-        href="#about"
-        className="relative z-10 mt-auto pt-2 pb-1 flex flex-col items-center text-[#565e74] hover:text-[#2563eb] transition-colors group cursor-pointer"
-      >
-        <span className="font-mono text-[10px] tracking-wider uppercase mb-1 opacity-75 group-hover:opacity-100">
-          {language === 'fr' ? 'Défiler pour découvrir' : 'Scroll down'}
-        </span>
-        <ChevronDown className="w-4 h-4 text-[#2563eb] animate-bounce" />
-      </a>
     </section>
   );
 };

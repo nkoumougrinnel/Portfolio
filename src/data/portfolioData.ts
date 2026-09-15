@@ -1,6 +1,6 @@
 import { Project, SkillCategory, ExperienceItem, EducationItem, ActivityItem } from '../types';
 
-export const PROFILE_AVATAR = "https://lh3.googleusercontent.com/aida/AEtjO1VZ7zjDbS7OyCljsV2su1R8YTGAlRO4uSirQwiKCDI8XFxJwoFj5zDbETULIpfRZB9O8Pxg_gaAzHE6l7N8OZeLe4JwMi-WLRgpDV2sA33-8rx5DE78eqzGlpelcBA1CuygVFbu8a9uw-ja3MeAFaD88fkeBdmb1AbFGIXZe0SzRBlsX-B0jOUMJ1MVD1powyVTGuwDEqhyHjEI92iT-E6C9a6zscxzdXQbdgCwaNhS-BjT2RPT0pj1";
+export const PROFILE_AVATAR = "/moi.jpeg";
 
 export const DEFAULT_FEATURED_MOCKUP = "https://lh3.googleusercontent.com/aida-public/AB6AXuBHQ3lRjT2iUyteB1MmgW2IeZ5zHWRo1oUR2FnkxtLoNgBqFm1HuIg2YACtRsc8yzkDcbS3ltTJ8xBGf5K5i7F9YhSLABS0bSCK1XT-n2WksvoBOILD_tM3kpvdZX4gsYIg1jyC1kgetBZVdsoKBPz-mx6ZsrBVYjDE9WaCDoGi4jjL5f_lezdl2A7FDQJVCi8xHXeYmgSBl0h3J0o2Ii-UZxWK4zrgGG8EaSxmdjG9EuXD4s-b5WY";
 

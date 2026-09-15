@@ -1,6 +1,89 @@
-import React from 'react';
-import { X, Printer, MapPin, Phone, Mail, Github, Globe, Linkedin, ArrowUpRight } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { X, Download, Phone, Mail, Github, Globe, Linkedin, ArrowUpRight } from 'lucide-react';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { Language } from '../types';
+
+/** Largeur desktop du CV (équivalent max-w-4xl) — utilisée pour l'export PDF sur tous les écrans */
+const PDF_LAYOUT_WIDTH_PX = 896;
+
+function sanitizeCssForCanvas(clonedDocument: Document) {
+  const root = clonedDocument.documentElement;
+
+  const cleanCSS = (css: string) =>
+    css
+      .replace(/oklab\([^)]*\)/g, '#0b1c30')
+      .replace(/oklch\([^)]*\)/g, '#0b1c30')
+      .replace(/color-mix\([^)]*\)/g, '#0b1c30');
+
+  clonedDocument.querySelectorAll('style').forEach((tag) => {
+    if (tag.textContent) {
+      tag.textContent = cleanCSS(tag.textContent);
+    }
+  });
+
+  const allElements = [root, ...Array.from(clonedDocument.querySelectorAll('*'))];
+  allElements.forEach((el) => {
+    if (!(el instanceof HTMLElement)) return;
+
+    if (el.getAttribute('style')) {
+      el.setAttribute('style', cleanCSS(el.getAttribute('style')!));
+    }
+
+    const computed = window.getComputedStyle(el);
+    ['color', 'backgroundColor', 'borderColor', 'boxShadow', 'textShadow'].forEach((prop) => {
+      const val = computed.getPropertyValue(prop);
+      if (val && (val.includes('oklab') || val.includes('oklch') || val.includes('color-mix'))) {
+        el.style.setProperty(prop, prop === 'color' ? '#0b1c30' : '#ffffff', 'important');
+      }
+    });
+  });
+}
+
+/** Force la mise en page 2 colonnes desktop, indépendamment du viewport (preview mobile incluse) */
+function applyDesktopPdfLayout(clonedDocument: Document) {
+  const cvDoc = clonedDocument.querySelector('[data-cv-document]');
+  if (!(cvDoc instanceof HTMLElement)) return;
+
+  cvDoc.style.setProperty('width', `${PDF_LAYOUT_WIDTH_PX}px`, 'important');
+  cvDoc.style.setProperty('overflow', 'visible', 'important');
+  cvDoc.style.setProperty('height', 'auto', 'important');
+  cvDoc.style.setProperty('max-height', 'none', 'important');
+
+  const layout = cvDoc.firstElementChild;
+  if (layout instanceof HTMLElement) {
+    layout.style.setProperty('display', 'flex', 'important');
+    layout.style.setProperty('flex-direction', 'row', 'important');
+  }
+
+  const aside = cvDoc.querySelector('aside');
+  if (aside instanceof HTMLElement) {
+    aside.style.setProperty('width', '30%', 'important');
+    aside.style.setProperty('flex-shrink', '0', 'important');
+    aside.style.setProperty('border-bottom', 'none', 'important');
+    aside.style.setProperty('border-right', '1px solid #e5eeff', 'important');
+    aside.style.setProperty('padding', '1.5rem', 'important');
+  }
+
+  const main = cvDoc.querySelector('main');
+  if (main instanceof HTMLElement) {
+    main.style.setProperty('width', '70%', 'important');
+    main.style.setProperty('flex', '1 1 0%', 'important');
+    main.style.setProperty('padding', '2rem', 'important');
+  }
+
+  cvDoc.querySelectorAll('div.flex.flex-col.justify-between').forEach((el) => {
+    if (el instanceof HTMLElement) {
+      el.style.setProperty('flex-direction', 'row', 'important');
+      el.style.setProperty('align-items', 'baseline', 'important');
+    }
+  });
+
+  const title = cvDoc.querySelector('h1');
+  if (title instanceof HTMLElement) {
+    title.style.setProperty('font-size', '1.5rem', 'important');
+  }
+}
 
 interface CvModalProps {
   isOpen: boolean;
@@ -15,34 +98,95 @@ export const CvModal: React.FC<CvModalProps> = ({
   onClose,
   avatarUrl,
 }) => {
-  if (!isOpen) return null;
+  const documentRef = useRef<HTMLDivElement>(null);
 
-  const handlePrint = () => {
-    window.print();
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  const handleDownload = async () => {
+    if (!documentRef.current) return;
+
+    const element = documentRef.current;
+    const originalScrollTop = element.scrollTop;
+    element.scrollTop = 0;
+
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        windowWidth: PDF_LAYOUT_WIDTH_PX,
+        width: PDF_LAYOUT_WIDTH_PX,
+        scrollY: 0,
+        scrollX: 0,
+        onclone: (clonedDocument, clonedElement) => {
+          applyDesktopPdfLayout(clonedDocument);
+          sanitizeCssForCanvas(clonedDocument);
+
+          if (clonedElement instanceof HTMLElement) {
+            clonedElement.style.overflow = 'visible';
+            clonedElement.style.width = `${PDF_LAYOUT_WIDTH_PX}px`;
+            clonedElement.style.height = `${clonedElement.scrollHeight}px`;
+          }
+        },
+      });
+
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const margin = 10;
+      const contentWidth = pageWidth - margin * 2;
+      const contentHeight = pageHeight - margin * 2;
+      const imgWidth = contentWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+      let heightLeft = imgHeight;
+      let position = margin;
+
+      pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
+      heightLeft -= contentHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight + margin;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
+        heightLeft -= contentHeight;
+      }
+
+      pdf.save('CV-Nkoumou-Tjade-Grinnel-Germain.pdf');
+    } finally {
+      element.scrollTop = originalScrollTop;
+    }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-5 bg-[#0b1c30]/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl max-h-[92vh] bg-white rounded-2xl shadow-2xl border border-[#e5eeff] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0b1c30]/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-4xl bg-white sm:rounded-2xl shadow-2xl border border-[#e5eeff] overflow-hidden flex flex-col">
         {/* Modal Header Controls */}
         <div className="px-5 py-3 border-b border-[#e5eeff] flex items-center justify-between bg-[#f4f7fc] sticky top-0 z-20 print:hidden">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb]"></span>
+          <div className="flex items-center gap-2 min-w-0">
             <span className="font-mono text-xs font-bold text-[#0b1c30] tracking-wider uppercase">
-              Curriculum Vitae
-            </span>
-            <span className="font-mono text-xs text-[#565e74] hidden sm:inline">
-              · Nkoumou Tjade Grinnel Germain
+              <span className="sm:hidden">CV</span>
+              <span className="hidden sm:inline">Curriculum Vitae</span>
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <button
-              onClick={handlePrint}
+              onClick={handleDownload}
               className="px-3 py-1.5 rounded-lg bg-white border border-[#c3c6d7]/50 hover:bg-[#e5eeff] text-[#2563eb] text-xs font-mono font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span>{language === 'fr' ? 'Imprimer / PDF' : 'Print / PDF'}</span>
+              <Download className="w-3.5 h-3.5" />
+              <span>{language === 'fr' ? 'Télécharger' : 'Download'}</span>
             </button>
             <button
               onClick={onClose}
@@ -55,7 +199,7 @@ export const CvModal: React.FC<CvModalProps> = ({
         </div>
 
         {/* CV Document Container: 2 COLUMNS (30% GAUCHE / 70% DROITE) */}
-        <div className="overflow-y-auto flex-1 bg-white text-[#0b1c30]">
+        <div ref={documentRef} data-cv-document className="overflow-y-auto flex-1 bg-white text-[#0b1c30]">
           <div className="flex flex-col md:flex-row min-h-full">
             {/* ========================================================= */}
             {/* COLONNE GAUCHE — 30% */}
@@ -72,21 +216,14 @@ export const CvModal: React.FC<CvModalProps> = ({
                       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
                   }}
                 />
-                <span className="font-mono text-[11px] text-[#2563eb] font-bold uppercase tracking-wider">
-                  Yaoundé, Cameroun
-                </span>
               </div>
 
               {/* CONTACT */}
               <div>
                 <h3 className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
-                  {language === 'fr' ? 'CONTACT' : 'CONTACT'}
+                  Contact
                 </h3>
                 <div className="space-y-2 text-[#565e74]">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-[#2563eb] shrink-0" />
-                    <span>Yaoundé, Cameroun</span>
-                  </div>
                   <div className="flex items-center gap-2">
                     <Phone className="w-3.5 h-3.5 text-[#2563eb] shrink-0" />
                     <a href="tel:+237694316630" className="hover:text-[#2563eb] font-mono">
@@ -350,28 +487,6 @@ export const CvModal: React.FC<CvModalProps> = ({
                   5. {language === 'fr' ? 'PROJETS' : 'PROJECTS'}
                 </span>
 
-                {/* RELIO */}
-                <div className="p-3.5 rounded-xl bg-[#f8fafc] border border-[#e5eeff] space-y-1">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                    <h4 className="text-xs sm:text-sm font-bold text-[#0b1c30]">
-                      RELIO
-                    </h4>
-                    <span className="font-mono text-[11px] text-[#2563eb] font-semibold">
-                      Septembre 2026 — Present
-                    </span>
-                  </div>
-                  <p className="font-mono text-[11px] text-[#2563eb] font-medium">
-                    Fullstack Developer | Plateforme d'attribution de services
-                  </p>
-                  <p className="text-xs text-[#565e74] leading-relaxed">
-                    Application de mise en relation clients/prestataires avec moteur d'attribution basé sur un score dynamique.
-                  </p>
-                  <p className="font-mono text-[10.5px] text-[#0b1c30] pt-1">
-                    <span className="text-[#565e74]">Technologies : </span>
-                    React Native · Django · PostgreSQL · Firebase
-                  </p>
-                </div>
-
                 {/* CARBURFLOW */}
                 <div className="p-3.5 rounded-xl bg-[#f8fafc] border border-[#e5eeff] space-y-1">
                   <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
@@ -442,18 +557,6 @@ export const CvModal: React.FC<CvModalProps> = ({
           </div>
         </div>
 
-        {/* Modal Bottom Close Button */}
-        <div className="px-6 py-3 bg-[#f4f7fc] border-t border-[#e5eeff] flex items-center justify-between print:hidden">
-          <span className="font-mono text-xs text-[#565e74]">
-            Nkoumou Tjade Grinnel Germain · SUP'PTIC
-          </span>
-          <button
-            onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-[#0b1c30] hover:bg-[#2563eb] text-white text-xs font-mono font-semibold transition-colors"
-          >
-            {language === 'fr' ? 'Fermer' : 'Close'}
-          </button>
-        </div>
       </div>
     </div>
   );

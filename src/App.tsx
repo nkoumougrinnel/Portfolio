@@ -31,9 +31,7 @@ export default function App() {
   const [language, setLanguage] = useState<Language>('fr');
 
   // Dynamic Image state storage
-  const [avatarUrl, setAvatarUrl] = useState<string>(() => {
-    return localStorage.getItem('nt_avatar_url') || PROFILE_AVATAR;
-  });
+  const [avatarUrl, setAvatarUrl] = useState<string>(PROFILE_AVATAR);
 
   const [certImageUrl, setCertImageUrl] = useState<string>(() => {
     return localStorage.getItem('nt_cert_url') || CERTIFICATION_IMAGE;
@@ -92,6 +90,14 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('nt_activities', JSON.stringify(activitiesList));
   }, [activitiesList]);
+
+  useEffect(() => {
+    if (!isCvModalOpen) return;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isCvModalOpen]);
 
   // Project Image update handler
   const handleUpdateProjectImage = (projectId: string, newUrl: string) => {

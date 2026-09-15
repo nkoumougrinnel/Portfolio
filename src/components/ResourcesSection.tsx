@@ -11,17 +11,6 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
   language,
   onOpenCvModal,
 }) => {
-  const [downloadingPdf, setDownloadingPdf] = React.useState(false);
-
-  const handleDownloadPdf = () => {
-    setDownloadingPdf(true);
-    // Simulate generation / print prompt
-    setTimeout(() => {
-      window.print();
-      setDownloadingPdf(false);
-    }, 400);
-  };
-
   return (
     <section id="resources" className="px-5 py-10 bg-[#f4f7fc]/40 border-b border-[#e5eeff]/70">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
@@ -81,19 +70,12 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
             </div>
 
             <button
-              onClick={handleDownloadPdf}
-              disabled={downloadingPdf}
+              onClick={onOpenCvModal}
               className="px-3.5 py-2 rounded-xl bg-[#f4f7fc] border border-[#c3c6d7]/40 hover:bg-[#e5eeff] text-[#0b1c30] hover:text-[#2563eb] font-mono text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-xs shrink-0 active:scale-98"
             >
               <Download className="w-3.5 h-3.5 text-[#2563eb]" />
               <span>
-                {downloadingPdf
-                  ? language === 'fr'
-                    ? 'Export...'
-                    : 'Export...'
-                  : language === 'fr'
-                  ? 'Imprimer'
-                  : 'Download'}
+                {language === 'fr' ? 'Télécharger' : 'Download'}
               </span>
             </button>
           </div>
