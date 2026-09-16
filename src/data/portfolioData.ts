@@ -1,18 +1,18 @@
 import { Project, SkillCategory, ExperienceItem, EducationItem, ActivityItem } from '../types';
 
-export const PROFILE_AVATAR = "/moi.jpeg";
+export const PROFILE_AVATAR = "/images/profile/avatar.jpeg";
 
 export const DEFAULT_FEATURED_MOCKUP = "https://lh3.googleusercontent.com/aida-public/AB6AXuBHQ3lRjT2iUyteB1MmgW2IeZ5zHWRo1oUR2FnkxtLoNgBqFm1HuIg2YACtRsc8yzkDcbS3ltTJ8xBGf5K5i7F9YhSLABS0bSCK1XT-n2WksvoBOILD_tM3kpvdZX4gsYIg1jyC1kgetBZVdsoKBPz-mx6ZsrBVYjDE9WaCDoGi4jjL5f_lezdl2A7FDQJVCi8xHXeYmgSBl0h3J0o2Ii-UZxWK4zrgGG8EaSxmdjG9EuXD4s-b5WY";
 
 export const DEFAULT_MORE_MOCKUP = "https://lh3.googleusercontent.com/aida/AEtjO1XfbdpNwAaF-LRp-TerdTIyzgfYJEDRysW4gOL_IEdUYGH2eFR4jyc4JQ8DYDOeFTkRrJCl96V2DTGHpDFwLrHjIWCF-TuiBDGnuaQstfYCURxT8c8sFrUJFUrZ1ponjCtPZhh9VAuoIlmmmhLinFIlWrIJDdDQQwbZhOh0TCYt0J9LLZdi0oxpX8NKZYXDRFzQBX4aQ5fQN3Phkp0EdHRQv40pUue4gnssXzP7zkyRRCpDEYI4sTZ4tg";
 
-export const CERTIFICATION_IMAGE = "https://lh3.googleusercontent.com/aida/AEtjO1UCBn5WplJlOKfc8Srct_PmeBA6cag14Iwyeg_wlOUyWr3lsBw4F03vUhnrxTDObDLl3FBTpPp0QwaMBc0ONqplzN7hR4ag9puEljLYFStyOPe51NIJ5Uat5hR7mncBP8ym09n4JK7g5BoULu9d7U6f8PVVY9yAEtcl71jJhfe3OHhaBmj7XIcxxBNO__g1QRo9DgSA6ZTghWYVlppEqScdHCbGxSgsC5VqZ6vq2OpPl-kP-Csssu1a";
+export const CERTIFICATION_IMAGE = "/images/certs/dclic.jpg";
 
-export const HACKVERSE_IMAGE = "https://lh3.googleusercontent.com/aida-public/AB6AXuAu3506-NuY9tUQcbTVSzIXOlRmLel9fBkrKDwGymWEjznpxSHuSfKYoRgn_mkt7Dp6CY0o4arOWVmC3oGLAINQWA80xVjn6r4k47KB-QEh2LSfqZN4NqBcSxyZVLTu0GqNbaS0eClGSNQdpuNgff1brYUVBh72e-L3cvZmC4gJ6_G5u4_jZGLh5ixuQPCxGFL9IOdcE2KayQcTnaY0-Wx5QsdM3UZJs8zUBnuLXcTigCJf2jCiP6Y";
+export const HACKVERSE_IMAGE = "/images/projects/hackverse.jpg";
 
-export const CURSOR_HACKATHON_IMAGE = "https://lh3.googleusercontent.com/aida/AEtjO1X3Z7PtOOAuUD_3FdULCpUoISxj0jHw7x_boOL6SsIisseTtTkRHZYRklGwpYXYEe5acsNN69byYU7JADE74Qo_g1P9NGJQIvaB8_LADx_THup89ul_Qak9YNBTSz0bZa6f3yIMGo5d0shcPPsozGxI7-I_hkgzYmhh8xZOvwZNf7_OraMBuDRA3vvogtQvQux3tkFo138CeWCYSpjlWdMtB-evhP5U-Tjclkz-97YCDCS0WkfTdXtyag";
+export const CURSOR_HACKATHON_IMAGE = "/images/projects/lekki.jpg";
 
-export const CLUB_INFO_IMAGE = "https://lh3.googleusercontent.com/aida-public/AB6AXuCPtqkQDxVZZxGSrypYAL1oUvCnJ6lwsC9amINVFgPVAoQFddE_WbM16eNLB7QL4VuZZ8o24Jma3Y0AcIacD328LLiyrp_wakebzRCOVdSTSDylXJSRBewa56DPqwNHemGxszDv_X3uGtE0-UdoOdEmkGXexjMAuXVh01hwGGjKE4ElLxXVAuQhIvdNivL6NmLnL33RCQ7RIF3ivVl3TQNh-BXx-6JxyDGKnlRWYLcPXPPp8sAEe2o";
+export const CLUB_INFO_IMAGE = "/images/activities/club-info.jpeg";
 
 export const PROJECTS: Project[] = [
   {
@@ -22,7 +22,7 @@ export const PROJECTS: Project[] = [
     category: "featured",
     typeBadge: "Marketplace & Matching",
     status: "Active MVP",
-    imageUrl: DEFAULT_FEATURED_MOCKUP,
+    imageUrl: "/images/projects/relio.png",
     description: {
       en: "An on-demand service marketplace designed to connect clients with the right service providers through a dynamic matching process. Currently developed as a working MVP focusing on service attribution and platform architecture.",
       fr: "Une place de marché de services à la demande conçue pour connecter les clients aux bons prestataires grâce à un processus d'attribution dynamique. Développé comme MVP fonctionnel centré sur l'architecture plateforme."
@@ -67,7 +67,7 @@ export const PROJECTS: Project[] = [
     category: "featured",
     typeBadge: "Industrial IoT & Analytics",
     status: "Production Pilot",
-    imageUrl: DEFAULT_FEATURED_MOCKUP,
+    imageUrl: "/images/projects/carburflow.png",
     description: {
       en: "A system for monitoring fuel levels and consumption across multiple telecom sites, with mechanisms for identifying anomalies such as potential leaks or losses. Built during CAMTEL internship.",
       fr: "Un système de supervision des niveaux et consommations de carburant sur les sites télécoms distants, doté d'algorithmes de détection d'anomalies (fuites, soutirages suspects). Conçu lors du stage chez CAMTEL."
@@ -112,7 +112,7 @@ export const PROJECTS: Project[] = [
     category: "featured",
     typeBadge: "RAG & LLMs",
     status: "Hackathon Winner / Active",
-    imageUrl: DEFAULT_FEATURED_MOCKUP,
+    imageUrl: "/images/projects/lekki.jpg",
     description: {
       en: "An organization-oriented knowledge base with AI-powered search. Combines company documentation with a RAG pipeline for conversational queries, source citations, and multi-LLM routing.",
       fr: "Une base de connaissances souveraine d'entreprise boostée par l'IA. Combine la documentation interne à un pipeline RAG pour des requêtes conversationnelles, des citations de sources et du routage multi-LLM."

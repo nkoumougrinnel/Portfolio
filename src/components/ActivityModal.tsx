@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Calendar, Award, CheckCircle2, Terminal } from 'lucide-react';
 import { Language, ActivityItem } from '../types';
 
@@ -13,27 +13,36 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
   language,
   onClose,
 }) => {
+  useEffect(() => {
+    if (!activity) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [activity]);
+
   if (!activity) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#0b1c30]/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-2xl shadow-2xl border border-[#e5eeff] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-5 bg-[#0b1c30]/75 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-2xl bg-white sm:rounded-2xl shadow-2xl border border-[#e5eeff] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="px-5 sm:px-6 py-4 border-b border-[#e5eeff] flex items-center justify-between bg-white sticky top-0 z-20">
-          <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb]"></span>
+          <div className="flex items-center gap-3 min-w-0">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-lg font-bold text-[#0b1c30] leading-tight">
                   {activity.title}
                 </h3>
                 {activity.tag && (
-                  <span className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#2563eb] border border-[#2563eb]/20">
+                  <span className="hidden sm:inline-flex text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#2563eb] border border-[#2563eb]/20">
                     {activity.tag}
                   </span>
                 )}
               </div>
-              <p className="font-mono text-xs text-[#565e74] flex items-center gap-1.5 mt-0.5">
+              <p className="hidden sm:flex font-mono text-xs text-[#565e74] items-center gap-1.5 mt-0.5">
                 <Calendar className="w-3.5 h-3.5 text-[#2563eb]" />
                 <span>{activity.year}</span>
               </p>
@@ -96,15 +105,6 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="px-5 sm:px-6 py-3.5 bg-[#f4f7fc]/90 border-t border-[#e5eeff] flex items-center justify-end">
-          <button
-            onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-[#0b1c30] hover:bg-[#2563eb] text-white text-xs font-mono font-semibold transition-colors shadow-xs"
-          >
-            {language === 'fr' ? 'Fermer' : 'Close'}
-          </button>
-        </div>
       </div>
     </div>
   );

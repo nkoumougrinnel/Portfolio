@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, CheckCircle, ExternalLink, Sparkles, Layers, Cpu, Check } from 'lucide-react';
 import { Language, Project } from '../types';
 import { DEFAULT_FEATURED_MOCKUP, DEFAULT_MORE_MOCKUP } from '../data/portfolioData';
@@ -15,6 +15,16 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   language,
   onClose,
 }) => {
+  useEffect(() => {
+    if (!project) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [project]);
+
   if (!project) return null;
 
   // Curate 2 to 3 clean screenshots/captures for the project
@@ -39,21 +49,20 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
       ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#0b1c30]/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-2xl shadow-2xl border border-[#e5eeff] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-5 bg-[#0b1c30]/75 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-3xl bg-white sm:rounded-2xl shadow-2xl border border-[#e5eeff] overflow-hidden flex flex-col">
         {/* Sticky Header */}
         <div className="px-5 sm:px-6 py-4 border-b border-[#e5eeff] flex items-center justify-between bg-white sticky top-0 z-20">
-          <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb]"></span>
+          <div className="flex items-center gap-3 min-w-0">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-lg sm:text-xl font-bold text-[#0b1c30] leading-tight">
                   {project.title}
                 </h3>
-                <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#2563eb] border border-[#2563eb]/20">
+                <span className="hidden sm:inline-flex text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#2563eb] border border-[#2563eb]/20">
                   {project.typeBadge}
                 </span>
-                <span className="text-[10px] font-mono text-[#565e74] bg-[#f4f7fc] px-2 py-0.5 rounded border border-[#c3c6d7]/40">
+                <span className="hidden sm:inline-flex text-[10px] font-mono text-[#565e74] bg-[#f4f7fc] px-2 py-0.5 rounded border border-[#c3c6d7]/40">
                   {project.status}
                 </span>
               </div>
@@ -172,15 +181,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           </div>
         </div>
 
-        {/* Simple Footer without "Nkoumou Tjade Portfolio" */}
-        <div className="px-5 sm:px-6 py-3.5 bg-[#f4f7fc]/90 border-t border-[#e5eeff] flex items-center justify-end">
-          <button
-            onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-[#0b1c30] hover:bg-[#2563eb] text-white text-xs font-mono font-semibold transition-colors shadow-xs"
-          >
-            {language === 'fr' ? 'Fermer' : 'Close'}
-          </button>
-        </div>
       </div>
     </div>
   );
