@@ -15,7 +15,6 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
     <section id="resources" className="px-5 py-10 bg-[#f4f7fc]/40 border-b border-[#e5eeff]/70">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-4">
-          <span className="font-mono text-lg text-[#2563eb] font-bold">09 /</span>
           <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
             {language === 'fr' ? 'Ressources & Documents' : 'Resources'}
           </h2>
@@ -43,7 +42,7 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={onOpenCvModal}
-                className="px-3.5 py-2 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-white font-mono text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-xs active:scale-98"
+                className="px-3.5 py-2 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-xs active:scale-98"
               >
                 <Eye className="w-3.5 h-3.5" />
                 <span>{language === 'fr' ? 'Consulter' : 'View'}</span>
@@ -71,7 +70,7 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
 
             <button
               onClick={onOpenCvModal}
-              className="px-3.5 py-2 rounded-xl bg-[#f4f7fc] border border-[#c3c6d7]/40 hover:bg-[#e5eeff] text-[#0b1c30] hover:text-[#2563eb] font-mono text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-xs shrink-0 active:scale-98"
+              className="px-3.5 py-2 rounded-xl bg-[#f4f7fc] border border-[#c3c6d7]/40 hover:bg-[#e5eeff] text-[#0b1c30] hover:text-[#2563eb] text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-xs shrink-0 active:scale-98"
             >
               <Download className="w-3.5 h-3.5 text-[#2563eb]" />
               <span>

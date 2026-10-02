@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, Building2, MapPin, Calendar, CheckCircle2 } from 'lucide-react';
+import { Building2, MapPin, Calendar } from 'lucide-react';
 import { Language } from '../types';
 import { EXPERIENCE_DATA } from '../data/portfolioData';
 
@@ -12,7 +12,6 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }
     <section id="experience" className="px-5 py-10 bg-white border-b border-[#e5eeff]/70">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-6">
-          <span className="font-mono text-lg text-[#2563eb] font-bold">04 /</span>
           <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
             {language === 'fr' ? 'Expérience Professionnelle' : 'Experience'}
           </h2>
@@ -26,8 +25,8 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }
               <div className="absolute -left-[27px] sm:-left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-white border-2 border-[#2563eb] shadow-xs group-hover:scale-125 transition-transform"></div>
 
               {/* Company & Date */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-mono text-xs">
-                <span className="text-[#2563eb] font-bold uppercase tracking-wide flex items-center gap-1.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <span className="text-sm text-[#2563eb] font-bold flex items-center gap-1.5">
                   <Building2 className="w-3.5 h-3.5" />
                   {exp.company}
                 </span>
@@ -43,7 +42,7 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }
               </div>
 
               {/* Department & Location */}
-              <div className="font-mono text-[11px] text-[#565e74] flex items-center gap-1 leading-snug">
+              <div className="text-[11px] text-[#565e74] flex items-center gap-1 leading-snug">
                 <MapPin className="w-3 h-3 text-[#2563eb] shrink-0" />
                 <span>{exp.department[language]}</span>
               </div>

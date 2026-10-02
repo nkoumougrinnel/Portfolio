@@ -25,7 +25,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
     <section id="contact" className="px-5 py-12 bg-white">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-3">
-          <span className="font-mono text-lg text-[#2563eb] font-bold">10 /</span>
           <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
             {language === 'fr' ? 'Me Contacter' : 'Get in Touch'}
           </h2>
@@ -50,7 +49,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
               <div className="w-12 h-12 rounded-xl bg-blue-50 border border-[#2563eb]/20 flex items-center justify-center text-[#2563eb] group-hover:bg-[#2563eb] group-hover:text-white transition-colors mb-4">
                 <Mail className="w-6 h-6" />
               </div>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#565e74] font-semibold block mb-1">
+              <span className="text-xs uppercase tracking-wider text-[#565e74] font-semibold block mb-1">
                 Email
               </span>
               <a
@@ -69,7 +68,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
             <div className="pt-4 mt-4 border-t border-[#e5eeff] flex items-center justify-between gap-2">
               <a
                 href={`mailto:${emailAddress}`}
-                className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#2563eb] hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563eb] hover:underline"
               >
                 <span>{language === 'fr' ? 'Écrire un mail' : 'Send email'}</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -78,7 +77,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#f4f7fc] hover:bg-[#e5eeff] text-[#565e74] hover:text-[#0b1c30] text-[11px] font-mono transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#f4f7fc] hover:bg-[#e5eeff] text-[#565e74] hover:text-[#0b1c30] text-[11px] transition-colors"
                 title={language === 'fr' ? 'Copier l’adresse' : 'Copy address'}
               >
                 {copiedEmail ? (
@@ -109,7 +108,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
               <div className="w-12 h-12 rounded-xl bg-blue-50 border border-[#2563eb]/20 flex items-center justify-center text-[#2563eb] group-hover:bg-[#2563eb] group-hover:text-white transition-colors mb-4">
                 <Github className="w-6 h-6" />
               </div>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#565e74] font-semibold block mb-1">
+              <span className="text-xs uppercase tracking-wider text-[#565e74] font-semibold block mb-1">
                 GitHub
               </span>
               <span className="text-sm sm:text-base font-bold text-[#0b1c30] group-hover:text-[#2563eb] transition-colors break-all block">
@@ -123,7 +122,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
             </div>
 
             <div className="pt-4 mt-4 border-t border-[#e5eeff] flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#2563eb] group-hover:underline">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563eb] group-hover:underline">
                 <span>{language === 'fr' ? 'Consulter GitHub' : 'Visit profile'}</span>
                 <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </span>
@@ -144,7 +143,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
               <div className="w-12 h-12 rounded-xl bg-blue-50 border border-[#2563eb]/20 flex items-center justify-center text-[#2563eb] group-hover:bg-[#2563eb] group-hover:text-white transition-colors mb-4">
                 <Linkedin className="w-6 h-6" />
               </div>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#565e74] font-semibold block mb-1">
+              <span className="text-xs uppercase tracking-wider text-[#565e74] font-semibold block mb-1">
                 LinkedIn
               </span>
               <span className="text-sm sm:text-base font-bold text-[#0b1c30] group-hover:text-[#2563eb] transition-colors break-all block">
@@ -158,7 +157,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
             </div>
 
             <div className="pt-4 mt-4 border-t border-[#e5eeff] flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#2563eb] group-hover:underline">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563eb] group-hover:underline">
                 <span>{language === 'fr' ? 'Se connecter sur LinkedIn' : 'Connect on LinkedIn'}</span>
                 <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </span>

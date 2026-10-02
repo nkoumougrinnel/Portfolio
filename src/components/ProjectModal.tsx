@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { X, CheckCircle, ExternalLink, Sparkles, Layers, Cpu, Check } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { X, Maximize2, ExternalLink } from 'lucide-react';
 import { Language, Project } from '../types';
-import { DEFAULT_FEATURED_MOCKUP, DEFAULT_MORE_MOCKUP } from '../data/portfolioData';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -10,14 +9,21 @@ interface ProjectModalProps {
   onUpdateProjectImage?: (projectId: string, newUrl: string) => void;
 }
 
-export const ProjectModal: React.FC<ProjectModalProps> = ({
-  project,
-  language,
-  onClose,
-}) => {
+const STATUS_LABELS: Record<string, { fr: string; en: string }> = {
+  'Active MVP': { fr: 'MVP en cours', en: 'Active MVP' },
+  'Production Pilot': { fr: 'Pilote en production', en: 'Production pilot' },
+  'Hackathon Winner / Active': { fr: 'Lauréat de hackathon · Actif', en: 'Hackathon winner · Active' },
+  "Deployed at SUP'PTIC": { fr: "Déployé à SUP’PTIC", en: "Deployed at SUP'PTIC" },
+  Completed: { fr: 'Projet livré', en: 'Delivered' },
+  Prototype: { fr: 'Prototype', en: 'Prototype' },
+  'In Progress': { fr: 'En cours', en: 'In progress' }
+};
+
+export const ProjectModal: React.FC<ProjectModalProps> = ({ project, language, onClose }) => {
+  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
+
   useEffect(() => {
     if (!project) return;
-
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
@@ -25,163 +31,203 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
     };
   }, [project]);
 
+  useEffect(() => {
+    if (!enlargedImage) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setEnlargedImage(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [enlargedImage]);
+
   if (!project) return null;
 
-  // Curate 2 to 3 clean screenshots/captures for the project
-  const screenshots: { title: string; url: string }[] = project.screenshots && project.screenshots.length > 0
-    ? project.screenshots.map((url, idx) => ({
-        title: idx === 0 ? (language === 'fr' ? 'Vue principale' : 'Primary View') : `${language === 'fr' ? 'Capture' : 'Screen'} #${idx + 1}`,
-        url,
-      }))
-    : [
-        {
-          title: language === 'fr' ? 'Vue Principale / Interface' : 'Primary Interface',
-          url: project.imageUrl,
-        },
-        {
-          title: language === 'fr' ? 'Écran de Supervision / Données' : 'Dashboard / Data Screen',
-          url: DEFAULT_MORE_MOCKUP,
-        },
-        {
-          title: language === 'fr' ? 'Architecture & Flux' : 'Architecture & Workflow',
-          url: DEFAULT_FEATURED_MOCKUP,
-        },
-      ];
+  const gallery = [...new Set(project.gallery ?? project.screenshots ?? [])]
+    .filter((image) => image !== project.imageUrl);
+  const video = project.videos?.[0];
+  const links = [
+    ...(project.links ?? []).filter((link) => Boolean(link.url)),
+    ...(project.github && !project.links?.some((link) => link.url === project.github)
+      ? [{ label: 'GitHub', url: project.github }]
+      : []),
+    ...(project.link && !project.links?.some((link) => link.url === project.link)
+      ? [{ label: language === 'fr' ? 'Démo' : 'Live demo', url: project.link }]
+      : [])
+  ];
+  const status = STATUS_LABELS[project.status]?.[language] ?? project.status;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-5 bg-[#0b1c30]/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-3xl bg-white sm:rounded-2xl shadow-2xl border border-[#e5eeff] overflow-hidden flex flex-col">
-        {/* Sticky Header */}
-        <div className="px-5 sm:px-6 py-4 border-b border-[#e5eeff] flex items-center justify-between bg-white sticky top-0 z-20">
-          <div className="flex items-center gap-3 min-w-0">
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-lg sm:text-xl font-bold text-[#0b1c30] leading-tight">
-                  {project.title}
-                </h3>
-                <span className="hidden sm:inline-flex text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#2563eb] border border-[#2563eb]/20">
-                  {project.typeBadge}
-                </span>
-                <span className="hidden sm:inline-flex text-[10px] font-mono text-[#565e74] bg-[#f4f7fc] px-2 py-0.5 rounded border border-[#c3c6d7]/40">
-                  {project.status}
-                </span>
-              </div>
-              <p className="font-mono text-xs text-[#565e74] mt-0.5">{project.tagline}</p>
-            </div>
-          </div>
-
-          <button
-            onClick={onClose}
-            aria-label="Fermer"
-            className="w-8 h-8 rounded-full bg-[#f4f7fc] hover:bg-[#e5eeff] text-[#565e74] hover:text-[#0b1c30] flex items-center justify-center transition-colors shrink-0 ml-2"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Centralized Scrollable Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1 text-[#0b1c30]">
-          {/* 2-3 Captures / Screenshots Gallery */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#2563eb] flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5" />
-                {language === 'fr' ? 'Captures & Écrans du projet (2-3 vues)' : 'Screenshots & UI Previews'}
-              </span>
-              <span className="font-mono text-[11px] text-[#565e74]">
-                {screenshots.length} {language === 'fr' ? 'écrans' : 'screens'}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {screenshots.slice(0, 3).map((screen, idx) => (
-                <div
-                  key={idx}
-                  className="group relative rounded-xl overflow-hidden border border-[#c3c6d7]/50 bg-slate-950 aspect-[4/3] shadow-xs flex flex-col"
-                >
-                  <img
-                    src={screen.url}
-                    alt={`${project.title} - ${screen.title}`}
-                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80';
-                    }}
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-transparent p-2">
-                    <span className="text-[10.5px] font-mono text-white/90 font-medium block truncate">
-                      {screen.title}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Résumé Complet */}
-          <div className="space-y-1.5 border-t border-[#e5eeff] pt-5">
-            <h4 className="font-mono text-xs uppercase font-bold text-[#2563eb]">
-              // {language === 'fr' ? 'RÉSUMÉ DU PROJET' : 'PROJECT SUMMARY'}
-            </h4>
-            <p className="text-[13.5px] text-[#565e74] leading-relaxed">
-              {project.longDescription?.[language] || project.description[language]}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0b1c30]/75 p-0 backdrop-blur-sm animate-in fade-in duration-200 sm:p-5">
+      <div className="relative flex h-[100dvh] w-screen flex-col overflow-hidden border-0 bg-white shadow-2xl sm:h-auto sm:max-h-[92vh] sm:w-full sm:max-w-3xl sm:rounded-2xl sm:border">
+        <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#e5eeff] bg-white px-5 py-4 sm:px-7">
+          <div className="min-w-0">
+            <h3 className="text-lg font-bold leading-tight text-[#0b1c30] sm:text-xl">{project.title}</h3>
+            <p className="mt-1 text-xs text-[#565e74]">
+              <span>{status}</span>
+              {project.period && <><span className="mx-2 text-[#c3c6d7]">·</span><span>{project.period}</span></>}
             </p>
           </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={language === 'fr' ? 'Fermer' : 'Close'}
+            className="ml-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f4f7fc] text-[#565e74] transition-colors hover:bg-[#e5eeff] hover:text-[#0b1c30]"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </header>
 
-          {/* Fonctionnalités clés */}
-          {project.features && (
-            <div className="space-y-2 border-t border-[#e5eeff] pt-5">
-              <h4 className="font-mono text-xs uppercase font-bold text-[#2563eb]">
-                // {language === 'fr' ? 'FONCTIONNALITÉS CLÉS' : 'KEY FEATURES'}
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {project.features[language].map((feat, i) => (
-                  <div
-                    key={i}
-                    className="p-2.5 rounded-xl bg-[#f4f7fc]/80 border border-[#e5eeff] flex items-start gap-2"
-                  >
-                    <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span className="text-xs text-[#0b1c30] leading-snug">{feat}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Architecture & Stack */}
-          {project.architectureNotes && (
-            <div className="space-y-1.5 border-t border-[#e5eeff] pt-5">
-              <h4 className="font-mono text-xs uppercase font-bold text-[#0b1c30] flex items-center gap-1.5">
-                <Cpu className="w-3.5 h-3.5 text-[#2563eb]" />
-                {language === 'fr' ? 'Architecture & Conception Technique' : 'Architecture & Tech Stack'}
-              </h4>
-              <div className="p-3.5 rounded-xl bg-[#f4f7fc] border border-[#c3c6d7]/40">
-                <p className="text-xs text-[#565e74] leading-relaxed">
-                  {project.architectureNotes[language]}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Stack & Technologies */}
-          <div className="space-y-2 border-t border-[#e5eeff] pt-5">
-            <span className="font-mono text-[11px] text-[#565e74] block uppercase tracking-wider font-semibold">
-              {language === 'fr' ? 'Stack & Technologies :' : 'Stack & Technologies:'}
-            </span>
-            <div className="flex flex-wrap gap-1.5 font-mono text-xs">
-              {project.tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className="px-2.5 py-1 rounded-lg bg-[#e5eeff] text-[#2563eb] font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+        <div className="flex-1 space-y-7 overflow-y-auto px-5 py-5 text-[#0b1c30] sm:px-7 sm:py-6">
+          <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-slate-950">
+            <img src={project.imageUrl} alt={project.title} className="h-full w-full object-contain" />
+            <button
+              type="button"
+              onClick={() => setEnlargedImage({ src: project.imageUrl, alt: project.title })}
+              aria-label={language === 'fr' ? 'Agrandir l’image principale' : 'Enlarge main image'}
+              className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-lg bg-slate-950/75 px-3 py-2 text-xs font-semibold text-white backdrop-blur-sm transition-colors hover:bg-slate-950"
+            >
+              <Maximize2 className="h-3.5 w-3.5" />
+              {language === 'fr' ? 'Agrandir' : 'Enlarge'}
+            </button>
           </div>
-        </div>
 
+          <section className="space-y-2">
+            <h4 className="text-sm font-semibold text-[#0b1c30]">
+              {language === 'fr' ? 'À propos du projet' : 'About the project'}
+            </h4>
+            <p className="text-[13.5px] leading-relaxed text-[#565e74]">
+              {project.longDescription?.[language] || project.description[language]}
+            </p>
+            {project.context && (
+              <p className="text-xs leading-relaxed text-[#7a8298]">
+                <span className="font-medium text-[#565e74]">{language === 'fr' ? 'Contexte · ' : 'Context · '}</span>
+                {project.context[language]}
+              </p>
+            )}
+          </section>
+
+          {project.role && (
+            <section className="space-y-2">
+              <h4 className="text-sm font-semibold text-[#0b1c30]">
+                {language === 'fr' ? 'Mon rôle' : 'My role'}
+                {project.draftDetails && (
+                  <span className="ml-2 text-[10px] font-normal text-[#8a91a4]">
+                    {language === 'fr' ? '(à confirmer)' : '(to confirm)'}
+                  </span>
+                )}
+              </h4>
+              <p className="text-[13px] leading-relaxed text-[#565e74]">{project.role[language]}</p>
+            </section>
+          )}
+
+          {project.architectureNotes && (
+            <section className="space-y-2">
+              <h4 className="text-sm font-semibold text-[#0b1c30]">
+                {language === 'fr' ? 'Conception' : 'Design & implementation'}
+              </h4>
+              <p className="text-[13px] leading-relaxed text-[#565e74]">{project.architectureNotes[language]}</p>
+            </section>
+          )}
+
+          <section className="space-y-2">
+            <h4 className="text-sm font-semibold text-[#0b1c30]">{language === 'fr' ? 'Technologies' : 'Technologies'}</h4>
+            <p className="text-[12px] leading-relaxed text-[#565e74]">{project.tags.join(' · ')}</p>
+          </section>
+
+          {gallery.length > 0 && (
+            <section className="space-y-3">
+              <h4 className="text-sm font-semibold text-[#0b1c30]">
+                {project.demoAssets
+                  ? (language === 'fr' ? 'Captures de démonstration' : 'Demo captures')
+                  : (language === 'fr' ? 'Captures du projet' : 'Project screenshots')}
+              </h4>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {gallery.map((image, index) => {
+                  const alt = `${project.title} — ${language === 'fr' ? 'capture' : 'screenshot'} ${index + 1}`;
+                  return (
+                    <button
+                      key={image}
+                      type="button"
+                      onClick={() => setEnlargedImage({ src: image, alt })}
+                      className="overflow-hidden rounded-lg bg-slate-100 focus-visible:outline-2 focus-visible:outline-[#2563eb]"
+                    >
+                      <img src={image} alt={alt} className="aspect-[4/3] w-full object-cover transition-transform duration-300 hover:scale-105" />
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {video && (
+            <section className="space-y-3">
+              <h4 className="text-sm font-semibold text-[#0b1c30]">
+                {language === 'fr' ? 'Vidéo de démonstration' : 'Demo video'}
+                {project.demoAssets && <span className="ml-2 text-[10px] font-normal text-[#8a91a4]">{language === 'fr' ? '(aperçu)' : '(preview)'}</span>}
+              </h4>
+              <video src={video} controls preload="metadata" className="aspect-video w-full rounded-xl bg-black" />
+              {links.length > 0 && (
+                <nav aria-label={language === 'fr' ? 'Liens du projet' : 'Project links'} className="flex flex-wrap gap-2 pt-1">
+                  {links.map((link) => (
+                    <a
+                      key={`${link.label}-${link.url}`}
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-lg border border-[#2563eb]/20 bg-blue-50/70 px-3.5 py-2 text-xs font-semibold text-[#2563eb] transition-colors hover:border-[#2563eb] hover:bg-[#2563eb] hover:text-white"
+                    >
+                      {link.label}
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  ))}
+                </nav>
+              )}
+            </section>
+          )}
+
+          {!video && links.length > 0 && (
+            <nav aria-label={language === 'fr' ? 'Liens du projet' : 'Project links'} className="flex flex-wrap gap-x-6 gap-y-2 border-t border-[#e5eeff] pt-5">
+              {links.map((link) => (
+                <a
+                  key={`${link.label}-${link.url}`}
+                  href={link.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-[#2563eb] transition-colors hover:text-[#0b1c30]"
+                >
+                  {link.label}
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              ))}
+            </nav>
+          )}
+        </div>
       </div>
+
+      {enlargedImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={enlargedImage.alt}
+          onClick={() => setEnlargedImage(null)}
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/90 p-4 sm:p-8"
+        >
+          <button
+            type="button"
+            onClick={() => setEnlargedImage(null)}
+            aria-label={language === 'fr' ? 'Fermer l’image agrandie' : 'Close enlarged image'}
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+          >
+            <X className="h-5 w-5" />
+          </button>
+          <img
+            src={enlargedImage.src}
+            alt={enlargedImage.alt}
+            onClick={(event) => event.stopPropagation()}
+            className="max-h-full max-w-full object-contain"
+          />
+        </div>
+      )}
     </div>
   );
 };

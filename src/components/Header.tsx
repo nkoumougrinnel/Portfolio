@@ -45,10 +45,10 @@ export const Header: React.FC<HeaderProps> = ({
             />
           </div>
           <div className="flex flex-col justify-center text-left">
-            <span className="text-[13px] font-semibold tracking-tight text-[#0b1c30] leading-tight group-hover:text-[#2563eb] transition-colors">
+            <span className="font-sans text-[13px] font-bold tracking-tight text-[#0b1c30] leading-tight group-hover:text-[#2563eb] transition-colors">
               Nkoumou Tjade
             </span>
-            <span className="font-mono text-[10px] text-[#565e74]">
+            <span className="font-sans text-[10px] text-[#565e74]">
               Grinnel Germain
             </span>
           </div>
@@ -61,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
             <React.Fragment key={item.href}>
               <a
                 href={item.href}
-                className="text-xs font-mono font-medium text-[#565e74] hover:text-[#2563eb] px-2 py-1 rounded-md transition-colors"
+                className="font-sans text-xs font-medium text-[#565e74] hover:text-[#2563eb] px-2 py-1 rounded-md transition-colors"
               >
                 {item.label}
               </a>
@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => onLanguageChange(language === 'fr' ? 'en' : 'fr')}
             title="Changer de langue / Switch language"
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-mono font-semibold text-[#2563eb] bg-[#2563eb]/5 hover:bg-[#2563eb]/10 border border-[#2563eb]/25 rounded-lg transition-colors"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-sans font-semibold text-[#2563eb] bg-[#2563eb]/5 hover:bg-[#2563eb]/10 border border-[#2563eb]/25 rounded-lg transition-colors"
           >
             <Globe className="w-3.5 h-3.5" />
             <span>{language.toUpperCase()}</span>
@@ -106,7 +106,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Drawer Menu on Hamburger Click */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-[#e5eeff] bg-white/98 px-5 py-4 font-mono text-xs text-[#565e74] shadow-lg animate-in fade-in duration-200">
+        <div className="lg:hidden border-t border-[#e5eeff] bg-white/98 px-5 py-4 font-sans text-xs text-[#565e74] shadow-lg animate-in fade-in duration-200">
           <div className="flex flex-col divide-y divide-[#e5eeff]">
             {navItems.map((item) => (
               <a

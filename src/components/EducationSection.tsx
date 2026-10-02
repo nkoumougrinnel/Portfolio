@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, Calendar, Award } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import { Language } from '../types';
 import { EDUCATION_DATA } from '../data/portfolioData';
 
@@ -12,7 +12,6 @@ export const EducationSection: React.FC<EducationSectionProps> = ({ language }) 
     <section id="education" className="px-5 py-10 bg-[#f4f7fc]/40 border-b border-[#e5eeff]/70">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-4">
-          <span className="font-mono text-lg text-[#2563eb] font-bold">05 /</span>
           <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
             {language === 'fr' ? 'Formation Académique' : 'Education'}
           </h2>
@@ -30,7 +29,7 @@ export const EducationSection: React.FC<EducationSectionProps> = ({ language }) 
                     : 'border-[#e5eeff]'
                 }`}
               >
-                <div className="flex justify-between items-center text-[#2563eb] font-mono text-[11px] mb-1 font-semibold">
+                <div className="flex justify-between items-center text-[#2563eb] text-[11px] mb-1 font-semibold">
                   <span className="flex items-center gap-1.5">
                     <GraduationCap className="w-4 h-4 text-[#2563eb]" />
                     {edu.institution}

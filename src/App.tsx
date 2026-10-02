@@ -22,10 +22,11 @@ import { ActivityModal } from './components/ActivityModal';
 import {
   PROFILE_AVATAR,
   CERTIFICATION_IMAGE,
+  CERTIFICATIONS_DATA,
   PROJECTS,
   ACTIVITIES_DATA,
 } from './data/portfolioData';
-import { Language, Project, ActivityItem } from './types';
+import { Language, Project, ActivityItem, CertificationItem } from './types';
 
 export default function App() {
   const [language, setLanguage] = useState<Language>('fr');
@@ -41,7 +42,19 @@ export default function App() {
     const saved = localStorage.getItem('nt_projects');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const savedProjects = JSON.parse(saved) as Array<Project & { category?: Project['categories'][number] }>;
+        return [
+          ...PROJECTS.map((project) => {
+            const savedProject = savedProjects.find((item) => item.id === project.id);
+            return savedProject
+              ? { ...project, imageUrl: savedProject.imageUrl ?? project.imageUrl }
+              : project;
+          }),
+          ...savedProjects.filter((item) => !PROJECTS.some((project) => project.id === item.id)).map((item) => ({
+            ...item,
+            categories: item.categories ?? (item.category ? [item.category] : ['more'])
+          }))
+        ];
       } catch {
         return PROJECTS;
       }
@@ -53,7 +66,13 @@ export default function App() {
     const saved = localStorage.getItem('nt_activities');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const savedActivities = JSON.parse(saved) as ActivityItem[];
+        return ACTIVITIES_DATA.map((activity) => {
+          const savedActivity = savedActivities.find((item) => item.id === activity.id);
+          return savedActivity
+            ? { ...activity, ...savedActivity, categories: savedActivity.categories ?? activity.categories, imageUrl: activity.imageUrl }
+            : activity;
+        });
       } catch {
         return ACTIVITIES_DATA;
       }
@@ -63,7 +82,7 @@ export default function App() {
 
   // Modal states
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isCertModalOpen, setIsCertModalOpen] = useState(false);
+  const [selectedCertification, setSelectedCertification] = useState<CertificationItem | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<ActivityItem | null>(null);
   const [isImageStudioOpen, setIsImageStudioOpen] = useState(false);
   const [isCvModalOpen, setIsCvModalOpen] = useState(false);
@@ -151,7 +170,11 @@ export default function App() {
 
           <AboutSection language={language} />
 
-          <SkillsSection language={language} />
+          <SkillsSection
+            language={language}
+            projects={projectsList}
+            onSelectProject={(project) => setSelectedProject(project)}
+          />
 
           <ProjectsSection
             language={language}
@@ -168,8 +191,10 @@ export default function App() {
 
           <CertificationsSection
             language={language}
+            certifications={CERTIFICATIONS_DATA}
+            projects={projectsList}
             certImageUrl={certImageUrl}
-            onOpenDetailsModal={() => setIsCertModalOpen(true)}
+            onSelectCertification={setSelectedCertification}
           />
 
           <ActivitiesSection
@@ -200,16 +225,26 @@ export default function App() {
 
       {/* Dedicated Certification Details Modal */}
       <CertificationModal
-        isOpen={isCertModalOpen}
+        certification={selectedCertification}
         language={language}
-        certImageUrl={certImageUrl}
-        onClose={() => setIsCertModalOpen(false)}
+        certificateImageUrl={selectedCertification?.id === 'dclic' ? certImageUrl : selectedCertification?.imageUrl ?? ''}
+        projects={projectsList}
+        onSelectProject={(project) => {
+          setSelectedCertification(null);
+          setSelectedProject(project);
+        }}
+        onClose={() => setSelectedCertification(null)}
       />
 
       {/* Dedicated Activity & Hackathon Details Modal */}
       <ActivityModal
         activity={selectedActivity}
         language={language}
+        projects={projectsList}
+        onSelectProject={(project) => {
+          setSelectedActivity(null);
+          setSelectedProject(project);
+        }}
         onClose={() => setSelectedActivity(null)}
       />
 

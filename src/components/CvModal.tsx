@@ -174,7 +174,7 @@ export const CvModal: React.FC<CvModalProps> = ({
         {/* Modal Header Controls */}
         <div className="px-5 py-3 border-b border-[#e5eeff] flex items-center justify-between bg-[#f4f7fc] sticky top-0 z-20 print:hidden">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="font-mono text-xs font-bold text-[#0b1c30] tracking-wider uppercase">
+            <span className="text-xs font-bold text-[#0b1c30] tracking-wider uppercase">
               <span className="sm:hidden">CV</span>
               <span className="hidden sm:inline">Curriculum Vitae</span>
             </span>
@@ -183,7 +183,7 @@ export const CvModal: React.FC<CvModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handleDownload}
-              className="px-3 py-1.5 rounded-lg bg-white border border-[#c3c6d7]/50 hover:bg-[#e5eeff] text-[#2563eb] text-xs font-mono font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
+              className="px-3 py-1.5 rounded-lg bg-white border border-[#c3c6d7]/50 hover:bg-[#e5eeff] text-[#2563eb] text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
             >
               <Download className="w-3.5 h-3.5" />
               <span>{language === 'fr' ? 'Télécharger' : 'Download'}</span>
@@ -220,25 +220,25 @@ export const CvModal: React.FC<CvModalProps> = ({
 
               {/* CONTACT */}
               <div>
-                <h3 className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
+                <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
                   Contact
                 </h3>
                 <div className="space-y-2 text-[#565e74]">
                   <div className="flex items-center gap-2">
                     <Phone className="w-3.5 h-3.5 text-[#2563eb] shrink-0" />
-                    <a href="tel:+237694316630" className="hover:text-[#2563eb] font-mono">
+                    <a href="tel:+237694316630" className="hover:text-[#2563eb]">
                       +237 694 316 630
                     </a>
                   </div>
                   <div className="flex items-center gap-2">
                     <Mail className="w-3.5 h-3.5 text-[#2563eb] shrink-0" />
-                    <a href="mailto:nkoumougrinnel@gmail.com" className="hover:text-[#2563eb] break-all font-mono">
+                    <a href="mailto:nkoumougrinnel@gmail.com" className="hover:text-[#2563eb] break-all">
                       nkoumougrinnel@gmail.com
                     </a>
                   </div>
 
                   {/* GitHub · Portfolio · LinkedIn */}
-                  <div className="pt-2 border-t border-[#e5eeff] space-y-1.5 font-mono text-[11px]">
+                  <div className="pt-2 border-t border-[#e5eeff] space-y-1.5 text-[11px]">
                     <a
                       href="https://github.com/nkoumougrinnel"
                       target="_blank"
@@ -281,12 +281,12 @@ export const CvModal: React.FC<CvModalProps> = ({
 
               {/* COMPÉTENCES */}
               <div>
-                <h3 className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
+                <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
                   {language === 'fr' ? 'COMPÉTENCES' : 'SKILLS'}
                 </h3>
                 <div className="space-y-3">
                   <div>
-                    <span className="font-mono font-bold text-[#0b1c30] block text-[11.5px]">
+                    <span className="font-sans font-semibold text-[#0b1c30] block text-[11.5px]">
                       {language === 'fr' ? 'Développement' : 'Development'}
                     </span>
                     <p className="text-[#565e74] leading-snug mt-0.5">
@@ -295,7 +295,7 @@ export const CvModal: React.FC<CvModalProps> = ({
                   </div>
 
                   <div>
-                    <span className="font-mono font-bold text-[#0b1c30] block text-[11.5px]">
+                    <span className="font-sans font-semibold text-[#0b1c30] block text-[11.5px]">
                       {language === 'fr' ? 'Réseaux' : 'Networking'}
                     </span>
                     <p className="text-[#565e74] leading-snug mt-0.5">
@@ -304,7 +304,7 @@ export const CvModal: React.FC<CvModalProps> = ({
                   </div>
 
                   <div>
-                    <span className="font-mono font-bold text-[#0b1c30] block text-[11.5px]">
+                    <span className="font-sans font-semibold text-[#0b1c30] block text-[11.5px]">
                       Embedded & IoT
                     </span>
                     <p className="text-[#565e74] leading-snug mt-0.5">
@@ -313,7 +313,7 @@ export const CvModal: React.FC<CvModalProps> = ({
                   </div>
 
                   <div>
-                    <span className="font-mono font-bold text-[#0b1c30] block text-[11.5px]">
+                    <span className="font-sans font-semibold text-[#0b1c30] block text-[11.5px]">
                       {language === 'fr' ? 'Cybersécurité' : 'Cybersecurity'}
                     </span>
                     <p className="text-[#565e74] leading-snug mt-0.5">
@@ -322,7 +322,7 @@ export const CvModal: React.FC<CvModalProps> = ({
                   </div>
 
                   <div>
-                    <span className="font-mono font-bold text-[#0b1c30] block text-[11.5px]">
+                    <span className="font-sans font-semibold text-[#0b1c30] block text-[11.5px]">
                       IA & Data
                     </span>
                     <p className="text-[#565e74] leading-snug mt-0.5">
@@ -334,7 +334,7 @@ export const CvModal: React.FC<CvModalProps> = ({
 
               {/* LANGUES */}
               <div>
-                <h3 className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
+                <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
                   {language === 'fr' ? 'LANGUES' : 'LANGUAGES'}
                 </h3>
                 <div className="space-y-1.5 text-[#565e74]">
@@ -349,7 +349,7 @@ export const CvModal: React.FC<CvModalProps> = ({
 
               {/* INTÉRÊTS */}
               <div>
-                <h3 className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
+                <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#2563eb] pb-1.5 mb-2.5 border-b border-[#2563eb]/20">
                   {language === 'fr' ? 'INTÉRÊTS' : 'INTERESTS'}
                 </h3>
                 <p className="text-[#565e74] leading-relaxed">
@@ -364,13 +364,13 @@ export const CvModal: React.FC<CvModalProps> = ({
             <main className="w-full md:w-[68%] lg:w-[70%] p-6 sm:p-8 space-y-6 flex-1 text-justify">
               {/* 1. IDENTITÉ / POSITIONNEMENT */}
               <section className="border-b border-[#e5eeff] pb-5">
-                <span className="font-mono text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block mb-1">
+                <span className="text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block mb-1">
                   1. {language === 'fr' ? 'IDENTITÉ / POSITIONNEMENT' : 'IDENTITY / PROFILE'}
                 </span>
                 <h1 className="text-xl sm:text-2xl font-extrabold text-[#0b1c30] tracking-tight">
                   NKOUMOU Tjade Grinnel Germain
                 </h1>
-                <h2 className="text-sm font-bold text-[#2563eb] mt-0.5 mb-3 font-mono">
+                <h2 className="text-sm font-bold text-[#2563eb] mt-0.5 mb-3">
                   {language === 'fr'
                     ? 'Étudiant ingénieur en Télécommunications — Informatique & Réseaux'
                     : 'Telecommunications Engineering Student — IT & Networks'}
@@ -384,7 +384,7 @@ export const CvModal: React.FC<CvModalProps> = ({
 
               {/* 2. EXPÉRIENCE */}
               <section className="border-b border-[#e5eeff] pb-5">
-                <span className="font-mono text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block mb-2">
+                <span className="text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block mb-2">
                   2. {language === 'fr' ? 'EXPÉRIENCE' : 'EXPERIENCE'}
                 </span>
 
@@ -393,11 +393,11 @@ export const CvModal: React.FC<CvModalProps> = ({
                     <h3 className="text-sm font-bold text-[#0b1c30]">
                       STAGIAIRE — CAMTEL
                     </h3>
-                    <span className="font-mono text-xs text-[#2563eb] font-semibold">
+                    <span className="text-xs text-[#2563eb] font-semibold">
                       Juillet — Septembre 2026
                     </span>
                   </div>
-                  <p className="font-mono text-xs text-[#565e74]">
+                  <p className="text-xs text-[#565e74]">
                     Service de la Lutte contre la Fraude · Douala
                   </p>
                   <p className="text-xs sm:text-[12.5px] text-[#565e74] pt-1 leading-relaxed">
@@ -408,7 +408,7 @@ export const CvModal: React.FC<CvModalProps> = ({
 
               {/* 3. FORMATION */}
               <section className="border-b border-[#e5eeff] pb-5">
-                <span className="font-mono text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block mb-2.5">
+                <span className="text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block mb-2.5">
                   3. {language === 'fr' ? 'FORMATION' : 'EDUCATION'}
                 </span>
 
@@ -423,7 +423,7 @@ export const CvModal: React.FC<CvModalProps> = ({
                         Ingénieur des Travaux de Télécommunication — Informatique & Réseaux
                       </p>
                     </div>
-                    <span className="font-mono text-xs text-[#2563eb] font-semibold shrink-0">
+                    <span className="text-xs text-[#2563eb] font-semibold shrink-0">
                       2024 — présent · 3e année
                     </span>
                   </div>
@@ -438,7 +438,7 @@ export const CvModal: React.FC<CvModalProps> = ({
                         Mathématiques — niveau Licence 3
                       </p>
                     </div>
-                    <span className="font-mono text-xs text-[#565e74] shrink-0">
+                    <span className="text-xs text-[#565e74] shrink-0">
                       2023 — 2025
                     </span>
                   </div>
@@ -453,7 +453,7 @@ export const CvModal: React.FC<CvModalProps> = ({
                         Baccalauréat C
                       </p>
                     </div>
-                    <span className="font-mono text-xs text-[#565e74] shrink-0">
+                    <span className="text-xs text-[#565e74] shrink-0">
                       2023
                     </span>
                   </div>
@@ -462,7 +462,7 @@ export const CvModal: React.FC<CvModalProps> = ({
 
               {/* 4. CERTIFICATION */}
               <section className="border-b border-[#e5eeff] pb-5">
-                <span className="font-mono text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block mb-2">
+                <span className="text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block mb-2">
                   4. {language === 'fr' ? 'CERTIFICATION' : 'CERTIFICATION'}
                 </span>
 
@@ -475,7 +475,7 @@ export const CvModal: React.FC<CvModalProps> = ({
                       OIF / D-CLIC — CNFFDP
                     </p>
                   </div>
-                  <span className="font-mono text-xs text-[#2563eb] font-semibold shrink-0">
+                  <span className="text-xs text-[#2563eb] font-semibold shrink-0">
                     400 h · Oct. 2025 — Avr. 2026
                   </span>
                 </div>
@@ -483,7 +483,7 @@ export const CvModal: React.FC<CvModalProps> = ({
 
               {/* 5. PROJETS */}
               <section className="space-y-4">
-                <span className="font-mono text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block">
+                <span className="text-[10px] font-bold text-[#2563eb] uppercase tracking-widest block">
                   5. {language === 'fr' ? 'PROJETS' : 'PROJECTS'}
                 </span>
 
@@ -493,11 +493,11 @@ export const CvModal: React.FC<CvModalProps> = ({
                     <h4 className="text-xs sm:text-sm font-bold text-[#0b1c30]">
                       CARBURFLOW
                     </h4>
-                    <span className="font-mono text-[11px] text-[#2563eb] font-semibold">
+                    <span className="text-[11px] text-[#2563eb] font-semibold">
                       Juillet — Septembre 2026
                     </span>
                   </div>
-                  <p className="font-mono text-[11px] text-[#2563eb] font-medium">
+                  <p className="text-[11px] text-[#2563eb] font-medium">
                     Lead & Fullstack Developer | Projet de stage livré
                   </p>
                   <p className="text-xs text-[#565e74] leading-relaxed">
@@ -515,11 +515,11 @@ export const CvModal: React.FC<CvModalProps> = ({
                     <h4 className="text-xs sm:text-sm font-bold text-[#0b1c30]">
                       LEKKI
                     </h4>
-                    <span className="font-mono text-[11px] text-[#2563eb] font-semibold">
+                    <span className="text-[11px] text-[#2563eb] font-semibold">
                       Juin 2026
                     </span>
                   </div>
-                  <p className="font-mono text-[11px] text-[#2563eb] font-medium">
+                  <p className="text-[11px] text-[#2563eb] font-medium">
                     Lead & Backend Developer | Wiki d'entreprise avec IA
                   </p>
                   <p className="text-xs text-[#565e74] leading-relaxed">
@@ -537,11 +537,11 @@ export const CvModal: React.FC<CvModalProps> = ({
                     <h4 className="text-xs sm:text-sm font-bold text-[#0b1c30]">
                       SUPONEAI
                     </h4>
-                    <span className="font-mono text-[11px] text-[#2563eb] font-semibold">
+                    <span className="text-[11px] text-[#2563eb] font-semibold">
                       Fevrier — Mai 2026
                     </span>
                   </div>
-                  <p className="font-mono text-[11px] text-[#2563eb] font-medium">
+                  <p className="text-[11px] text-[#2563eb] font-medium">
                     Lead & Backend Developer | Chatbot SUP'PTIC
                   </p>
                   <p className="text-xs text-[#565e74] leading-relaxed">

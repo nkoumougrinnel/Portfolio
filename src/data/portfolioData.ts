@@ -1,28 +1,45 @@
-import { Project, SkillCategory, ExperienceItem, EducationItem, ActivityItem } from '../types';
+import { Project, SkillCategory, ExperienceItem, EducationItem, ActivityItem, CertificationItem } from '../types';
 
 export const PROFILE_AVATAR = "/images/profile/avatar.jpeg";
 
-export const DEFAULT_FEATURED_MOCKUP = "https://lh3.googleusercontent.com/aida-public/AB6AXuBHQ3lRjT2iUyteB1MmgW2IeZ5zHWRo1oUR2FnkxtLoNgBqFm1HuIg2YACtRsc8yzkDcbS3ltTJ8xBGf5K5i7F9YhSLABS0bSCK1XT-n2WksvoBOILD_tM3kpvdZX4gsYIg1jyC1kgetBZVdsoKBPz-mx6ZsrBVYjDE9WaCDoGi4jjL5f_lezdl2A7FDQJVCi8xHXeYmgSBl0h3J0o2Ii-UZxWK4zrgGG8EaSxmdjG9EuXD4s-b5WY";
-
-export const DEFAULT_MORE_MOCKUP = "https://lh3.googleusercontent.com/aida/AEtjO1XfbdpNwAaF-LRp-TerdTIyzgfYJEDRysW4gOL_IEdUYGH2eFR4jyc4JQ8DYDOeFTkRrJCl96V2DTGHpDFwLrHjIWCF-TuiBDGnuaQstfYCURxT8c8sFrUJFUrZ1ponjCtPZhh9VAuoIlmmmhLinFIlWrIJDdDQQwbZhOh0TCYt0J9LLZdi0oxpX8NKZYXDRFzQBX4aQ5fQN3Phkp0EdHRQv40pUue4gnssXzP7zkyRRCpDEYI4sTZ4tg";
-
 export const CERTIFICATION_IMAGE = "/images/certs/dclic.jpg";
 
-export const HACKVERSE_IMAGE = "/images/projects/hackverse.jpg";
+export const HACKVERSE_IMAGE = "/images/activities/hackverse.jpg";
 
-export const CURSOR_HACKATHON_IMAGE = "/images/projects/lekki.jpg";
+export const CURSOR_HACKATHON_IMAGE = "/images/activities/cursor.jpg";
 
 export const CLUB_INFO_IMAGE = "/images/activities/club-info.jpeg";
+
+const DEMO_PROJECT_GALLERY = [
+  "/images/projects/relio.png",
+  "/images/projects/carburflow.png",
+  "/images/projects/lekki.png"
+];
+
+const DEMO_PROJECT_LINKS = [
+  { label: "GitHub (démo)", url: "https://example.com/github-demo", placeholder: true },
+  { label: "Démo en ligne (fictive)", url: "https://example.com/deployment-demo", placeholder: true }
+];
+
+const DEMO_PROJECT_VIDEO = "/video/video-test.mp4";
 
 export const PROJECTS: Project[] = [
   {
     id: "relio",
-    title: "RELIO",
-    tagline: "Architecture & MVP",
-    category: "featured",
-    typeBadge: "Marketplace & Matching",
+    title: "Relio",
+    categories: ["featured", "personal", "web"],
     status: "Active MVP",
     imageUrl: "/images/projects/relio.png",
+    role: {
+      fr: "Proposition à confirmer : contribution à la conception de l’expérience mobile et à l’intégration des services de mise en relation.",
+      en: "Draft to confirm: contribution to the mobile experience design and integration of the matching services."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Projet personnel", en: "Personal project" },
     description: {
       en: "An on-demand service marketplace designed to connect clients with the right service providers through a dynamic matching process. Currently developed as a working MVP focusing on service attribution and platform architecture.",
       fr: "Une place de marché de services à la demande conçue pour connecter les clients aux bons prestataires grâce à un processus d'attribution dynamique. Développé comme MVP fonctionnel centré sur l'architecture plateforme."
@@ -50,24 +67,22 @@ export const PROJECTS: Project[] = [
       fr: "Architecture logicielle en couches découplées : frontend mobile React Native communiquant via API REST avec Django, avec indexation géospatiale pour les requêtes de proximité."
     },
     tags: ["React Native", "Expo", "Django", "PostgreSQL", "Firebase"],
-    screenMockup: {
-      themeColor: "#2563eb",
-      previewType: "mobile-app",
-      stats: [
-        { label: "Latency", value: "<120ms" },
-        { label: "Matches", value: "Real-time" },
-        { label: "Platform", value: "iOS / Android" }
-      ]
-    }
   },
   {
     id: "carburflow",
-    title: "CARBURFLOW",
-    tagline: "Telemetry & Auditing",
-    category: "featured",
-    typeBadge: "Industrial IoT & Analytics",
+    title: "Carburflow",
+    categories: ["featured", "professional", "web", "network"],
     status: "Production Pilot",
     imageUrl: "/images/projects/carburflow.png",
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Stage académique chez CAMTEL", en: "Academic internship at CAMTEL" },
+    role: {
+      fr: "Lead technique : modélisation des données, logique métier, API, intégration frontend, détection d'anomalies et conteneurisation.",
+      en: "Technical lead: data modeling, business logic, APIs, frontend integration, anomaly detection, and containerization."
+    },
     description: {
       en: "A system for monitoring fuel levels and consumption across multiple telecom sites, with mechanisms for identifying anomalies such as potential leaks or losses. Built during CAMTEL internship.",
       fr: "Un système de supervision des niveaux et consommations de carburant sur les sites télécoms distants, doté d'algorithmes de détection d'anomalies (fuites, soutirages suspects). Conçu lors du stage chez CAMTEL."
@@ -95,24 +110,22 @@ export const PROJECTS: Project[] = [
       fr: "Déploiement conteneurisé Docker multi-services combinant API Django, stockage optimisé PostgreSQL pour séries temporelles et dashboard React interactif."
     },
     tags: ["Django", "React", "PostgreSQL", "Docker", "Anti-Fraud"],
-    screenMockup: {
-      themeColor: "#059669",
-      previewType: "dashboard",
-      stats: [
-        { label: "Sites Monitored", value: "48+" },
-        { label: "Leak Detection", value: "Instant" },
-        { label: "Data Pipeline", value: "Dockerized" }
-      ]
-    }
   },
   {
     id: "lekki",
-    title: "LEKKI",
-    tagline: "AI Semantic Pipeline",
-    category: "featured",
-    typeBadge: "RAG & LLMs",
+    title: "Lekki",
+    categories: ["featured", "competition", "ai", "web"],
     status: "Hackathon Winner / Active",
-    imageUrl: "/images/projects/lekki.jpg",
+    imageUrl: "/images/projects/lekki.png",
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Hackathon Cursor J.U.I.N 2026", en: "Cursor J.U.I.N Hackathon 2026" },
+    role: {
+      fr: "Développeur principal, responsable de l'architecture et de l'implémentation du pipeline RAG.",
+      en: "Lead developer responsible for the RAG pipeline architecture and implementation."
+    },
     description: {
       en: "An organization-oriented knowledge base with AI-powered search. Combines company documentation with a RAG pipeline for conversational queries, source citations, and multi-LLM routing.",
       fr: "Une base de connaissances souveraine d'entreprise boostée par l'IA. Combine la documentation interne à un pipeline RAG pour des requêtes conversationnelles, des citations de sources et du routage multi-LLM."
@@ -140,24 +153,22 @@ export const PROJECTS: Project[] = [
       fr: "Moteur de recherche hybride combinant recherche sémantique dense et BM25 pour un rappel maximal, servi par une API asynchrone FastAPI."
     },
     tags: ["FastAPI", "React", "TypeScript", "RAG", "Vector Search"],
-    screenMockup: {
-      themeColor: "#7c3aed",
-      previewType: "chat-rag",
-      stats: [
-        { label: "Precision", value: "96.4%" },
-        { label: "Response Time", value: "<450ms" },
-        { label: "Routing", value: "Multi-Model" }
-      ]
-    }
   },
   {
     id: "suponeai",
-    title: "SUPONEAI",
-    tagline: "Retrieval Engine",
-    category: "featured",
-    typeBadge: "Campus Assistant",
+    title: "Suponeai",
+    categories: ["featured", "academic", "ai"],
     status: "Deployed at SUP'PTIC",
-    imageUrl: DEFAULT_FEATURED_MOCKUP,
+    imageUrl: "/images/projects/suponeai.jpg",
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Projet académique pour SUP'PTIC", en: "Academic project for SUP'PTIC" },
+    role: {
+      fr: "Développement du moteur de recherche sémantique et intégration backend.",
+      en: "Development of the semantic retrieval engine and backend integration."
+    },
     description: {
       en: "An AI assistant developed for SUP'PTIC, allowing students to query a knowledge base of 1,000+ Q&As through semantic search. Focused on backend retrieval and integration.",
       fr: "Un assistant IA développé pour SUP'PTIC permettant aux étudiants d'interroger une base de 1 000+ questions/réponses académiques via recherche sémantique."
@@ -181,24 +192,23 @@ export const PROJECTS: Project[] = [
       ]
     },
     tags: ["Django", "Scikit-Learn", "Pandas", "React", "NLP"],
-    screenMockup: {
-      themeColor: "#2563eb",
-      previewType: "chat-rag",
-      stats: [
-        { label: "Indexed Q&As", value: "1,000+" },
-        { label: "Target Audience", value: "SUP'PTIC" },
-        { label: "Accuracy", value: "High" }
-      ]
-    }
   },
   {
     id: "media-cloud-center",
-    title: "MEDIA CLOUD CENTER",
-    tagline: "Local Infrastructure",
-    category: "more",
-    typeBadge: "Network Streaming",
+    title: "Media cloud center",
+    categories: ["more", "personal", "network"],
     status: "Completed",
-    imageUrl: DEFAULT_MORE_MOCKUP,
+    imageUrl: "/images/projects/mediacloudcenter.jpg",
+    role: {
+      fr: "Proposition à confirmer : installation et configuration du serveur multimédia et des services accessibles sur le réseau local.",
+      en: "Draft to confirm: installation and configuration of the media server and services available over the local network."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Projet personnel d'infrastructure réseau", en: "Personal network infrastructure project" },
     description: {
       en: "A local media server designed to stream and share files across a network without relying on an internet connection.",
       fr: "Un serveur multimédia local conçu pour diffuser et partager des fichiers sur un réseau local autonome, sans nécessiter d'accès internet."
@@ -207,159 +217,337 @@ export const PROJECTS: Project[] = [
       en: "Allows high-speed multimedia streaming, document sharing, and distributed storage over localized Wi-Fi/LAN setups, ideal for bandwidth-constrained campus environments.",
       fr: "Permet la diffusion multimédia et le partage de documents à haut débit via Wi-Fi/LAN local autonome, idéal pour les environnements de campus déconnectés."
     },
-    tags: ["Networking", "Streaming", "Python", "Local LAN"],
-    screenMockup: {
-      themeColor: "#0284c7",
-      previewType: "terminal",
-      stats: [
-        { label: "Internet Required", value: "None (0%)" },
-        { label: "Protocol", value: "HTTP / UPnP" },
-        { label: "Throughput", value: "LAN Max" }
-      ]
-    }
+    tags: ["Networking", "Streaming", "Linux", "Docker"],
   },
   {
     id: "smart-trash",
-    title: "SMART TRASH",
-    tagline: "Embedded AI",
-    category: "more",
-    typeBadge: "AI & Embedded",
+    title: "Smart trash",
+    categories: ["more", "personal", "embedded", "ai"],
     status: "Prototype",
-    imageUrl: DEFAULT_MORE_MOCKUP,
+    imageUrl: "/images/projects/smart-trash.jpg",
+    role: {
+      fr: "Proposition à confirmer : assemblage du prototype embarqué et participation à l’intégration de la reconnaissance des déchets.",
+      en: "Draft to confirm: assembly of the embedded prototype and contribution to waste-recognition integration."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Prototype personnel", en: "Personal prototype" },
     description: {
       en: "A smart waste-sorting system combining AI and embedded hardware to recognize and classify waste.",
       fr: "Un système intelligent de tri des déchets combinant vision par ordinateur et électronique embarquée pour classifier automatiquement les matières."
     },
     tags: ["Arduino", "Computer Vision", "C++", "Sensors"],
-    screenMockup: {
-      themeColor: "#10b981",
-      previewType: "iot",
-      stats: [
-        { label: "Hardware", value: "Arduino / ESP32" },
-        { label: "Vision Model", value: "Edge CNN" },
-        { label: "Accuracy", value: "91%" }
-      ]
-    }
   },
   {
     id: "campusflow",
-    title: "CAMPUSFLOW",
-    tagline: "Platform Architecture",
-    category: "more",
-    typeBadge: "Campus Platform",
+    title: "Campusflow",
+    categories: ["more", "academic", "web"],
     status: "In Progress",
-    imageUrl: DEFAULT_MORE_MOCKUP,
+    imageUrl: "/images/projects/campusflow.jpg",
+    role: {
+      fr: "Proposition à confirmer : contribution au développement de l’interface et à l’intégration des modules de gestion du campus.",
+      en: "Draft to confirm: contribution to the interface development and integration of campus management modules."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Projet académique", en: "Academic project" },
     description: {
       en: "A unified digital campus management platform connecting students, delegates, and faculty administration.",
       fr: "Plateforme unifiée pour la vie de campus connectant étudiants, délégués et administration universitaire."
     },
     tags: ["React", "Node.js", "PostgreSQL", "Full-Stack"],
-    screenMockup: {
-      themeColor: "#6366f1",
-      previewType: "dashboard",
-      stats: [
-        { label: "Modules", value: "Courses / Events / Auth" },
-        { label: "Status", value: "Active Dev" }
-      ]
-    }
   },
   {
     id: "tasktrack",
-    title: "TASKTRACK",
-    tagline: "Learning Project",
-    category: "early",
-    typeBadge: "Desktop & Productivity",
+    title: "Tasktrack",
+    categories: ["early", "personal", "web"],
     status: "Completed",
-    imageUrl: DEFAULT_MORE_MOCKUP,
+    imageUrl: "/images/projects/tasktrack.jpg",
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Projet personnel d'apprentissage", en: "Personal learning project" },
+    role: {
+      fr: "Développement d'une application desktop de gestion de tâches en Java.",
+      en: "Development of a Java desktop task-management application."
+    },
     description: {
       en: "A simple task-management application built in Java as a foundational learning project.",
       fr: "Une application desktop de gestion de tâches développée en Java avec Swing et SQLite pour asseoir les bases de la POO."
     },
     tags: ["Java", "Swing", "SQLite"],
-    screenMockup: {
-      themeColor: "#475569",
-      previewType: "terminal"
+  },
+  {
+    id: "site-club-info",
+    title: "Site officiel du club info",
+    categories: ["more", "web"],
+    status: "Completed",
+    imageUrl: "/images/projects/siteclubinfo.png",
+    context: { fr: "Projet du Club Informatique de SUP’PTIC", en: "SUP’PTIC Computer Club project" },
+    role: {
+      fr: "Proposition à confirmer : participation au développement frontend et à la mise en ligne du site.",
+      en: "Draft to confirm: contribution to frontend development and website deployment."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    description: {
+      fr: "Développement et déploiement du site officiel du Club Informatique de SUP'PTIC pour centraliser les ressources et les informations pour les étudiants.",
+      en: "Development and deployment of the official SUP'PTIC Computer Club website to centralize resources and information for students."
+    },
+    tags: ["React", "Tailwind CSS", "TypeScript"]
+  },
+  {
+    id: "sango",
+    title: "Sango",
+    categories: ["more", "ai", "network"],
+    status: "In Progress",
+    imageUrl: "/images/projects/sango.jpg",
+    context: { fr: "Projet en cours", en: "Ongoing project" },
+    role: {
+      fr: "Proposition à confirmer : exploration de l’interface de routage et de la visualisation des itinéraires pour les secours.",
+      en: "Draft to confirm: exploration of the routing interface and emergency-route visualization."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    description: {
+      fr: "Système de routage en temps réel pour ambulances et pompiers, capable de s'adapter aux conditions changeantes.",
+      en: "A real-time routing system for ambulances and firefighters that adapts to changing conditions."
+    },
+    longDescription: {
+      fr: "Sango explore le routage intelligent pour les véhicules de secours, en tenant compte du trafic, de la météo, des incidents et de la qualité variable des routes.",
+      en: "Sango explores intelligent routing for emergency vehicles, taking into account traffic, weather, incidents and variable road quality."
+    },
+    tags: ["React", "TypeScript", "Python", "Vite"]
+  },
+  {
+    id: "shopkamer",
+    title: "Shopkamer",
+    categories: ["early", "training", "web"],
+    status: "Completed",
+    imageUrl: "/images/projects/shopkamer.jpg",
+    context: { fr: "Premier atelier du Club Informatique", en: "Computer Club’s first workshop" },
+    role: {
+      fr: "Proposition à confirmer : réalisation d’une interface e-commerce d’exercice et mise en pratique des bases web.",
+      en: "Draft to confirm: building a practice e-commerce interface and applying web fundamentals."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    description: {
+      fr: "Site e-commerce développé dans le cadre du premier atelier du Club pour mettre en pratique les bases du développement web.",
+      en: "An e-commerce website developed during the Club's first workshop to practise web development fundamentals."
+    },
+    tags: ["HTML", "CSS", "JavaScript", "PHP", "SQL"]
+  },
+  {
+    id: "bras-robotise",
+    title: "Bras robotisé",
+    categories: ["more", "training", "embedded"],
+    status: "Completed",
+    imageUrl: "/images/projects/bras-robotise.jpg",
+    role: {
+      fr: "Proposition à confirmer : câblage des servomoteurs et mise en œuvre de la commande par potentiomètre sur Arduino.",
+      en: "Draft to confirm: wiring the servomotors and implementing potentiometer control on Arduino."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Formation D-CLIC", en: "D-CLIC training" },
+    description: {
+      fr: "Bras mécanique contrôlé par servomoteurs et potentiomètre, piloté par Arduino.",
+      en: "Mechanical arm controlled by servomotors and a potentiometer, powered by Arduino."
+    },
+    tags: ["Arduino", "Servomoteurs", "C++", "Embedded"]
+  },
+  {
+    id: "robot-eviteur",
+    title: "Robot éviteur d’obstacles",
+    categories: ["more", "training", "embedded"],
+    status: "Completed",
+    imageUrl: "/images/projects/robot-eviteur.jpg",
+    role: {
+      fr: "Proposition à confirmer : intégration du capteur HC-SR04 et réglage de la logique d’évitement.",
+      en: "Draft to confirm: integrating the HC-SR04 sensor and tuning the obstacle-avoidance logic."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Formation D-CLIC", en: "D-CLIC training" },
+    description: {
+      fr: "Robot autonome utilisant un capteur ultrason HC-SR04 pour détecter et éviter les obstacles.",
+      en: "Autonomous robot using an HC-SR04 ultrasonic sensor to detect and avoid obstacles."
+    },
+    tags: ["Arduino", "HC-SR04", "Moteurs", "Embedded"]
+  },
+  {
+    id: "compteur-7-segments",
+    title: "Compteur 7 segments",
+    categories: ["more", "training", "embedded"],
+    status: "Completed",
+    imageUrl: "/images/projects/compteur-7-segments.jpg",
+    role: {
+      fr: "Proposition à confirmer : câblage du registre 74HC595 et programmation de l’affichage des chiffres.",
+      en: "Draft to confirm: wiring the 74HC595 shift register and programming digit display."
+    },
+    draftDetails: true,
+    demoAssets: true,
+    gallery: DEMO_PROJECT_GALLERY,
+    videos: [DEMO_PROJECT_VIDEO],
+    links: DEMO_PROJECT_LINKS,
+    context: { fr: "Formation D-CLIC", en: "D-CLIC training" },
+    description: {
+      fr: "Afficheur numérique piloté par registre à décalage 74HC595 et Arduino.",
+      en: "Digital display driven by a 74HC595 shift register and Arduino."
+    },
+    tags: ["Arduino", "74HC595", "7-Segment", "Embedded"]
+  },
+];
+
+export const CERTIFICATIONS_DATA: CertificationItem[] = [
+  {
+    id: "dclic",
+    title: { fr: "D-CLIC — Programmation Électronique & Systèmes Embarqués", en: "D-CLIC — Electronic Programming & Embedded Systems" },
+    issuer: { fr: "OIF / CNFFDP", en: "OIF / CNFFDP" },
+    kind: "official",
+    duration: "400h",
+    period: "2025 — 2026",
+    categories: ["certification", "training"],
+    imageUrl: CERTIFICATION_IMAGE,
+    skills: ["Arduino", "ESP32", "C/C++", "MicroPython", "Électronique", "Capteurs & actionneurs", "Wi-Fi / Bluetooth", "Prototypage"],
+    relatedProjectIds: ["bras-robotise", "robot-eviteur", "compteur-7-segments"],
+    relatedProjectsContext: { fr: "Projets issus de cette formation", en: "Projects developed during this training" },
+    description: {
+      fr: "Parcours certifiant de 400 heures consacré à la programmation électronique et aux systèmes embarqués.",
+      en: "A 400-hour certification program focused on electronic programming and embedded systems."
     }
   },
   {
-    id: "supphub",
-    title: "SUPPHUB",
-    tagline: "Community & Collaboration",
-    category: "early",
-    typeBadge: "Student Community",
-    status: "Early Stage",
-    imageUrl: DEFAULT_MORE_MOCKUP,
+    id: "cursor-hackathon-2026",
+    title: { fr: "Cursor Hackathon J.U.I.N 2026", en: "Cursor Hackathon J.U.I.N 2026" },
+    issuer: { fr: "Université de Yaoundé I", en: "University of Yaoundé I" },
+    kind: "participation",
+    period: "2026",
+    categories: ["competition"],
+    imageUrl: "/images/certs/cursor.jpg",
+    momentPhotos: ["/images/activities/cursor.jpg"],
+    relatedProjectIds: ["lekki"],
+    relatedProjectsContext: { fr: "Projet associé à cet événement", en: "Project associated with this event" },
     description: {
-      en: "An early-stage platform designed around communication and interaction between SUP'PTIC students.",
-      fr: "Projet précurseur axé sur la mise en relation et l'échange de ressources entre étudiants de SUP'PTIC."
-    },
-    tags: ["Sup'PTIC Community", "Web", "API"],
-    screenMockup: {
-      themeColor: "#3b82f6",
-      previewType: "mobile-app"
+      fr: "Certificat de participation au hackathon Cursor J.U.I.N 2026.",
+      en: "Certificate of participation in Cursor Hackathon J.U.I.N 2026."
+    }
+  },
+  {
+    id: "hackverse-2026",
+    title: { fr: "HackVerse 2026", en: "HackVerse 2026" },
+    issuer: { fr: "Club GI", en: "Club GI" },
+    kind: "participation",
+    period: "2026",
+    categories: ["competition"],
+    imageUrl: "/images/certs/hackverse.jpeg",
+    momentPhotos: ["/images/activities/hackverse.jpg"],
+    description: {
+      fr: "Attestation officielle de participation au HackVerse 2026.",
+      en: "Official certificate of participation in HackVerse 2026."
     }
   }
 ];
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
-    title: {
-      en: "Software & Web Engineering",
-      fr: "Génie Logiciel & Développement Web"
-    },
-    iconName: "code",
+    id: "software",
+    title: { en: "Software", fr: "Software" },
     skills: [
-      { name: "Python", tag: "PY", activeDot: true },
-      { name: "Django", tag: "DJ", activeDot: true },
-      { name: "FastAPI" },
-      { name: "React", activeDot: true },
-      { name: "React Native" },
-      { name: "TypeScript", tag: "TS" },
-      { name: "PostgreSQL & SQLite" },
-      { name: "Docker" },
-      { name: "REST APIs" }
+      { name: "Python", icon: "python", relatedProjects: ["lekki", "suponeai", "sango"] },
+      { name: "Django", icon: "django", relatedProjects: ["relio", "carburflow", "suponeai"] },
+      { name: "FastAPI", icon: "fastapi", relatedProjects: ["lekki"] },
+      { name: "React", icon: "react", relatedProjects: ["carburflow", "lekki", "campusflow"] },
+      { name: "React Native", icon: "react", relatedProjects: ["relio"] },
+      { name: "TypeScript", icon: "typescript", relatedProjects: ["lekki", "campusflow"] },
+      { name: "JavaScript", icon: "javascript", relatedProjects: ["campusflow", "lekki"] },
+      { name: "PostgreSQL", icon: "postgresql", relatedProjects: ["relio", "carburflow", "campusflow"] },
+      { name: "SQLite", icon: "sqlite", relatedProjects: ["tasktrack"] },
+      { name: "Docker", icon: "docker", relatedProjects: ["carburflow"] },
+      { name: "Git", icon: "git", context: { fr: "Versionnement des projets de développement", en: "Version control for development projects" } },
+      { name: "GitHub", icon: "github", context: { fr: "Hébergement et partage de code", en: "Code hosting and collaboration" } }
     ]
   },
   {
-    title: {
-      en: "Networks & Infrastructure",
-      fr: "Réseaux & Infrastructures"
-    },
-    iconName: "network",
+    id: "networks",
+    title: { en: "Networks", fr: "Réseaux" },
     skills: [
-      { name: "GNS3 & Packet Tracer" },
-      { name: "IPv4 / IPv6" },
-      { name: "VLAN & OSPF" },
-      { name: "ACL & Routing" },
-      { name: "Protocol Architecture" }
+      { name: "GNS3", icon: "gns3", context: { fr: "TP Réseaux — SUP’PTIC", en: "Networking labs — SUP’PTIC" } },
+      { name: "Cisco Packet Tracer", icon: "cisco", context: { fr: "TP Réseaux — SUP’PTIC", en: "Networking labs — SUP’PTIC" } },
+      { name: "Wireshark", icon: "wireshark", context: { fr: "TP réseau — SUP’PTIC", en: "Network analysis — HackVerse 2026" } },
+      { name: "Nmap", icon: "nmap", context: { fr: "TP réseau — SUP’PTIC", en: "Network analysis — HackVerse 2026" } }
     ]
   },
   {
-    title: {
-      en: "AI, RAG & Data",
-      fr: "Intelligence Artificielle & Données"
-    },
-    iconName: "brain",
+    id: "ai-data",
+    title: { en: "AI & Data", fr: "IA & Données" },
     skills: [
-      { name: "RAG Architectures", activeDot: true },
-      { name: "LLMs & Embeddings" },
-      { name: "Scikit-Learn", tag: "SK" },
-      { name: "PyTorch", tag: "PT" },
-      { name: "OpenCV & ONNX" }
+      { name: "Scikit-learn", icon: "scikitlearn", relatedProjects: ["suponeai"] },
+      { name: "PyTorch", icon: "pytorch" },
+      { name: "OpenCV", icon: "opencv", relatedProjects: ["smart-trash"] },
+      { name: "Pandas", icon: "pandas", relatedProjects: ["suponeai"] },
+      { name: "ONNX", icon: "onnx" }
     ]
   },
   {
-    title: {
-      en: "Systems, IoT & Security",
-      fr: "Systèmes, IoT & Cybersécurité"
-    },
-    iconName: "shield",
+    id: "systems",
+    title: { en: "Systems & IoT", fr: "Systèmes & IoT" },
     skills: [
-      { name: "Wireshark & Nmap" },
-      { name: "Linux / Ubuntu" },
-      { name: "TLS / SSL" },
-      { name: "C/C++ & ESP32" },
-      { name: "Arduino & Sensors" }
+      { name: "Arduino", icon: "arduino", relatedProjects: ["bras-robotise", "robot-eviteur", "compteur-7-segments"] },
+      { name: "ESP32", icon: "espressif", relatedProjects: ["smart-trash"] },
+      { name: "Raspberry Pi", icon: "raspberrypi" },
+      { name: "C", icon: "c" },
+      { name: "C++", icon: "cplusplus", relatedProjects: ["bras-robotise", "robot-eviteur", "compteur-7-segments", "smart-trash"] },
+      { name: "Linux", icon: "linux" },
+      { name: "Ubuntu", icon: "ubuntu" }
+    ]
+  },
+  {
+    id: "cybersecurity",
+    title: { en: "Cybersecurity", fr: "Cybersécurité" },
+    skills: [
+      { name: "Kali Linux", icon: "kalilinux" },
+      { name: "Wireshark", icon: "wireshark", context: { fr: "Analyse réseau — HackVerse 2026", en: "Network analysis — HackVerse 2026" } },
+      { name: "Nmap", icon: "nmap", context: { fr: "Analyse réseau — HackVerse 2026", en: "Network analysis — HackVerse 2026" } },
+      { name: "Burp Suite", icon: "burpsuite" },
+      { name: "Metasploit", icon: "metasploit" },
+      { name: "OpenSSL", icon: "openssl" }
+    ]
+  },
+  {
+    id: "tools",
+    title: { en: "Tools & Practices", fr: "Outils & Pratiques" },
+    skills: [
+      { name: "VS Code", icon: "visualstudiocode" },
+      { name: "Postman", icon: "postman" },
+      { name: "Figma", icon: "figma" },
+      { name: "Notion", icon: "notion" },
+      { name: "Docker", icon: "docker", relatedProjects: ["carburflow"] },
+      { name: "Git", icon: "git", context: { fr: "Versionnement des projets de développement", en: "Version control for development projects" } },
+      { name: "GitHub", icon: "github", context: { fr: "Hébergement et partage de code", en: "Code hosting and collaboration" } }
     ]
   }
 ];
@@ -430,14 +618,20 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
     title: "HackVerse 2026",
     year: "2026",
     imageUrl: HACKVERSE_IMAGE,
+    certificateImageUrl: "/images/certs/hackverse.jpeg",
+    categories: ["competition"],
     tag: "Cybersecurity Hackathon",
+    role: {
+      en: "Cybersecurity team participant",
+      fr: "Participant au sein de l’équipe cybersécurité"
+    },
     description: {
       en: "Participation in a high-intensity cybersecurity hackathon focusing on offensive and defensive strategies, network analysis, and vulnerability mitigation.",
       fr: "Participation à un hackathon intense de cybersécurité centré sur les stratégies offensives et défensives, l'analyse de paquets et la remédiation de failles."
     },
     details: {
-      en: "HackVerse 2026 brought together top engineering talents across Central Africa for a 48-hour competitive cybersecurity showdown. Our squad focused on deep packet inspection, identifying server-side misconfigurations, analyzing obfuscated payloads, and designing automated intrusion mitigation scripts.",
-      fr: "Le HackVerse 2026 a réuni les meilleurs profils techniques de la sous-région pour 48h d'épreuves intensives d'attaque et défense d'infrastructures. Notre équipe s'est concentrée sur l'inspection approfondie de trames réseau, l'exploitation et la correction de failles d'élévation de privilèges, ainsi que le durcissement d'équipements sous Linux."
+      en: "HackVerse 2026 is a 48-hour cybersecurity hackathon focused on security challenges, network analysis, and system defense.",
+      fr: "HackVerse 2026 est un hackathon de cybersécurité de 48 heures consacré à des défis de sécurité, à l’analyse réseau et à la défense des systèmes."
     },
     highlights: {
       en: [
@@ -457,14 +651,21 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
     title: "Cursor Hackathon J.U.I.N 2026",
     year: "2026",
     imageUrl: CURSOR_HACKATHON_IMAGE,
+    certificateImageUrl: "/images/certs/cursor.jpg",
+    categories: ["competition"],
     tag: "AI & Software Hackathon",
+    role: {
+      en: "Lead developer on LEKKI",
+      fr: "Développeur principal sur LEKKI"
+    },
+    relatedProjectIds: ["lekki"],
     description: {
       en: "Lead developer for the Lekki project, integrating a hybrid RAG pipeline for sovereign enterprise knowledge management.",
       fr: "Lead développeur sur le projet Lekki, intégrant un pipeline RAG souverain primé pour la recherche sémantique en entreprise."
     },
     details: {
-      en: "During the 2026 edition of the J.U.I.N Cursor Hackathon, I architected and built the full pipeline for Lekki. The challenge was to deliver a context-aware enterprise retrieval assistant operating with high semantic precision, zero hallucinations on sensitive documentation, and near-instant latency.",
-      fr: "Lors de l'édition 2026 du Hackathon J.U.I.N Cursor, j'ai piloté l'architecture et l'implémentation complète du moteur sémantique Lekki. L'objectif était de concevoir un assistant conversationnel pour entreprise garantissant une recherche vectorielle ultra-rapide et l'élimination des hallucinations grâce à des citations strictes des sources documentaires."
+      en: "The 2026 J.U.I.N Cursor Hackathon challenged teams to build useful software solutions. LEKKI, an AI-assisted knowledge search project, was developed during the event.",
+      fr: "Le Hackathon J.U.I.N Cursor 2026 invitait les équipes à concevoir des solutions logicielles utiles. LEKKI, un projet de recherche documentaire assistée par IA, a été développé dans ce cadre."
     },
     highlights: {
       en: [
@@ -484,14 +685,19 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
     title: "Vice-président Club Informatique",
     year: "2024 – present",
     imageUrl: CLUB_INFO_IMAGE,
+    categories: ["leadership", "community"],
     tag: "SUP'PTIC Leadership",
+    role: {
+      en: "Vice-President of the Computer Science Club",
+      fr: "Vice-président du Club Informatique"
+    },
     description: {
       en: "Leading the computer science club at SUP'PTIC, organizing practical workshops in programming, networks, and technical bootcamps for students.",
       fr: "Direction du Club Informatique de SUP'PTIC, organisation d'ateliers pratiques de code, réseau, IoT et sessions de mentorat pour les étudiants."
     },
     details: {
-      en: "As Vice-President of the SUP'PTIC Computer Club, I coordinate technical workshops and peer-mentoring programs for over 150 engineering students. We focus on bridging theoretical coursework with practical industry demands: Docker deployments, clean code architecture, network administration, and CTF training.",
-      fr: "En tant que Vice-président du Club Informatique de l'École Nationale Supérieure des Postes, Télécommunications et TIC (SUP'PTIC), je pilote les ateliers techniques hebdomadaires pour plus de 150 étudiants. Notre mission est d'ancrer les compétences pratiques : conteneurisation Docker, bonnes pratiques de code, protocoles réseaux et entraînement aux compétitions CTF."
+      en: "The SUP'PTIC Computer Club brings students together through practical workshops and peer learning in software, networks, and embedded technology.",
+      fr: "Le Club Informatique de SUP'PTIC réunit les étudiants autour d’ateliers pratiques et du partage de connaissances en développement, réseaux et systèmes embarqués."
     },
     highlights: {
       en: [

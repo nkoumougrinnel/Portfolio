@@ -12,7 +12,7 @@ export const Footer: React.FC<FooterProps> = ({ language }) => {
   };
 
   return (
-    <footer className="w-full py-8 px-5 border-t border-[#e5eeff] bg-white flex flex-col items-center justify-center text-center gap-2 font-mono text-xs text-[#565e74]">
+    <footer className="w-full py-8 px-5 border-t border-[#e5eeff] bg-white flex flex-col items-center justify-center text-center gap-2 font-sans text-xs text-[#565e74]">
       <p className="text-[11.5px] text-[#0b1c30] font-medium">
         © 2026 Nkoumou Tjade Grinnel Germain. {language === 'fr' ? 'Tous droits réservés.' : 'All rights reserved.'}
       </p>

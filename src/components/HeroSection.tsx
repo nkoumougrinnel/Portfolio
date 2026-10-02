@@ -19,10 +19,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       id="hero"
       className="relative w-full min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-between items-center px-5 py-6 sm:py-8 overflow-hidden bg-white border-b border-[#e5eeff]/70"
     >
-      {/* Background subtle radial ambient glows */}
-      <div className="absolute -top-16 -right-16 w-80 h-80 bg-blue-100/60 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute top-1/2 -left-20 w-64 h-64 bg-[#e5eeff]/70 rounded-full blur-2xl pointer-events-none"></div>
-
       {/* Top spacer for perfect vertical balancing on large screens */}
       <div className="hidden sm:block h-2 pointer-events-none"></div>
 
@@ -33,9 +29,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         
         {/* Mobile Portrait (visible on mobile/tablet, hidden on desktop lg) */}
         <div className="flex lg:hidden justify-center items-center pointer-events-none select-none">
-          <div className="relative w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center">
-            <div className="absolute inset-0 bg-blue-100/60 rounded-full blur-xl"></div>
-            <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-white shadow-md bg-[#f4f7fc]">
+          <div className="relative h-72 w-72 flex items-center justify-center">
+            <div className="relative h-72 w-72 rounded-full overflow-hidden border-2 border-white shadow-md bg-[#f4f7fc]">
               <img
                 alt="Portrait de NKOUMOU TJADE Grinnel Germain"
                 className="w-full h-full rounded-full object-cover"
@@ -51,17 +46,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Left Column (Desktop) / Main Text Details (Mobile) */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left flex-1 max-w-2xl">
-          {/* Status Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/90 border border-[#2563eb]/20 text-xs font-mono text-[#0b1c30] mb-3 shadow-xs">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2563eb] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2563eb]"></span>
-            </span>
-            <span className="font-semibold tracking-tight">
-              {language === 'fr' ? 'Élève-Ingénieur 3ème Année' : '3rd Year Engineering Student'}
-            </span>
-            <span className="text-[#565e74] opacity-50">·</span>
-            <span className="font-bold text-[#2563eb]">SUP'PTIC</span>
+          <div className="mb-3 text-sm font-medium text-[#565e74]">
+            {language === 'fr' ? 'Étudiant ingénieur en 3e année · SUP’PTIC' : '3rd-year engineering student · SUP’PTIC'}
           </div>
 
           {/* Titles & Name */}
@@ -72,17 +58,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             Grinnel Germain
           </h2>
 
-          {/* Hero Quote / Statement */}
-          <div className="w-full max-w-md lg:max-w-xl my-2 p-4 rounded-xl bg-gradient-to-r from-blue-50/80 via-[#f4f7fc]/70 to-white border-l-3 border-l-[#2563eb] border border-[#c3c6d7]/35 shadow-xs text-left">
-            <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase font-bold text-[#2563eb] tracking-widest mb-1.5">
-              <span>{language === 'fr' ? 'MOTO & VISION' : 'CORE CREED'}</span>
-            </div>
-            <p className="text-[13.5px] sm:text-[14.5px] leading-relaxed italic text-[#0b1c30] font-medium">
-              {language === 'fr'
-                ? '« Concevoir des systèmes. Comprendre leur fonctionnement profond. Apprendre à les sécuriser. »'
-                : '“Building systems. Understanding how they work. Learning how to secure them.”'}
-            </p>
-          </div>
+          <p className="my-2 max-w-lg text-[15px] leading-relaxed text-[#565e74]">
+            {language === 'fr'
+              ? 'Je m’intéresse au développement, aux systèmes et aux réseaux, avec un intérêt grandissant pour la cybersécurité.'
+              : 'I’m interested in software development, systems, and networks, with a growing interest in cybersecurity.'}
+          </p>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start w-full gap-3 max-w-sm lg:max-w-md mt-5">
@@ -91,7 +71,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               className="w-full sm:flex-1 h-11 px-5 bg-[#2563eb] hover:bg-blue-700 text-white font-medium rounded-xl flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all active:scale-98"
             >
               <span className="text-sm font-semibold">
-                {language === 'fr' ? 'Explorer les Projets' : 'View Projects'}
+                {language === 'fr' ? 'Voir mes projets' : 'View my projects'}
               </span>
               <ArrowRight className="w-4 h-4" />
             </a>
@@ -111,10 +91,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Desktop Large Portrait (visible on lg screens, placed on the right side) */}
         <div className="hidden lg:flex justify-end items-center shrink-0 pointer-events-none select-none">
           <div className="relative w-72 h-72 xl:w-96 xl:h-96 2xl:w-[420px] 2xl:h-[420px] flex items-center justify-center">
-            {/* Subtle multi-layer ambient glow */}
-            <div className="absolute inset-0 bg-blue-100/70 rounded-full blur-3xl transform scale-110"></div>
-            <div className="absolute -inset-3 bg-[#2563eb]/10 rounded-full blur-2xl"></div>
-
             {/* Large static portrait, crisp border, zero hover animation */}
             <div className="relative w-72 h-72 xl:w-96 xl:h-96 2xl:w-[420px] 2xl:h-[420px] rounded-full overflow-hidden border-4 border-white shadow-2xl bg-[#f4f7fc]">
               <img
