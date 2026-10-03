@@ -9,46 +9,46 @@ interface ExperienceSectionProps {
 
 export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }) => {
   return (
-    <section id="experience" className="px-5 py-10 bg-white border-b border-[#e5eeff]/70">
+    <section id="experience" className="px-5 py-10">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
             {language === 'fr' ? 'Expérience Professionnelle' : 'Experience'}
           </h2>
         </div>
 
         {/* Timeline format matching layout */}
-        <div className="relative pl-5 sm:pl-6 border-l-2 border-[#2563eb]/40 space-y-8">
+        <div className="relative pl-5 sm:pl-6 border-l-2 border-[var(--color-accent)]/40 space-y-8">
           {EXPERIENCE_DATA.map((exp, idx) => (
-            <div key={idx} className="relative flex flex-col gap-2 group">
+            <div key={idx} className="relative flex flex-col gap-2 group glass-card p-4 sm:p-5 rounded-2xl">
               {/* Timeline marker node */}
-              <div className="absolute -left-[27px] sm:-left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-white border-2 border-[#2563eb] shadow-xs group-hover:scale-125 transition-transform"></div>
+              <div className="absolute -left-[43px] sm:-left-[51px] top-5 sm:top-6 w-3.5 h-3.5 rounded-full bg-[var(--color-bg-main)] border-2 border-[var(--color-accent)] shadow-xs group-hover:scale-125 transition-transform"></div>
 
               {/* Company & Date */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                <span className="text-sm text-[#2563eb] font-bold flex items-center gap-1.5">
+                <span className="text-sm text-[var(--color-accent)] font-bold flex items-center gap-1.5">
                   <Building2 className="w-3.5 h-3.5" />
                   {exp.company}
                 </span>
-                <span className="text-[#565e74] text-[11px] flex items-center gap-1 bg-[#f4f7fc] px-2.5 py-0.5 rounded-full border border-[#c3c6d7]/30 w-fit">
-                  <Calendar className="w-3 h-3 text-[#2563eb]" />
+                <span className="text-[var(--color-text-muted)] text-[11px] flex items-center gap-1 bg-[var(--color-bg-soft)] px-2.5 py-0.5 rounded-full border border-[var(--color-border-muted)]/30 w-fit">
+                  <Calendar className="w-3 h-3 text-[var(--color-accent)]" />
                   {exp.period}
                 </span>
               </div>
 
               {/* Role */}
-              <div className="text-sm sm:text-base font-bold text-[#0b1c30]">
+              <div className="text-sm sm:text-base font-bold text-[var(--color-text-main)]">
                 {exp.role[language]}
               </div>
 
               {/* Department & Location */}
-              <div className="text-[11px] text-[#565e74] flex items-center gap-1 leading-snug">
-                <MapPin className="w-3 h-3 text-[#2563eb] shrink-0" />
+              <div className="text-[11px] text-[var(--color-text-muted)] flex items-center gap-1 leading-snug">
+                <MapPin className="w-3 h-3 text-[var(--color-accent)] shrink-0" />
                 <span>{exp.department[language]}</span>
               </div>
 
               {/* Description */}
-              <p className="text-[12.5px] sm:text-[13px] leading-relaxed text-[#565e74] mt-1 text-justify">
+              <p className="text-[12.5px] sm:text-[13px] leading-relaxed text-[var(--color-text-muted)] mt-1 text-justify">
                 {exp.description[language]}
               </p>
 
@@ -57,7 +57,7 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }
                 {exp.tags.map((tag, tIdx) => (
                   <span
                     key={tIdx}
-                    className="px-2.5 py-0.5 rounded-full bg-[#f4f7fc] text-[#565e74] border border-[#c3c6d7]/40 font-medium"
+                    className="px-2.5 py-0.5 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/20 font-medium transition-colors hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/20"
                   >
                     {tag}
                   </span>

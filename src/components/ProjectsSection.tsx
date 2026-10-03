@@ -76,10 +76,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const renderProjectCard = (project: Project) => (
     <article
       key={project.id}
-      className="group flex h-full flex-col justify-between gap-3 rounded-2xl border border-[#e5eeff] bg-white p-4 shadow-xs transition-all hover:border-[#2563eb]/40 hover:shadow-md sm:p-5"
+      className="group flex h-full flex-col justify-between gap-3 rounded-2xl glass-card p-4 transition-all hover:border-[var(--color-accent)]/40 hover:shadow-md sm:p-5"
     >
       <div className="flex flex-col gap-3">
-        <div className="group/img relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-[#c3c6d7]/30 bg-slate-900 shadow-inner">
+        <div className="group/img relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-[var(--color-border-muted)]/30 bg-[var(--color-media-surface)] shadow-inner">
           <img
             alt={project.title}
             className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-102"
@@ -92,12 +92,12 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         </div>
 
         <div className="pt-1">
-          <h4 className="text-base font-bold text-[#0b1c30] transition-colors group-hover:text-[#2563eb] sm:text-lg">
+          <h4 className="text-base font-bold text-[var(--color-text-main)] transition-colors group-hover:text-[var(--color-accent)] sm:text-lg">
             {project.title}
           </h4>
         </div>
 
-        <p className="line-clamp-3 text-[13px] leading-relaxed text-[#565e74]">
+        <p className="line-clamp-3 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
           {project.description[language]}
         </p>
 
@@ -105,7 +105,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-[#c3c6d7]/40 bg-[#f4f7fc] px-2.5 py-0.5 text-[#565e74] transition-colors hover:border-[#2563eb]/30 hover:text-[#2563eb]"
+              className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-[var(--color-accent)] transition-colors hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/20"
             >
               {tag}
             </span>
@@ -113,15 +113,15 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         </div>
       </div>
 
-      <div className="mt-1 flex items-center justify-between border-t border-[#e5eeff] pt-3">
-        <span className="flex items-center gap-1 font-mono text-[10.5px] text-[#565e74]">
-          <Layers className="h-3 w-3 text-[#2563eb]" />
+      <div className="mt-1 flex items-center justify-between border-t border-[var(--color-border)] pt-3">
+        <span className="flex items-center gap-1 font-mono text-[10.5px] text-[var(--color-text-muted)]">
+          <Layers className="h-3 w-3 text-[var(--color-accent)]" />
           {project.status}
         </span>
         <button
           type="button"
           onClick={() => onSelectProject(project)}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-[#2563eb]/25 bg-blue-50/80 px-3.5 py-1.5 text-xs font-semibold text-[#2563eb] shadow-xs transition-all hover:bg-[#2563eb] hover:text-white active:scale-98"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--color-accent)]/25 bg-[var(--color-bg-accent)]/50 px-3.5 py-1.5 text-xs font-semibold text-[var(--color-accent)] shadow-xs transition-all hover:bg-[var(--color-accent)] hover:text-white active:scale-98"
         >
           <span>{language === 'fr' ? 'Détails' : 'Details'}</span>
           <ExternalLink className="h-3.5 w-3.5" />
@@ -131,11 +131,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   );
 
   return (
-    <section id="projects" className="border-b border-[#e5eeff]/70 bg-[#f4f7fc]/40 px-5 py-10">
+    <section id="projects" className="px-5 py-10">
       <div className="mx-auto max-w-7xl px-0 sm:px-4 lg:px-6">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold tracking-tight text-[#0b1c30] sm:text-xl">
+            <h2 className="text-lg font-bold tracking-tight text-[var(--color-text-main)] sm:text-xl">
               {language === 'fr' ? 'Projets & Réalisations' : 'Projects'}
             </h2>
           </div>
@@ -147,14 +147,14 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               type="button"
               aria-pressed={selectedCategories.length === 0}
               onClick={() => setSelectedFilters({})}
-              className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${selectedCategories.length === 0 ? 'border-[#2563eb] bg-[#2563eb] text-white' : 'border-[#c3c6d7]/50 bg-white text-[#565e74] hover:border-[#2563eb]/50 hover:text-[#2563eb]'}`}
+              className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${selectedCategories.length === 0 ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-lg shadow-[var(--color-accent)]/25' : 'border-[var(--color-border)]/50 bg-[var(--color-bg-soft)]/50 backdrop-blur-sm text-[var(--color-text-muted)] hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]'}`}
             >
               {language === 'fr' ? 'Tous' : 'All'}
             </button>
 
             {FILTER_GROUPS.map((group, groupIndex) => (
               <React.Fragment key={group.id}>
-                {groupIndex > 0 && <span aria-hidden="true" className="mx-1 h-6 w-px shrink-0 bg-[#c3c6d7]" />}
+                {groupIndex > 0 && <span aria-hidden="true" className="mx-1 h-6 w-px shrink-0 bg-[var(--color-border-muted)]" />}
                 <div role="group" aria-label={group.label[language]} className="flex shrink-0 items-center gap-2">
                   {group.categories.map((category) => (
                     <button
@@ -162,7 +162,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                       type="button"
                       aria-pressed={selectedFilters[group.id] === category}
                       onClick={() => toggleFilter(group.id, category)}
-                      className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${selectedFilters[group.id] === category ? 'border-[#2563eb] bg-[#2563eb] text-white' : 'border-[#c3c6d7]/50 bg-white text-[#565e74] hover:border-[#2563eb]/50 hover:text-[#2563eb]'}`}
+                      className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${selectedFilters[group.id] === category ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-lg shadow-[var(--color-accent)]/25' : 'border-[var(--color-border)]/50 bg-[var(--color-bg-soft)]/50 backdrop-blur-sm text-[var(--color-text-muted)] hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]'}`}
                     >
                       {FILTER_LABELS[category][language]}
                     </button>
@@ -171,14 +171,14 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               </React.Fragment>
             ))}
           </div>
-          <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#f4f7fc]/95 to-transparent sm:hidden" />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[var(--color-bg-main)]/95 to-transparent sm:hidden" />
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {visibleProjects.map(renderProjectCard)}
         </div>
         {visibleProjects.length === 0 && (
-          <p className="py-8 text-center text-sm text-[#565e74]">
+          <p className="py-8 text-center text-sm text-[var(--color-text-muted)]">
             {language === 'fr' ? 'Aucun projet ne correspond à cette combinaison.' : 'No projects match this combination.'}
           </p>
         )}

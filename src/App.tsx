@@ -30,6 +30,21 @@ import { Language, Project, ActivityItem, CertificationItem } from './types';
 
 export default function App() {
   const [language, setLanguage] = useState<Language>('fr');
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    const saved = localStorage.getItem('nt_theme');
+    return saved ? saved === 'dark' : false; // default = light (menuisier)
+  });
+
+  // Apply theme to <html> on mount and on change
+  useEffect(() => {
+    const html = document.documentElement;
+    if (isDark) {
+      html.setAttribute('data-theme', 'dark');
+    } else {
+      html.removeAttribute('data-theme');
+    }
+    localStorage.setItem('nt_theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   // Dynamic Image state storage
   const [avatarUrl, setAvatarUrl] = useState<string>(PROFILE_AVATAR);
@@ -149,18 +164,29 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#0b1c30] flex flex-col w-full">
-      <div className="w-full bg-white flex flex-col min-h-screen relative">
+    <div className="min-h-screen text-[var(--color-text-main)] flex flex-col w-full relative z-0">
+        {/* Aurora Background Blobs — dark mode only */}
+        {isDark && (
+          <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+            <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent)]/30 blur-[100px] animate-blob"></div>
+            <div className="absolute top-[30%] right-[-10%] w-[35vw] h-[35vw] rounded-full bg-violet-500/25 blur-[120px] animate-blob animation-delay-2000"></div>
+            <div className="absolute bottom-[-10%] left-[10%] w-[45vw] h-[45vw] rounded-full bg-cyan-400/20 blur-[100px] animate-blob animation-delay-4000"></div>
+          </div>
+        )}
+
+      <div className="w-full flex flex-col min-h-screen relative">
         {/* Header */}
         <Header
           language={language}
           onLanguageChange={setLanguage}
           onOpenCvModal={() => setIsCvModalOpen(true)}
           avatarUrl={avatarUrl}
+          isDark={isDark}
+          onToggleTheme={() => setIsDark((d) => !d)}
         />
 
         {/* Main Content Body */}
-        <main className="flex-1 flex flex-col w-full">
+        <main className="flex-1 flex flex-col w-full pt-16">
           <HeroSection
             language={language}
             avatarUrl={avatarUrl}

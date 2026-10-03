@@ -1,16 +1,123 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════
+   LIGHT THEME — "Menuisier" (default)
+   Warm craft paper, no glassmorphism
+═══════════════════════════════════════════ */
 :root {
   --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
   --font-technical: 'JetBrains Mono', monospace;
+
+  /* ── Backgrounds ───────────────────────── */
+  --color-bg-main:   #F5EDD8;   /* crème menuisier chaud */
+  --color-bg-soft:   #FFFFFF;   /* cartes blanches */
+  --color-bg-accent: #F9FAFB;   /* fond léger survol */
+  --color-bg-panel:  #FFFFFF;   /* modales blanches */
+
+  /* ── Texte ─────────────────────────────── */
+  --color-text-main:   #1A1209;  /* quasi noir chaud */
+  --color-text-muted:  #5C4A2A;  /* brun lisible */
+  --color-text-subtle: #7A6240;
+  --color-text-faint:  #A08C68;
+
+  /* ── Accent principal ──────────────────── */
+  --color-accent:       #7C3A0D;  /* brun roux fonce */
+  --color-accent-hover: #5C2A08;
+
+  /* ── Utilitaires ───────────────────────── */
+  --color-success:              #166534;
+  --color-danger:               #991B1B;
+  --color-category-competition: #92400E;
+  --color-category-neutral:     #6B7280;
+
+  /* ── Bordures ──────────────────────────── */
+  --color-border:       rgba(92, 74, 42, 0.20);
+  --color-border-muted: rgba(92, 74, 42, 0.12);
+
+  /* ── Médias (modals sombres) ───────────── */
+  --color-media-overlay:  #000000;
+  --color-media-surface:  #0f172a;
+  --color-media-panel:    #020617;
+  --color-media-control:  #1e293b;
+  --color-media-border:   #334155;
+  --color-media-text:     #e2e8f0;
+  --color-media-muted:    #94a3b8;
+  --color-media-subtle:   #cbd5e1;
+}
+
+/* ═══════════════════════════════════════════
+   DARK THEME — "Midnight" (data-theme=dark)
+   Deep night, glassmorphism + aurora blobs
+═══════════════════════════════════════════ */
+[data-theme="dark"] {
+  /* ── Backgrounds ───────────────────────── */
+  --color-bg-main:   #0A0F1E;
+  --color-bg-soft:   #111827;
+  --color-bg-accent: #1E2A3A;
+  --color-bg-panel:  #0D1422;
+
+  /* ── Texte ─────────────────────────────── */
+  --color-text-main:   #F1F5F9;
+  --color-text-muted:  #94A3B8;
+  --color-text-subtle: #64748B;
+  --color-text-faint:  #475569;
+
+  /* ── Accent principal ──────────────────── */
+  --color-accent:       #38BDF8;
+  --color-accent-hover: #7DD3FC;
+
+  /* ── Utilitaires ───────────────────────── */
+  --color-success:              #34D399;
+  --color-danger:               #F87171;
+  --color-category-competition: #FBBF24;
+  --color-category-neutral:     #94A3B8;
+
+  /* ── Bordures ──────────────────────────── */
+  --color-border:       rgba(148, 163, 184, 0.12);
+  --color-border-muted: rgba(148, 163, 184, 0.08);
 }
 
 @layer base {
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-height: 100%;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   body {
     font-family: var(--font-ui);
-    color: #0b1c30;
-    background-color: #ffffff;
+    color: var(--color-text-main);
+    background-color: var(--color-bg-main);
     -webkit-font-smoothing: antialiased;
+
+    /* Global Dot Grid */
+    --dot-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
+    --dot-size: 1.5px;
+    --dot-gap: 24px;
+    background-image:
+      radial-gradient(circle at 50% 50%,
+        transparent 0%,
+        color-mix(in srgb, var(--color-bg-main) 70%, transparent) 100%
+      ),
+      radial-gradient(circle, var(--dot-color) var(--dot-size), transparent var(--dot-size));
+    background-size:
+      100% 100%,
+      var(--dot-gap) var(--dot-gap);
+    background-position:
+      center center,
+      0 0;
+    background-attachment: fixed;
   }
 
   code, kbd, samp, pre {
@@ -37,10 +144,62 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(115, 118, 134, 0.2);
+  background: color-mix(in srgb, var(--color-text-muted) 20%, transparent);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(37, 99, 235, 0.4);
+  background: color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+
+@layer utilities {
+  /* Light mode: solid cards, no blur */
+  .glass-card {
+    background-color: var(--color-bg-soft);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 12px 0 rgba(92, 74, 42, 0.07);
+  }
+
+  /* Dark mode only: real glassmorphism */
+  [data-theme="dark"] .glass-card {
+    background-color: color-mix(in srgb, var(--color-bg-panel) 45%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  /* Skill icon stage: solid in light, glass in dark */
+  [data-theme="dark"] .skills-icon-stage {
+    background-color: color-mix(in srgb, var(--color-bg-panel) 35%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  [data-theme="dark"] .skills-skill-button:hover .skills-icon-stage,
+  [data-theme="dark"] .skills-skill-button:focus-visible .skills-icon-stage {
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .animate-blob {
+    animation: blob 10s infinite alternate;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
+
+@keyframes blob {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  33%  { transform: translate(30px, -50px) scale(1.1); }
+  66%  { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
 }

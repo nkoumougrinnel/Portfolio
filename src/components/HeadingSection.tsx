@@ -7,18 +7,18 @@ interface HeadingSectionProps {
 
 export const HeadingSection: React.FC<HeadingSectionProps> = ({ language }) => {
   return (
-    <section id="heading" className="px-5 py-10 bg-white border-b border-[#e5eeff]/70">
+    <section id="heading" className="px-5 py-10">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
               {language === 'fr' ? 'Où je vais' : "Where I'm Heading"}
             </h2>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#e5eeff] bg-white p-5 shadow-xs sm:p-6">
-          <div className="space-y-4 text-[13.5px] leading-relaxed text-[#565e74]">
+        <div className="rounded-2xl glass-card p-5 sm:p-6">
+          <div className="space-y-4 text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
             {language === 'fr' ? (
               <>
                 <p>

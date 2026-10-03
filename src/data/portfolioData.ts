@@ -488,7 +488,11 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { name: "SQLite", icon: "sqlite", relatedProjects: ["tasktrack"] },
       { name: "Docker", icon: "docker", relatedProjects: ["carburflow"] },
       { name: "Git", icon: "git", context: { fr: "Versionnement des projets de développement", en: "Version control for development projects" } },
-      { name: "GitHub", icon: "github", context: { fr: "Hébergement et partage de code", en: "Code hosting and collaboration" } }
+      { name: "GitHub", icon: "github", context: { fr: "Hébergement et partage de code", en: "Code hosting and collaboration" } },
+      { name: "VS Code", icon: "visualstudiocode" },
+      { name: "Postman", icon: "postman" },
+      { name: "Figma", icon: "figma" },
+      { name: "Notion", icon: "notion" }
     ]
   },
   {
@@ -535,19 +539,6 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { name: "Burp Suite", icon: "burpsuite" },
       { name: "Metasploit", icon: "metasploit" },
       { name: "OpenSSL", icon: "openssl" }
-    ]
-  },
-  {
-    id: "tools",
-    title: { en: "Tools & Practices", fr: "Outils & Pratiques" },
-    skills: [
-      { name: "VS Code", icon: "visualstudiocode" },
-      { name: "Postman", icon: "postman" },
-      { name: "Figma", icon: "figma" },
-      { name: "Notion", icon: "notion" },
-      { name: "Docker", icon: "docker", relatedProjects: ["carburflow"] },
-      { name: "Git", icon: "git", context: { fr: "Versionnement des projets de développement", en: "Version control for development projects" } },
-      { name: "GitHub", icon: "github", context: { fr: "Hébergement et partage de code", en: "Code hosting and collaboration" } }
     ]
   }
 ];

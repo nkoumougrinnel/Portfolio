@@ -1,0 +1,386 @@
+/* ─── Section wrapper ──────────────────────────────────────────── */
+.skills-experience-section {
+  --skills-lane-height: 7rem;
+
+  position: relative;
+  isolation: isolate;
+  padding: 1.5rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .skills-experience-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+.skills-inner {
+  margin: 0 auto;
+  max-width: 80rem;
+  padding-inline: 0;
+}
+
+@media (min-width: 640px)  { .skills-inner { padding-inline: 1rem; } }
+@media (min-width: 1024px) { .skills-inner { padding-inline: 1.5rem; } }
+
+.skills-heading-row {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.skills-heading {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--color-text-main);
+}
+
+@media (min-width: 640px) { .skills-heading { font-size: 1.25rem; } }
+
+/* ─── Stage ────────────────────────────────────────────────────── */
+.skills-content-stage {
+  position: relative;
+  isolation: isolate;
+}
+
+/* ─── Chaos cloud ──────────────────────────────────────────────── */
+.skills-chaos-cloud {
+  position: absolute;
+  z-index: 2;
+  inset: -3rem 0 3rem;
+  pointer-events: none;
+  /* CSS-only transition — zero JS overhead */
+  transition: opacity 650ms ease, transform 650ms ease;
+  transform-origin: center;
+}
+
+.skills-experience-section[data-started='true'] .skills-chaos-cloud {
+  opacity: 0;
+  transform: scale(1.12);
+  pointer-events: none;
+}
+
+.skills-chaos-icon {
+  position: absolute;
+  width: 1.65rem;
+  height: 1.65rem;
+  object-fit: contain;
+  filter: saturate(0.82);
+  /* Use transform (compositor thread) — NOT margin-top (reflow) */
+  animation: skills-cloud-drift 5.5s ease-in-out infinite alternate;
+  /* Hint the GPU to keep this on its own layer */
+  will-change: transform;
+}
+
+.skills-experience-section[data-started='true'] .skills-chaos-icon {
+  animation-play-state: paused;
+  will-change: auto; /* release layer once done */
+}
+
+/* Keyframe fully owns transform. Centering is via marginLeft/marginTop in inline style. */
+@keyframes skills-cloud-drift {
+  from { transform: translateY(-0.35rem) rotate(var(--r, 0deg)); }
+  to   { transform: translateY( 0.35rem) rotate(var(--r, 0deg)); }
+}
+
+/* ─── Conveyor reveal ──────────────────────────────────────────── */
+.skills-conveyor-content {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0.75rem);
+  transition:
+    opacity 650ms ease,
+    transform 850ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 850ms;
+}
+
+.skills-experience-section[data-started='true'] .skills-conveyor-content {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    opacity 650ms ease,
+    transform 850ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s;
+}
+
+.skills-lanes-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ─── Lane ─────────────────────────────────────────────────────── */
+.skills-lane {
+  position: relative;
+  z-index: 0;
+}
+
+/* Pause conveyor via CSS :hover (zero JS, compositor-only) */
+.skills-lane:hover         .skills-marquee-track,
+.skills-lane:focus-within  .skills-marquee-track,
+.skills-lane[data-paused='true'] .skills-marquee-track {
+  animation-play-state: paused !important;
+}
+
+.skills-lane-header {
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-inline: 0.25rem;
+}
+
+.skills-lane-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-main);
+}
+
+/* ─── Marquee ──────────────────────────────────────────────────── */
+.skills-marquee-viewport {
+  position: relative;
+  overflow-x: clip;
+  overflow-y: visible;
+  min-height: var(--skills-lane-height);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+}
+
+.skills-marquee-track {
+  display: flex;
+  width: max-content;
+  min-height: var(--skills-lane-height);
+  /* translateX is compositor-thread only — no reflow */
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.skills-marquee-group {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.skills-marquee-left  { animation: skills-conveyor-left  72s linear infinite; }
+.skills-marquee-right { animation: skills-conveyor-right 78s linear infinite; }
+
+@keyframes skills-conveyor-left  { from { transform: translateX(0);    } to { transform: translateX(-50%); } }
+@keyframes skills-conveyor-right { from { transform: translateX(-50%); } to { transform: translateX(0);    } }
+
+/* ─── Skill card ───────────────────────────────────────────────── */
+.skills-marquee-item {
+  position: relative;
+  z-index: 0;
+  /* CSS-driven scatter entry — replaces 100+ motion.div instances */
+  opacity: 0;
+  transform:
+    translateX(var(--scatter-x, 0px))
+    translateY(var(--scatter-y, 0px))
+    rotate(var(--scatter-r, 0deg))
+    scale(0.72);
+  transition: none;
+}
+
+/* Once data-started is on the item, animate to final position */
+.skills-marquee-item[data-started] {
+  opacity: 1;
+  transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+  transition:
+    opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1) var(--enter-delay, 0s),
+    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1) var(--enter-delay, 0s);
+}
+
+.skills-skill-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 6rem;
+  width: 6.25rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  /* contain layout changes within this element */
+  contain: layout style;
+}
+
+@media (min-width: 640px) { .skills-skill-button { width: 7rem; } }
+
+.skills-skill-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.skills-icon-stage {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+  border-radius: 1rem;
+  background-color: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(92, 74, 42, 0.05);
+  transition: border-color 300ms ease, transform 300ms ease, box-shadow 300ms ease;
+}
+
+.skills-skill-button:hover .skills-icon-stage,
+.skills-skill-button:focus-visible .skills-icon-stage {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(92, 74, 42, 0.1);
+}
+
+.skills-icon-img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  /* Use opacity + scale instead of filter: grayscale — much cheaper */
+  opacity: 0.75;
+  transform: scale(1);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+@media (min-width: 640px) {
+  .skills-icon-img { width: 2.25rem; height: 2.25rem; }
+}
+
+.skills-skill-button:hover .skills-icon-img,
+.skills-skill-button:focus-visible .skills-icon-img {
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+.skills-skill-name {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--color-text-main);
+  opacity: 0;
+  transform: translateY(0.3rem);
+  transition: opacity 450ms ease, transform 450ms ease;
+}
+
+.skills-skill-name.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Tooltip ──────────────────────────────────────────────────── */
+.skills-tooltip {
+  position: fixed;
+  z-index: 100;
+  max-height: min(18rem, calc(100vh - 1rem));
+  overflow-y: auto;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+  background-color: color-mix(in srgb, var(--color-bg-main) 98%, transparent);
+  padding: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: skills-tooltip-in 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.skills-tooltip.no-motion {
+  animation: none;
+}
+
+@keyframes skills-tooltip-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)  scale(1);    }
+}
+
+.skills-tooltip-label {
+  margin-bottom: 0.5rem;
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.skills-tooltip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.skills-tooltip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-align: left;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 150ms ease;
+}
+
+.skills-tooltip-link:hover { color: var(--color-text-main); }
+
+.skills-tooltip-arrow {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+}
+
+.skills-tooltip-context {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--color-accent);
+}
+
+/* ─── Reduced motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .skills-chaos-icon,
+  .skills-marquee-track {
+    animation: none !important;
+    will-change: auto;
+  }
+
+  .skills-marquee-track { transform: none !important; }
+
+  .skills-conveyor-content {
+    transition: none;
+    transform: none;
+  }
+
+  .skills-chaos-cloud {
+    transition: none;
+  }
+
+  .skills-marquee-item,
+  .skills-marquee-item[data-started] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .skills-skill-name {
+    opacity: 1;
+    transform: none;
+  }
+
+  .skills-tooltip {
+    animation: none;
+  }
+}

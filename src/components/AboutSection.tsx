@@ -9,23 +9,23 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
   return (
     <section
       id="about"
-      className="px-5 py-10 bg-[#f4f7fc]/50 border-b border-[#e5eeff]/70"
+      className="px-5 py-10"
     >
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
             {language === 'fr' ? 'À propos de moi' : 'About Me'}
           </h2>
         </div>
 
-        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#e5eeff] shadow-xs">
-          <div className="pb-3 mb-4 border-b border-[#e5eeff]/80">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[#2563eb]">
+        <div className="p-5 sm:p-6 rounded-2xl glass-card">
+          <div className="pb-3 mb-4 border-b border-[var(--color-border)]/80">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
               {language === 'fr' ? 'À PROPOS' : 'ABOUT'}
             </span>
           </div>
 
-          <div className="space-y-4 font-sans text-[13px] leading-relaxed text-[#565e74] text-justify">
+          <div className="space-y-4 font-sans text-[13px] leading-relaxed text-[var(--color-text-muted)] text-justify">
             {language === 'fr' ? (
               <>
                 <p>
@@ -53,13 +53,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
             )}
           </div>
 
-          <div className="pt-5 mt-5 border-t border-[#e5eeff]">
+          <div className="pt-5 mt-5 border-t border-[var(--color-border)]">
             <div className="mb-3">
-              <span className="text-[11px] text-[#2563eb] font-bold uppercase tracking-wider">
+              <span className="text-[11px] text-[var(--color-accent)] font-bold uppercase tracking-wider">
                 {language === 'fr' ? 'Au-delà du code' : 'Beyond the Code'}
               </span>
             </div>
-            <p className="text-[13px] leading-relaxed text-[#565e74]">
+            <p className="text-[13px] leading-relaxed text-[var(--color-text-muted)]">
               {language === 'fr'
                 ? 'En dehors de la technologie, je passe du temps à jouer aux jeux vidéo, regarder des anime, jouer aux échecs et faire du basketball.'
                 : 'Outside of technology, I enjoy video games, anime, chess, and basketball.'}

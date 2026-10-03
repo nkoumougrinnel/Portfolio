@@ -77,7 +77,7 @@ export interface Skill {
 export type SkillItem = Skill;
 
 export interface SkillCategory {
-  id: 'software' | 'networks' | 'ai-data' | 'systems' | 'cybersecurity' | 'tools';
+  id: 'software' | 'networks' | 'ai-data' | 'systems' | 'cybersecurity';
   title: {
     fr: string;
     en: string;

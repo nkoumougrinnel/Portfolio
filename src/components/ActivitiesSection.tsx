@@ -27,10 +27,10 @@ export const ActivitiesSection: React.FC<ActivitiesSectionProps> = ({
   );
 
   return (
-    <section id="activities" className="px-5 py-10 bg-[#f4f7fc]/40 border-b border-[#e5eeff]/70">
+    <section id="activities" className="px-5 py-10">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
             {language === 'fr' ? 'Activités' : 'Activities'}
           </h2>
         </div>
@@ -43,13 +43,13 @@ export const ActivitiesSection: React.FC<ActivitiesSectionProps> = ({
                 type="button"
                 aria-pressed={activeFilter === filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${activeFilter === filter ? 'border-[#2563eb] bg-[#2563eb] text-white' : 'border-[#c3c6d7]/50 bg-white text-[#565e74] hover:border-[#2563eb]/50 hover:text-[#2563eb]'}`}
+                className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${activeFilter === filter ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-lg shadow-[var(--color-accent)]/25' : 'border-[var(--color-border)]/50 bg-[var(--color-bg-soft)]/50 backdrop-blur-sm text-[var(--color-text-muted)] hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]'}`}
               >
                 {activityLabels[filter][language]}
               </button>
             ))}
           </div>
-          <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#f4f7fc]/95 to-transparent sm:hidden" />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[var(--color-bg-main)]/95 to-transparent sm:hidden" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -57,11 +57,11 @@ export const ActivitiesSection: React.FC<ActivitiesSectionProps> = ({
             <article
               key={item.id}
               onClick={() => onSelectActivity(item)}
-              className="rounded-2xl bg-white border border-[#e5eeff] shadow-xs overflow-hidden hover:shadow-md hover:border-[#2563eb]/40 transition-all flex flex-col justify-between group cursor-pointer"
+              className="rounded-2xl glass-card overflow-hidden hover:shadow-md hover:border-[var(--color-accent)]/40 transition-all flex flex-col justify-between group cursor-pointer"
             >
               <div>
                 {/* Photo */}
-                <div className="w-full aspect-[16/9] overflow-hidden border-b border-[#e5eeff] bg-slate-950 relative">
+                <div className="w-full aspect-[16/9] overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-media-panel)] relative">
                   <img
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
@@ -72,7 +72,7 @@ export const ActivitiesSection: React.FC<ActivitiesSectionProps> = ({
                     }}
                   />
                   {item.categories[0] && (
-                    <span className="absolute left-3 top-3 rounded-md border border-white/20 bg-slate-950/75 px-2.5 py-1 font-mono text-[10px] font-semibold text-white backdrop-blur-sm">
+                    <span className="absolute left-3 top-3 font-mono text-[10px] text-white px-2.5 py-1 rounded-md backdrop-blur-md border border-white/20 bg-black/40 shadow-sm">
                       {activityLabels[item.categories[0]][language]}
                     </span>
                   )}
@@ -80,19 +80,19 @@ export const ActivitiesSection: React.FC<ActivitiesSectionProps> = ({
 
                 {/* Text content */}
                 <div className="p-4 sm:p-5">
-                  <h3 className="text-sm sm:text-base font-bold text-[#0b1c30] group-hover:text-[#2563eb] transition-colors line-clamp-1 mb-2">
+                  <h3 className="text-sm sm:text-base font-bold text-[var(--color-text-main)] group-hover:text-[var(--color-accent)] transition-colors line-clamp-1 mb-2">
                     {item.title}
                   </h3>
 
-                  <p className="text-[12.5px] sm:text-[13px] text-[#565e74] leading-relaxed line-clamp-3">
+                  <p className="text-[12.5px] sm:text-[13px] text-[var(--color-text-muted)] leading-relaxed line-clamp-3">
                     {item.description[language]}
                   </p>
                 </div>
               </div>
 
               {/* Bottom CTA */}
-              <div className="p-4 sm:px-5 pt-3 pb-4 flex items-center justify-between border-t border-[#e5eeff]/80">
-                <span className="font-mono text-[11px] text-[#565e74]">
+              <div className="p-4 sm:px-5 pt-3 pb-4 flex items-center justify-between border-t border-[var(--color-border)]/80">
+                <span className="font-mono text-[11px] text-[var(--color-text-muted)]">
                   {item.year}
                 </span>
                 <button
@@ -101,7 +101,7 @@ export const ActivitiesSection: React.FC<ActivitiesSectionProps> = ({
                     e.stopPropagation();
                     onSelectActivity(item);
                   }}
-                  className="px-3.5 py-1.5 rounded-xl bg-blue-50/80 hover:bg-[#2563eb] hover:text-white text-[#2563eb] border border-[#2563eb]/25 text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 shadow-xs"
+                  className="px-3.5 py-1.5 rounded-xl bg-[var(--color-bg-accent)]/50 hover:bg-[var(--color-accent)] hover:text-white text-[var(--color-accent)] border border-[var(--color-accent)]/25 text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 shadow-xs"
                 >
                   <span>{language === 'fr' ? 'Détails' : 'Details'}</span>
                   <ExternalLink className="w-3.5 h-3.5" />

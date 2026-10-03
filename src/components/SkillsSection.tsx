@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useReducedMotion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
-import { Language, Project } from '../types';
+import { Language, Project, SkillCategory, SkillItem } from '../types';
 import { SKILL_CATEGORIES } from '../data/portfolioData';
+import './SkillsSection.css';
 
 interface SkillsSectionProps {
   language: Language;
@@ -9,119 +12,477 @@ interface SkillsSectionProps {
   onSelectProject: (project: Project) => void;
 }
 
-export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects, onSelectProject }) => {
-  const [activeCategory, setActiveCategory] = useState('all');
-  const visibleCategories = activeCategory === 'all'
-    ? SKILL_CATEGORIES
-    : SKILL_CATEGORIES.filter((category) => category.id === activeCategory);
-  const categoryFilters = [
-    { id: 'all', label: { fr: 'Tous', en: 'All' } },
-    ...SKILL_CATEGORIES.map((category) => ({ id: category.id, label: category.title }))
-  ];
+interface ActiveTooltip {
+  id: string;
+  skill: SkillItem;
+  relatedProjects: Project[];
+  top: number;
+  left: number;
+}
+
+const SKILLS_PER_MARQUEE_GROUP = 16;
+const TOOLTIP_WIDTH = 224;
+
+// Pre-compute at module level — pure functions, never change
+function buildMarqueeSkills(category: SkillCategory): SkillItem[] {
+  const result = [...category.skills];
+  while (result.length < SKILLS_PER_MARQUEE_GROUP) result.push(...category.skills);
+  return result;
+}
+
+// Cloud icons: pass rotation as CSS custom property so the @keyframes
+// fully owns `transform` (translateY + rotate) — no inline transform conflict.
+function buildCloudStyles(total: number): React.CSSProperties[] {
+  return Array.from({ length: total }, (_, index) => {
+    const angle = index * 2.399963229728653;
+    const radius = 0.12 + 0.88 * Math.sqrt(index / Math.max(1, total - 1));
+    const horizontal = 50 + Math.cos(angle) * radius * 37;
+    const vertical = 50 + Math.sin(angle) * radius * 21;
+    const rotation = (index * 29) % 46 - 23;
+    return {
+      // Centering via marginLeft; left drives horizontal position
+      left: `${horizontal}%`,
+      marginLeft: '-0.825rem', // -50% of 1.65rem width
+      top: `${vertical}%`,
+      marginTop: '-0.825rem',  // -50% of 1.65rem height (static, not animated)
+      // Pass rotation as CSS variable — consumed by @keyframes
+      ['--r' as string]: `${rotation}deg`,
+      animationDelay: `${-(index % 9) * 0.37}s`,
+      opacity: 0.55 + ((total - index) % 5) * 0.08,
+    };
+  });
+}
+
+// Pre-compute marquee data and cloud styles once at module level
+const MARQUEE_DATA = SKILL_CATEGORIES.map((cat) => buildMarqueeSkills(cat));
+const ALL_SKILLS = SKILL_CATEGORIES.flatMap((cat) => cat.skills);
+const CLOUD_STYLES = buildCloudStyles(ALL_SKILLS.length);
+
+// --- Sub-components (memoized to avoid re-renders) ---
+
+interface SkillCardProps {
+  skill: SkillItem;
+  itemIndex: number;
+  categoryIndex: number;
+  skillIndex: number;
+  isInteractiveCopy: boolean;
+  hasTooltip: boolean;
+  tooltipId: string;
+  hasStarted: boolean;
+  activeTooltipId: string | null;
+  relatedProjects: Project[];
+  onMouseEnter: (id: string, skill: SkillItem, projects: Project[], el: HTMLElement) => void;
+  onMouseLeave: (id: string, relatedTarget: EventTarget | null) => void;
+  onFocusCapture: (id: string, skill: SkillItem, projects: Project[], el: HTMLElement) => void;
+  onBlurCapture: (id: string, relatedTarget: EventTarget | null) => void;
+}
+
+const SkillCard = memo(({
+  skill,
+  itemIndex,
+  categoryIndex,
+  skillIndex,
+  isInteractiveCopy,
+  hasTooltip,
+  tooltipId,
+  hasStarted,
+  activeTooltipId,
+  relatedProjects,
+  onMouseEnter,
+  onMouseLeave,
+  onFocusCapture,
+  onBlurCapture,
+}: SkillCardProps) => {
+  const scatterX = ((skillIndex * 37 + categoryIndex * 29) % 150) - 75;
+  const scatterY = ((skillIndex * 23 + categoryIndex * 17) % 90) - 45;
+  const scatterRotation = ((skillIndex * 13 + categoryIndex * 11) % 36) - 18;
+  const delay = categoryIndex * 0.09 + skillIndex * 0.025;
 
   return (
-    <section id="skills" className="px-5 py-10 bg-white border-b border-[#e5eeff]/70">
-      <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
-        <div className="flex items-center gap-2 mb-5">
-          <h2 className="text-lg sm:text-xl font-bold text-[#0b1c30] tracking-tight">
+    <div
+      className="skills-marquee-item"
+      data-started={hasStarted || undefined}
+      style={{
+        '--scatter-x': `${scatterX}px`,
+        '--scatter-y': `${scatterY}px`,
+        '--scatter-r': `${scatterRotation}deg`,
+        '--enter-delay': `${delay}s`,
+      } as React.CSSProperties}
+      onMouseEnter={hasTooltip ? (e) => onMouseEnter(tooltipId, skill, relatedProjects, e.currentTarget) : undefined}
+      onMouseLeave={hasTooltip ? (e) => onMouseLeave(tooltipId, e.relatedTarget) : undefined}
+      onFocusCapture={hasTooltip && isInteractiveCopy ? (e) => onFocusCapture(tooltipId, skill, relatedProjects, e.target as HTMLElement) : undefined}
+      onBlurCapture={hasTooltip && isInteractiveCopy ? (e) => onBlurCapture(tooltipId, e.relatedTarget) : undefined}
+    >
+      <button
+        type="button"
+        tabIndex={isInteractiveCopy ? 0 : -1}
+        aria-label={skill.name}
+        aria-haspopup={hasTooltip && isInteractiveCopy ? 'true' : undefined}
+        aria-expanded={activeTooltipId === tooltipId}
+        className="skills-skill-button"
+      >
+        <span className="skills-icon-stage">
+          <img
+            src={`https://cdn.simpleicons.org/${skill.icon}`}
+            alt=""
+            loading="lazy"
+            width="36"
+            height="36"
+            decoding="async"
+            className="skills-icon-img"
+            onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+          />
+        </span>
+        <span className={`skills-skill-name${hasStarted ? ' is-visible' : ''}`}>
+          {skill.name}
+        </span>
+      </button>
+    </div>
+  );
+});
+SkillCard.displayName = 'SkillCard';
+
+interface SkillLaneProps {
+  category: SkillCategory;
+  categoryIndex: number;
+  marqueeSkills: SkillItem[];
+  direction: 'left' | 'right';
+  isPaused: boolean;
+  isSettled: boolean;
+  hasStarted: boolean;
+  prefersReducedMotion: boolean | null;
+  language: Language;
+  activeTooltipId: string | null;
+  projectsMap: Map<string, Project>;
+  isInView: boolean;
+  onMouseEnter: (id: string, skill: SkillItem, projects: Project[], el: HTMLElement) => void;
+  onMouseLeave: (id: string, relatedTarget: EventTarget | null) => void;
+  onFocusCapture: (id: string, skill: SkillItem, projects: Project[], el: HTMLElement) => void;
+  onBlurCapture: (id: string, relatedTarget: EventTarget | null) => void;
+}
+
+const SkillLane = memo(({
+  category,
+  categoryIndex,
+  marqueeSkills,
+  direction,
+  isPaused,
+  isSettled,
+  hasStarted,
+  prefersReducedMotion,
+  language,
+  activeTooltipId,
+  projectsMap,
+  isInView,
+  onMouseEnter,
+  onMouseLeave,
+  onFocusCapture,
+  onBlurCapture,
+}: SkillLaneProps) => {
+  const isRunning = isSettled && !prefersReducedMotion && isInView;
+
+  return (
+    <section
+      aria-label={category.title[language]}
+      className="skills-lane"
+      data-direction={direction}
+      data-paused={isPaused}
+    >
+      <div className="skills-lane-header">
+        <h3 className="skills-lane-title">{category.title[language]}</h3>
+      </div>
+
+      <div className="skills-marquee-viewport">
+        <div
+          className={`skills-marquee-track skills-marquee-${direction}`}
+          style={{ animationPlayState: isRunning ? 'running' : 'paused' }}
+        >
+          {[0, 1].map((copy) => (
+            <div
+              key={copy}
+              className="skills-marquee-group"
+              aria-hidden={copy === 1 ? 'true' : undefined}
+            >
+              {marqueeSkills.map((skill, itemIndex) => {
+                const skillIndex = itemIndex % category.skills.length;
+                const relatedProjects = skill.relatedProjects
+                  ? skill.relatedProjects.flatMap((id) => {
+                      const p = projectsMap.get(id);
+                      return p ? [p] : [];
+                    })
+                  : [];
+                const hasTooltip = relatedProjects.length > 0 || Boolean(skill.context);
+                const tooltipId = `${category.id}:${skill.name}:${skillIndex}`;
+
+                return (
+                  <SkillCard
+                    key={`${copy}-${itemIndex}-${skill.name}`}
+                    skill={skill}
+                    itemIndex={itemIndex}
+                    categoryIndex={categoryIndex}
+                    skillIndex={skillIndex}
+                    isInteractiveCopy={copy === 0}
+                    hasTooltip={hasTooltip}
+                    tooltipId={tooltipId}
+                    hasStarted={hasStarted}
+                    activeTooltipId={activeTooltipId}
+                    relatedProjects={relatedProjects}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    onFocusCapture={onFocusCapture}
+                    onBlurCapture={onBlurCapture}
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+});
+SkillLane.displayName = 'SkillLane';
+
+interface TooltipProps {
+  tooltip: ActiveTooltip;
+  language: Language;
+  prefersReducedMotion: boolean | null;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  onFocusCapture: () => void;
+  onBlurCapture: (e: React.FocusEvent) => void;
+  onSelectProject: (p: Project) => void;
+  onClose: () => void;
+}
+
+const SkillTooltip = memo(({
+  tooltip,
+  language,
+  prefersReducedMotion,
+  onMouseEnter,
+  onMouseLeave,
+  onFocusCapture,
+  onBlurCapture,
+  onSelectProject,
+  onClose,
+}: TooltipProps) => (
+  <div
+    data-skill-tooltip={tooltip.id}
+    role="group"
+    aria-label={tooltip.skill.name}
+    className={`skills-tooltip${prefersReducedMotion ? ' no-motion' : ''}`}
+    style={{ top: tooltip.top, left: tooltip.left, width: TOOLTIP_WIDTH }}
+    onMouseEnter={onMouseEnter}
+    onMouseLeave={onMouseLeave}
+    onFocusCapture={onFocusCapture}
+    onBlurCapture={onBlurCapture}
+  >
+    {tooltip.relatedProjects.length > 0 ? (
+      <>
+        <p className="skills-tooltip-label">
+          {language === 'fr' ? 'Projets :' : 'Projects:'}
+        </p>
+        <div className="skills-tooltip-list">
+          {tooltip.relatedProjects.map((project) => (
+            <button
+              key={project.id}
+              type="button"
+              onClick={() => { onSelectProject(project); onClose(); }}
+              className="skills-tooltip-link"
+            >
+              <ArrowRight className="skills-tooltip-arrow" />
+              {project.title}
+            </button>
+          ))}
+        </div>
+      </>
+    ) : tooltip.skill.context ? (
+      <>
+        <p className="skills-tooltip-label">
+          {language === 'fr' ? 'Utilisé dans :' : 'Used in:'}
+        </p>
+        <p className="skills-tooltip-context">{tooltip.skill.context[language]}</p>
+      </>
+    ) : null}
+  </div>
+));
+SkillTooltip.displayName = 'SkillTooltip';
+
+// --- Main component ---
+
+export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects, onSelectProject }) => {
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isSettled, setIsSettled] = useState(false);
+  const [isInView, setIsInView] = useState(true); // Default to true to prevent initial jump
+  const [activeTooltip, setActiveTooltip] = useState<ActiveTooltip | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const closeTooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const settledTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  // O(1) project lookup — rebuild only when projects change
+  const projectsMap = useMemo(
+    () => new Map(projects.map((p) => [p.id, p])),
+    [projects],
+  );
+
+  const pausedCategory = activeTooltip ? activeTooltip.id.split(':')[0] : null;
+
+  const startExperience = useCallback(() => {
+    setHasStarted((prev) => {
+      if (!prev) {
+        settledTimer.current = setTimeout(() => setIsSettled(true), 1200);
+        return true;
+      }
+      return prev;
+    });
+  }, []);
+
+  const cancelTooltipClose = useCallback(() => {
+    if (closeTooltipTimer.current) {
+      clearTimeout(closeTooltipTimer.current);
+      closeTooltipTimer.current = null;
+    }
+  }, []);
+
+  const scheduleTooltipClose = useCallback(() => {
+    if (closeTooltipTimer.current) clearTimeout(closeTooltipTimer.current);
+    closeTooltipTimer.current = setTimeout(() => setActiveTooltip(null), 140);
+  }, []);
+
+  const openTooltip = useCallback((
+    id: string,
+    skill: SkillItem,
+    relatedProjects: Project[],
+    target: HTMLElement,
+  ) => {
+    if (!relatedProjects.length && !skill.context) return;
+    if (closeTooltipTimer.current) { clearTimeout(closeTooltipTimer.current); closeTooltipTimer.current = null; }
+
+    const rect = target.getBoundingClientRect();
+    const estimatedHeight = Math.min(260, 48 + relatedProjects.length * 26);
+    const above = rect.top - estimatedHeight - 10;
+    const top = above > 8 ? above : Math.min(window.innerHeight - estimatedHeight - 8, rect.bottom + 10);
+    const left = Math.max(8, Math.min(rect.left + rect.width / 2 - TOOLTIP_WIDTH / 2, window.innerWidth - TOOLTIP_WIDTH - 8));
+    setActiveTooltip({ id, skill, relatedProjects, top: Math.max(8, top), left });
+  }, []);
+
+  const handleCardMouseLeave = useCallback((id: string, relatedTarget: EventTarget | null) => {
+    if (relatedTarget instanceof Element && relatedTarget.closest(`[data-skill-tooltip="${id}"]`)) return;
+    scheduleTooltipClose();
+  }, [scheduleTooltipClose]);
+
+  const handleCardBlur = useCallback((id: string, relatedTarget: EventTarget | null) => {
+    if (relatedTarget instanceof Element && relatedTarget.closest(`[data-skill-tooltip="${id}"]`)) return;
+    scheduleTooltipClose();
+  }, [scheduleTooltipClose]);
+
+  const handleTooltipBlur = useCallback((e: React.FocusEvent) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) scheduleTooltipClose();
+  }, [scheduleTooltipClose]);
+
+  const closeTooltip = useCallback(() => setActiveTooltip(null), []);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setIsInView(entries[0].isIntersecting);
+      },
+      { rootMargin: '200px' } // Pre-load slightly before coming into view
+    );
+    
+    observer.observe(sectionRef.current);
+    
+    return () => {
+      observer.disconnect();
+      if (closeTooltipTimer.current) clearTimeout(closeTooltipTimer.current);
+      if (settledTimer.current) clearTimeout(settledTimer.current);
+    };
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="skills"
+      className="skills-experience-section"
+      data-started={hasStarted}
+    >
+      <div className="skills-inner">
+        <div className="skills-heading-row">
+          <h2 className="skills-heading">
             {language === 'fr' ? 'Compétences' : 'Skills'}
           </h2>
         </div>
 
-        <div className="mb-6 flex flex-wrap gap-2" aria-label={language === 'fr' ? 'Filtres des compétences' : 'Skill filters'}>
-          {categoryFilters.map((filter) => (
-            <button
-              key={filter.id}
-              type="button"
-              aria-pressed={activeCategory === filter.id}
-              onClick={() => {
-                setActiveCategory(filter.id);
-              }}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${activeCategory === filter.id ? 'border-[#2563eb] bg-[#2563eb] text-white' : 'border-[#c3c6d7]/50 bg-white text-[#565e74] hover:border-[#2563eb]/50 hover:text-[#2563eb]'}`}
-            >
-              {filter.label[language]}
-            </button>
-          ))}
-        </div>
+        <div
+          className="skills-content-stage"
+          onMouseEnter={startExperience}
+          onTouchStart={startExperience}
+          onFocusCapture={startExperience}
+        >
+          {/* Chaos cloud — CSS transition only, no Framer Motion overhead */}
+          <div aria-hidden="true" className="skills-chaos-cloud">
+            {ALL_SKILLS.map((skill, index) => (
+              <img
+                key={skill.name}
+                src={`https://cdn.simpleicons.org/${skill.icon}`}
+                alt=""
+                loading="lazy"
+                width="26"
+                height="26"
+                decoding="async"
+                className="skills-chaos-icon"
+                style={CLOUD_STYLES[index]}
+                onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+              />
+            ))}
+          </div>
 
-        <div className="space-y-8">
-          {visibleCategories.map((category) => (
-            <section key={category.id}>
-              <h3 className="mb-4 flex items-center gap-3 text-sm font-bold text-[#0b1c30]">
-                {category.title[language]}
-                <span className="h-px flex-1 bg-[#e5eeff]" />
-              </h3>
-              <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-                {category.skills.map((skill) => {
-                  const relatedProjects = skill.relatedProjects
-                    ?.map((projectId) => projects.find((project) => project.id === projectId))
-                    .filter((project): project is Project => Boolean(project)) ?? [];
-                  const hasTooltip = relatedProjects.length > 0 || Boolean(skill.context);
-
-                  return (
-                    <div key={skill.name} className="group relative z-0 hover:z-30 focus-within:z-30">
-                      <button
-                        type="button"
-                        aria-label={skill.name}
-                        aria-haspopup={hasTooltip ? 'true' : undefined}
-                        className="flex min-h-24 w-full flex-col items-center justify-center gap-2 rounded-xl border border-[#e5eeff] bg-white p-3 text-center shadow-xs transition-all hover:-translate-y-0.5 hover:border-[#2563eb]/50 hover:shadow-md focus-visible:outline-2 focus-visible:outline-[#2563eb]"
-                      >
-                        <img
-                          src={`https://cdn.simpleicons.org/${skill.icon}`}
-                          alt=""
-                          loading="lazy"
-                          className="h-8 w-8 object-contain"
-                          onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
-                        />
-                        <span className="text-[11px] font-semibold leading-tight text-[#0b1c30]">{skill.name}</span>
-                      </button>
-
-                      {hasTooltip && (
-                        <div
-                          id={`skill-tooltip-${category.id}-${skill.name.replace(/[^a-zA-Z0-9]/g, '-')}`}
-                          role="group"
-                          aria-label={skill.name}
-                          className="invisible pointer-events-none absolute bottom-[calc(100%-0.5rem)] left-1/2 z-40 w-56 max-w-[calc(100vw-2rem)] -translate-x-1/2 translate-y-1 rounded-xl border border-[#e5eeff] bg-white/90 p-3 opacity-0 shadow-lg backdrop-blur-sm transition-all duration-150 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100"
-                        >
-                          {relatedProjects.length > 0 ? (
-                            <>
-                              <p className="mb-2 font-mono text-[10px] text-[#565e74]">
-                                {language === 'fr' ? 'Projets :' : 'Projects:'}
-                              </p>
-                              <div className="flex flex-col gap-1.5">
-                                {relatedProjects.map((project) => (
-                                  <button
-                                    key={project.id}
-                                    type="button"
-                                    onClick={() => onSelectProject(project)}
-                                    className="inline-flex items-center gap-1.5 text-left font-mono text-[11px] font-semibold text-[#2563eb] hover:text-[#0b1c30]"
-                                  >
-                                    <ArrowRight className="h-3 w-3 shrink-0" />
-                                    {project.title}
-                                  </button>
-                                ))}
-                              </div>
-                            </>
-                          ) : skill.context ? (
-                            <>
-                              <p className="mb-1 font-mono text-[10px] text-[#565e74]">
-                                {language === 'fr' ? 'Utilisé dans :' : 'Used in:'}
-                              </p>
-                              <p className="font-mono text-[11px] font-semibold leading-relaxed text-[#2563eb]">
-                                {skill.context[language]}
-                              </p>
-                            </>
-                          ) : null}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+          <div className="skills-conveyor-content">
+            <div className="skills-lanes-stack">
+              {SKILL_CATEGORIES.map((category, categoryIndex) => (
+                <SkillLane
+                  key={category.id}
+                  category={category}
+                  categoryIndex={categoryIndex}
+                  marqueeSkills={MARQUEE_DATA[categoryIndex]}
+                  direction={categoryIndex % 2 === 0 ? 'left' : 'right'}
+                  isPaused={pausedCategory === category.id}
+                  isSettled={isSettled}
+                  hasStarted={hasStarted}
+                  prefersReducedMotion={prefersReducedMotion}
+                  language={language}
+                  activeTooltipId={activeTooltip?.id ?? null}
+                  projectsMap={projectsMap}
+                  isInView={isInView}
+                  onMouseEnter={openTooltip}
+                  onMouseLeave={handleCardMouseLeave}
+                  onFocusCapture={openTooltip}
+                  onBlurCapture={handleCardBlur}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
+
+      {activeTooltip && createPortal(
+        <SkillTooltip
+          key={activeTooltip.id}
+          tooltip={activeTooltip}
+          language={language}
+          prefersReducedMotion={prefersReducedMotion}
+          onMouseEnter={cancelTooltipClose}
+          onMouseLeave={scheduleTooltipClose}
+          onFocusCapture={cancelTooltipClose}
+          onBlurCapture={handleTooltipBlur}
+          onSelectProject={onSelectProject}
+          onClose={closeTooltip}
+        />,
+        document.body,
+      )}
     </section>
   );
 };
