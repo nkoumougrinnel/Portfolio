@@ -1,244 +1,206 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Terminal } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Language } from '../types';
 
-/* ══════════════════════════════════════════════════════════
-   SecLabTerminal — animated typewriter + persistent cursor
-══════════════════════════════════════════════════════════ */
-
-/** Each entry in the script:
- *  - `prompt`   renders "$ <text>" (accent colour)
- *  - `output`   renders a plain response line (muted)
- *  - `comment`  renders a # comment line (faint, instant)
- */
-type LineKind = 'prompt' | 'output' | 'comment';
-
-interface ScriptLine {
-  kind: LineKind;
+type TerminalEntry = {
+  kind: 'prompt' | 'output';
   text: string;
-  /** ms delay before this line starts typing (after prev line finished) */
-  preDelay?: number;
-  /** chars per second — defaults to 60 */
-  speed?: number;
-}
+};
 
-const SCRIPT: ScriptLine[] = [
-  { kind: 'comment', text: '# system reconnaissance',       preDelay: 300  },
-  { kind: 'prompt',  text: 'nmap -sS -O target.local',      preDelay: 200, speed: 55 },
-  { kind: 'output',  text: 'Starting Nmap 7.95 …',          preDelay: 120  },
-  { kind: 'prompt',  text: 'tcpdump -i eth0 -c 10',         preDelay: 350, speed: 60 },
-  { kind: 'output',  text: '10 packets captured',           preDelay: 100  },
-  { kind: 'prompt',  text: 'curl -sI http://target',        preDelay: 400, speed: 58 },
-  { kind: 'output',  text: 'HTTP/1.1 200 OK',               preDelay: 120  },
+const TERMINAL_ENTRIES: TerminalEntry[] = [
+  {
+    kind: 'prompt',
+    text: 'ip addr',
+  },
+  {
+    kind: 'output',
+    text: `eth0    inet 192.168.56.101/24
+        state UP`,
+  },
+  {
+    kind: 'prompt',
+    text: 'nmap -sV 192.168.56.0/24',
+  },
+  {
+    kind: 'output',
+    text: `Nmap scan report for 192.168.56.1
+Host is up (0.0021s latency).
+
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 9.6
+80/tcp  open  http    nginx 1.24.0
+
+3 hosts up`,
+  },
+  {
+    kind: 'prompt',
+    text: 'curl -I http://192.168.56.10',
+  },
+  {
+    kind: 'output',
+    text: `HTTP/1.1 200 OK
+Server: nginx
+Content-Type: text/html`,
+  },
+  {
+    kind: 'prompt',
+    text: 'ss -tulpn',
+  },
+  {
+    kind: 'output',
+    text: `LISTEN 0  128  0.0.0.0:22
+LISTEN 0  511  0.0.0.0:80
+LISTEN 0  511  0.0.0.0:443`,
+  },
+  {
+    kind: 'prompt',
+    text: '',
+  },
 ];
 
-interface RenderedLine {
-  kind: LineKind;
-  text: string;       // fully revealed text so far
-  done: boolean;      // typing finished for this line
-}
+const SecLabTerminal: React.FC<{
+  language: Language;
+  isHovered: boolean;
+}> = ({ language, isHovered }) => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<number | null>(null);
 
-const SecLabTerminal: React.FC = () => {
-  const rootRef   = useRef<HTMLDivElement>(null);
-  const bodyRef   = useRef<HTMLDivElement>(null);
-  const rafRef    = useRef<number>(0);
-  const timerRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [entryIndex, setEntryIndex] = useState(0);
+  const [typedText, setTypedText] = useState('');
 
-  const [lines, setLines]           = useState<RenderedLine[]>([]);
-  const [cursorVisible, setCursor]  = useState(false);
-  const startedRef                  = useRef(false);
+  const currentEntry = TERMINAL_ENTRIES[entryIndex];
 
-  /* Auto-scroll terminal body to bottom */
-  useEffect(() => {
-    if (bodyRef.current) {
-      bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+  const clearTimer = () => {
+    if (timerRef.current !== null) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
     }
-  }, [lines]);
+  };
 
-  /* Typewriter engine */
-  const runScript = useCallback(() => {
-    let lineIdx = 0;
-    let charIdx = 0;
-    let accumulated = 0; // elapsed within current line (ms)
-    let lastTime = performance.now();
-
-    const tick = (currentTime: number) => {
-      const delta = currentTime - lastTime;
-      lastTime = currentTime;
-
-      if (lineIdx >= SCRIPT.length) {
-        // All done — just keep cursor blinking
-        return;
-      }
-
-      const scriptLine = SCRIPT[lineIdx];
-      const preDelay   = scriptLine.preDelay ?? 0;
-      const speed      = scriptLine.speed    ?? 60;
-      const msPerChar  = 1000 / speed;
-
-      accumulated += delta;
-
-      // Waiting for preDelay before typing starts
-      if (charIdx === 0 && accumulated < preDelay) {
-        rafRef.current = requestAnimationFrame(tick);
-        return;
-      }
-
-      // Instant lines (comment / output): reveal all at once after preDelay
-      if (scriptLine.kind !== 'prompt') {
-        setLines((prev) => {
-          const next = [...prev];
-          // Fill potential gaps just in case
-          while (next.length < lineIdx) {
-            next.push({ kind: 'output', text: '', done: true });
-          }
-          next[lineIdx] = { kind: scriptLine.kind, text: scriptLine.text, done: true };
-          return next;
-        });
-        lineIdx++;
-        charIdx = 0;
-        accumulated = 0;
-        rafRef.current = requestAnimationFrame(tick);
-        return;
-      }
-
-      // Prompt lines: character-by-character typing
-      const charsToType = Math.floor((accumulated - preDelay) / msPerChar);
-      const newCharIdx  = Math.min(charsToType, scriptLine.text.length);
-
-      if (newCharIdx > charIdx) {
-        charIdx = newCharIdx;
-        const partial = scriptLine.text.slice(0, charIdx);
-        setLines((prev) => {
-          const next = [...prev];
-          // Fill potential gaps just in case
-          while (next.length < lineIdx) {
-            next.push({ kind: 'output', text: '', done: true });
-          }
-          next[lineIdx] = { kind: 'prompt', text: partial, done: charIdx >= scriptLine.text.length };
-          return next;
-        });
-      }
-
-      if (charIdx >= scriptLine.text.length) {
-        lineIdx++;
-        charIdx = 0;
-        accumulated = 0;
-      }
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame((time) => {
-      lastTime = time;
-      tick(time);
-    });
-  }, []);
-
-  /* IntersectionObserver — trigger on first entry, cursor on/off */
+  /*
+   * Animation engine.
+   *
+   * A line is completely finished before the next line begins.
+   * There is therefore never a second cursor or a premature prompt.
+   */
   useEffect(() => {
-    const el = rootRef.current;
-    if (!el) return;
+    if (!isHovered || !currentEntry) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setCursor(true);
-          if (!startedRef.current) {
-            startedRef.current = true;
-            // Small delay so user sees the terminal before typing starts
-            timerRef.current = setTimeout(runScript, 400);
-          }
-        } else {
-          setCursor(false);
-        }
-      },
-      { threshold: 0.35 },
-    );
+    const targetLength = currentEntry.text.length;
 
-    observer.observe(el);
-    return () => {
-      observer.disconnect();
-      if (rafRef.current)   cancelAnimationFrame(rafRef.current);
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [runScript]);
+    if (typedText.length < targetLength) {
+      const speed = currentEntry.kind === 'prompt' ? 35 : 12;
+
+      timerRef.current = window.setTimeout(() => {
+        setTypedText(currentEntry.text.slice(0, typedText.length + 1));
+      }, speed);
+
+      return () => clearTimer();
+    }
+
+    /*
+     * Current line is completely typed.
+     * Wait before moving to the next one.
+     */
+    timerRef.current = window.setTimeout(() => {
+      if (entryIndex < TERMINAL_ENTRIES.length - 1) {
+        setEntryIndex((current) => current + 1);
+        setTypedText('');
+      } else {
+        /*
+         * End of the session:
+         * keep the last output visible while hovered.
+         * No automatic restart.
+         */
+      }
+    }, currentEntry.kind === 'prompt' ? 500 : 900);
+
+    return () => clearTimer();
+  }, [isHovered, entryIndex, typedText, currentEntry]);
+
+  /*
+   * Keep only the already completed lines.
+   */
+  const completedEntries = TERMINAL_ENTRIES.slice(0, entryIndex);
 
   return (
-    <div ref={rootRef} className="rounded-2xl glass-card overflow-hidden font-mono text-[11px]">
-      {/* ── Title bar ── */}
-      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-bg-accent)]">
+    <div
+      ref={rootRef}
+      className="w-full h-[560px] overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-soft)] font-mono text-[10px] shadow-sm sm:text-[11px]"
+      aria-label={language === 'fr' ? 'terminal' : 'terminal'}
+    >
+      {/* Terminal header */}
+      <div className="flex h-10 items-center gap-2 border-b border-[var(--color-border)] bg-[var(--color-bg-accent)] px-4">
         <div className="flex gap-1.5" aria-hidden="true">
           <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
         </div>
-        <span className="ml-2 select-none tracking-widest text-[10px] text-[var(--color-text-faint)] uppercase">
-          sec-lab — bash
+
+        <span className="ml-2 select-none text-[9px] tracking-widest text-[var(--color-text-faint)]">
+          terminal
         </span>
       </div>
 
-      {/* ── Body ── */}
-      <div
-        ref={bodyRef}
-        className="p-4 space-y-1.5 bg-[var(--color-bg-soft)] min-h-[148px] overflow-hidden"
-      >
-        {lines.map((line, i) => {
-          if (!line) return null;
-          const isLastLine = i === lines.length - 1;
-
-          if (line.kind === 'comment') {
-            return (
-              <p key={i} className="text-[var(--color-text-faint)] select-none">
-                {line.text}
-              </p>
-            );
-          }
-
-          if (line.kind === 'output') {
-            return (
-              <p key={i} className="text-[var(--color-text-subtle)] pl-2">
-                {line.text}
-              </p>
-            );
-          }
-
-          // prompt
-          return (
-            <p key={i} className="flex items-baseline gap-1">
-              <span className="text-[var(--color-accent)] shrink-0">$</span>
-              <span className="text-[var(--color-text-muted)]">{line.text}</span>
-              {/* Cursor: blinks on active last line, or steady on typing line */}
-              {isLastLine && (
-                <span
-                  className={
-                    line.done && cursorVisible
-                      ? 'text-[var(--color-accent)] animate-[blink_1s_step-end_infinite]'
-                      : line.done
-                        ? 'opacity-0'
-                        : 'text-[var(--color-accent)]'
-                  }
-                  aria-hidden="true"
-                >
-                  ▌
+      {/* Fixed terminal viewport */}
+      <div className="h-[510px] overflow-hidden p-4 sm:p-5">
+        <div className="space-y-1.5 leading-relaxed">
+          {/* Completed lines */}
+          {completedEntries.map((entry, index) => (
+            <div
+              key={`${entryIndex}-${index}`}
+              className="whitespace-pre-line"
+            >
+              {entry.kind === 'prompt' && (
+                <span className="text-[var(--color-accent)]">
+                  {entry.text.length === 0
+                    ? 'grinnel@lab:~'
+                    : 'grinnel@lab:~$'}
+                  &nbsp;
                 </span>
               )}
-            </p>
-          );
-        })}
 
-        {/* Prompt line before animation starts */}
-        {lines.length === 0 && (
-          <p className="flex items-baseline gap-1">
-            <span className="text-[var(--color-accent)] shrink-0">$</span>
-            <span
-              className={cursorVisible ? 'text-[var(--color-accent)] animate-[blink_1s_step-end_infinite]' : 'opacity-0'}
-              aria-hidden="true"
-            >
-              ▌
-            </span>
-          </p>
-        )}
+              <span
+                className={
+                  entry.kind === 'prompt'
+                    ? 'text-[var(--color-text-muted)]'
+                    : 'text-[var(--color-text-subtle)]'
+                }
+              >
+                {entry.text}
+              </span>
+            </div>
+          ))}
+
+          {/* Current line */}
+          {currentEntry && (
+            <div className="whitespace-pre-line">
+              {currentEntry.kind === 'prompt' && (
+                <span className="text-[var(--color-accent)]">
+                  {currentEntry.text.length === 0
+                    ? 'grinnel@lab:~'
+                    : 'grinnel@lab:~$'}
+                  &nbsp;
+                </span>
+              )}
+
+              <span
+                className={
+                  currentEntry.kind === 'prompt'
+                    ? 'text-[var(--color-text-muted)]'
+                    : 'text-[var(--color-text-subtle)]'
+                }
+              >
+                {typedText}
+              </span>
+
+              {/* Exactly one cursor */}
+              <span
+                className="terminal-cursor ml-0.5 inline-block h-3 w-[6px] bg-[var(--color-accent)] align-middle"
+                aria-hidden="true"
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -251,22 +213,41 @@ interface CybersecuritySectionProps {
 
 export const CybersecuritySection: React.FC<CybersecuritySectionProps> = ({
   language,
-}) => (
-  <section id="cybersecurity" className="cybersecurity-section px-5 py-10">
-    <div className="mx-auto max-w-7xl px-0 sm:px-4 lg:px-6">
-      <div className="mb-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <section
+      id="cybersecurity"
+      className="cybersecurity-section px-5 py-10"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="mx-auto max-w-7xl px-0 sm:px-4 lg:px-6">
+        <div className="mb-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div>
           <h2 className="text-lg font-bold tracking-tight text-[var(--color-text-main)] sm:text-xl">
             {language === 'fr' ? 'Cybersécurité' : 'Cybersecurity'}
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--color-text-muted)]">
-            {language === 'fr'
-              ? "Je construis et analyse des systèmes pour mieux comprendre comment ils peuvent être sécurisés."
-              : "I build and analyse systems to better understand how they can be secured."}
-          </p>
+
+          <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--color-text-muted)]">
+            <span className="font-semibold text-[var(--color-accent)]">
+              {language === 'fr' ? 'Prochainement' : 'Coming soon'}
+            </span>
+            <span>·</span>
+            <span>Security Labs</span>
+            <span>·</span>
+            <span>CTFs</span>
+            <span>·</span>
+            <span>Security Projects</span>
+            <span>·</span>
+            <span>Write-ups</span>
+          </div>
         </div>
-        <SecLabTerminal />
+
+        <SecLabTerminal language={language} isHovered={isHovered} />
       </div>
     </div>
-  </section>
-);
+    </section>
+  );
+};

@@ -18,35 +18,49 @@ export const HeadingSection: React.FC<HeadingSectionProps> = ({ language }) => {
         </div>
 
         <div className="rounded-2xl glass-card p-5 sm:p-6">
-<div className="space-y-4 text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
+          <div className="space-y-4 text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
             {language === 'fr' ? (
               <>
                 <p>
-                  Je me dirige aujourd'hui vers la cybersécurité avec une priorité particulière donnée à la sécurité des systèmes, des réseaux et des infrastructures.
+                  Je souhaite désormais approfondir la cybersécurité, en
+                  particulier la compréhension des vulnérabilités, des réseaux
+                  et des systèmes.
                 </p>
+
                 <p>
-                  La prochaine étape est de transformer cette orientation en expérience concrète : approfondir les fondamentaux, multiplier les labs et les CTF, construire des projets de sécurité et développer une meilleure compréhension des mécanismes d'attaque et de défense.
+                  La prochaine étape est de transformer cette orientation en
+                  expérience concrète : approfondir les fondamentaux,
+                  pratiquer dans différents environnements, participer à des
+                  labs et des CTF, puis construire mes propres projets de
+                  sécurité.
                 </p>
+
                 <p>
-                  Je veux continuer à m'appuyer sur mes bases en développement, en réseaux et en systèmes pour aller plus loin. La cybersécurité devient mon axe principal, sans pour autant fermer les autres dimensions de l'ingénierie qui font partie de mon parcours.
-                </p>
-                <p>
-                  À plus long terme, je souhaite approfondir cette expertise dans des environnements où logiciel, réseaux, systèmes et sécurité se rencontrent, que ce soit dans l'industrie, la recherche ou une formation d'ingénierie avancée.
+                  À plus long terme, je souhaite évoluer dans des
+                  environnements où logiciel, réseaux, systèmes et sécurité se
+                  rencontrent, que ce soit dans l’industrie, la recherche ou
+                  une formation d’ingénierie avancée.
                 </p>
               </>
             ) : (
               <>
                 <p>
-                  I'm moving today toward cybersecurity with particular focus on systems, network, and infrastructure security.
+                  I now want to deepen my understanding of cybersecurity, with
+                  a particular focus on vulnerabilities, networks, and
+                  systems.
                 </p>
+
                 <p>
-                  The next step is to transform this direction into concrete experience: deepen fundamentals, increase labs and CTFs, build security projects, and develop a better understanding of attack and defense mechanisms.
+                  The next step is to turn this direction into concrete
+                  experience: strengthen my fundamentals, practice in
+                  different environments, take part in labs and CTFs, and
+                  eventually build my own security projects.
                 </p>
+
                 <p>
-                  I want to continue building on my foundations in development, networks, and systems to go further. Cybersecurity becomes my primary focus, without closing off the other dimensions of engineering that are part of my journey.
-                </p>
-                <p>
-                  In the longer term, I want to deepen this expertise in environments where software, networks, systems, and security meet, whether in industry, research, or advanced engineering study.
+                  In the longer term, I want to work in environments where
+                  software, networks, systems, and security intersect, whether
+                  in industry, research, or advanced engineering education.
                 </p>
               </>
             )}

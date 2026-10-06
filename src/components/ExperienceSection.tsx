@@ -22,7 +22,7 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }
           {EXPERIENCE_DATA.map((exp, idx) => (
             <div key={idx} className="relative flex flex-col gap-2 group glass-card p-4 sm:p-5 rounded-2xl">
               {/* Timeline marker node */}
-              <div className="absolute -left-[43px] sm:-left-[51px] top-5 sm:top-6 w-3.5 h-3.5 rounded-full bg-[var(--color-bg-main)] border-2 border-[var(--color-accent)] shadow-xs group-hover:scale-125 transition-transform"></div>
+              <div className="absolute -left-[28px] sm:-left-[32px] top-5 sm:top-6 w-3.5 h-3.5 rounded-full bg-[var(--color-bg-main)] border-2 border-[var(--color-accent)] shadow-xs group-hover:scale-125 transition-transform"></div>
 
               {/* Company & Date */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">

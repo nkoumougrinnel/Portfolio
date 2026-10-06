@@ -30,24 +30,14 @@ function buildMarqueeSkills(category: SkillCategory): SkillItem[] {
   return result;
 }
 
-// Cloud icons: pass rotation as CSS custom property so the @keyframes
-// fully owns `transform` (translateY + rotate) — no inline transform conflict.
+// Cloud icons orbit the shared center on staggered radii and phases.
 function buildCloudStyles(total: number): React.CSSProperties[] {
   return Array.from({ length: total }, (_, index) => {
-    const angle = index * 2.399963229728653;
-    const radius = 0.12 + 0.88 * Math.sqrt(index / Math.max(1, total - 1));
-    const horizontal = 50 + Math.cos(angle) * radius * 37;
-    const vertical = 50 + Math.sin(angle) * radius * 21;
-    const rotation = (index * 29) % 46 - 23;
+    const orbitRadius = 2.5 + ((index * 7) % 8) * 1.25;
     return {
-      // Centering via marginLeft; left drives horizontal position
-      left: `${horizontal}%`,
-      marginLeft: '-0.825rem', // -50% of 1.65rem width
-      top: `${vertical}%`,
-      marginTop: '-0.825rem',  // -50% of 1.65rem height (static, not animated)
-      // Pass rotation as CSS variable — consumed by @keyframes
-      ['--r' as string]: `${rotation}deg`,
-      animationDelay: `${-(index % 9) * 0.37}s`,
+      ['--orbit-radius' as string]: `${orbitRadius}rem`,
+      ['--orbit-duration' as string]: `${24 + (index % 5) * 4}s`,
+      animationDelay: `${-(index / Math.max(1, total)) * 28}s`,
       opacity: 0.55 + ((total - index) % 5) * 0.08,
     };
   });
@@ -422,22 +412,24 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
           onTouchStart={startExperience}
           onFocusCapture={startExperience}
         >
-          {/* Chaos cloud — CSS transition only, no Framer Motion overhead */}
+          {/* Skills orbit individually until the cloud disperses. */}
           <div aria-hidden="true" className="skills-chaos-cloud">
-            {ALL_SKILLS.map((skill, index) => (
-              <img
-                key={skill.name}
-                src={`https://cdn.simpleicons.org/${skill.icon}`}
-                alt=""
-                loading="lazy"
-                width="26"
-                height="26"
-                decoding="async"
-                className="skills-chaos-icon"
-                style={CLOUD_STYLES[index]}
-                onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
-              />
-            ))}
+            <div className="skills-chaos-orbit">
+              {ALL_SKILLS.map((skill, index) => (
+                <img
+                  key={skill.name}
+                  src={`https://cdn.simpleicons.org/${skill.icon}`}
+                  alt=""
+                  loading="lazy"
+                  width="26"
+                  height="26"
+                  decoding="async"
+                  className="skills-chaos-icon"
+                  style={CLOUD_STYLES[index]}
+                  onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+                />
+              ))}
+            </div>
           </div>
 
           <div className="skills-conveyor-content">
@@ -457,11 +449,6 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
                           ? 'Cybersécurité — Spécialisation en cours'
                           : 'Cybersecurity — Current Focus'}
                       </h3>
-                      <p className="text-[12px] text-[var(--color-text-muted)] mb-3">
-                        {language === 'fr'
-                          ? 'Je développe actuellement mes compétences en sécurité des systèmes et des réseaux.'
-                          : 'I am currently developing my expertise in systems and network security.'}
-                      </p>
                     </div>
                   )}
                   <SkillLane

@@ -114,12 +114,6 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm text-[var(--color-text-muted)] mb-6 max-w-3xl">
-          {language === 'fr'
-            ? 'Je construis des projets pour résoudre des problèmes concrets, mais aussi pour comprendre les technologies qui les composent. Ces projets couvrent le logiciel, les données, l\'IA, les réseaux et les systèmes embarqués.'
-            : 'I build projects to solve concrete problems, but also to understand the technologies that compose them. These projects cover software, data, AI, networks, and embedded systems.'}
-        </p>
-
         <div className="relative mb-6 -mx-5 sm:mx-0" aria-label={language === 'fr' ? 'Filtres des projets' : 'Project filters'}>
           <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap px-5 pb-2 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {PROJECT_FILTERS.map((filter) => (

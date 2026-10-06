@@ -25,35 +25,42 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
             </span>
           </div>
 
-<div className="space-y-4 font-sans text-[13px] leading-relaxed text-[var(--color-text-muted)] text-justify">
+          <div className="space-y-4 font-sans text-[13px] leading-relaxed text-[var(--color-text-muted)] text-justify">
             {language === 'fr' ? (
               <>
                 <p>
-                  Je me suis construit en passant par plusieurs facettes de l'ingénierie informatique : le développement logiciel, les réseaux, les systèmes embarqués et l'intelligence artificielle. Ce qui les relie, ce n'est pas seulement la technologie, mais l'envie de comprendre ce qu'il y a derrière un système et de voir jusqu'où il peut aller.
+                  Je suis étudiant ingénieur en Informatique et Réseaux à
+                  SUP’PTIC, avec une approche très orientée pratique. Je
+                  construis des applications, travaille avec les réseaux et
+                  explore les systèmes embarqués pour mieux comprendre leur
+                  fonctionnement et leurs contraintes.
                 </p>
+
                 <p>
-                  Je préfère apprendre en construisant. Je pars d'un problème, je cherche à comprendre ce qui se passe sous le capot, puis je transforme cette compréhension en quelque chose de concret. Au fil de mes projets, cette approche m'a amené à regarder les systèmes autrement : comment ils communiquent, où ils dépendent les uns des autres, ce qui peut mal fonctionner et, surtout, ce qui pourrait être fait pour les rendre plus fiables et plus sûrs.
-                </p>
-                <p>
-                  C'est ce qui marque aujourd'hui un changement de direction dans mon parcours. Après avoir consacré beaucoup de temps à construire des systèmes, je veux désormais consacrer la même rigueur à leur sécurité. Je développe mes bases en cybersécurité et je me dirige vers une compréhension plus profonde de la sécurité des systèmes, des réseaux et des infrastructures.
-                </p>
-                <p>
-                  Je ne considère pas ce parcours comme terminé. Mon objectif est de continuer à apprendre par la pratique, d'explorer différents environnements techniques et de confronter mes connaissances à des problèmes réels.
+                  J’apprends principalement en expérimentant : partir d’un
+                  problème, construire, tester, chercher ce qui ne fonctionne
+                  pas et approfondir jusqu’à comprendre le système. Cette
+                  manière de travailler m’a permis d’explorer plusieurs
+                  domaines tout en développant une vision plus globale des
+                  systèmes informatiques.
                 </p>
               </>
             ) : (
               <>
                 <p>
-                  I've built myself through several facets of computer engineering: software development, networks, embedded systems, and artificial intelligence. What connects them is not just the technology, but the desire to understand what's behind a system and how far it can go.
+                  I’m an engineering student in Computer Science and Networks
+                  at SUP’PTIC, with a strongly hands-on approach. I build
+                  applications, work with networks, and explore embedded
+                  systems to better understand how they work and the
+                  constraints they involve.
                 </p>
+
                 <p>
-                  I prefer to learn by building. I start with a problem, seek to understand what's happening beneath the surface, then transform that understanding into something concrete. Through my projects, this approach has taught me to look at systems differently: how they communicate, where they depend on each other, what can go wrong, and most importantly, what could be done to make them more reliable and secure.
-                </p>
-                <p>
-                  This marks a shift in direction in my journey today. After spending considerable time building systems, I want to now apply the same rigor to their security. I'm developing my foundations in cybersecurity and moving toward a deeper understanding of systems, network, and infrastructure security.
-                </p>
-                <p>
-                  I don't consider this journey complete. My goal is to continue learning through practice, exploring different technical environments, and confronting my knowledge with real problems.
+                  I mainly learn by experimenting: starting with a problem,
+                  building, testing, investigating what does not work, and
+                  digging deeper until I understand the system. This approach
+                  has allowed me to explore different areas while developing a
+                  broader understanding of computer systems.
                 </p>
               </>
             )}
@@ -65,6 +72,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
                 {language === 'fr' ? 'Au-delà du code' : 'Beyond the Code'}
               </span>
             </div>
+
             <p className="text-[13px] leading-relaxed text-[var(--color-text-muted)]">
               {language === 'fr'
                 ? 'En dehors de la technologie, je passe du temps à jouer aux jeux vidéo, regarder des anime, jouer aux échecs et faire du basketball.'

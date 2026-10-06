@@ -145,6 +145,16 @@
   font-family: var(--font-ui);
 }
 
+.terminal-cursor {
+  animation: terminal-cursor-blink 1s steps(2, start) infinite;
+}
+
+@keyframes terminal-cursor-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
 /* Custom subtle scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
