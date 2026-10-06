@@ -2,32 +2,22 @@ import React, { useState } from 'react';
 import { ExternalLink, Layers } from 'lucide-react';
 import { Language, Project, ProjectCategory } from '../types';
 
-type ProjectFilterGroup = {
-  id: 'hierarchy' | 'origin' | 'domain';
-  label: { fr: string; en: string };
-  categories: ProjectCategory[];
-};
-
-const FILTER_GROUPS: ProjectFilterGroup[] = [
-  {
-    id: 'hierarchy',
-    label: { fr: 'Importance', en: 'Importance' },
-    categories: ['featured', 'more', 'early']
-  },
-  {
-    id: 'origin',
-    label: { fr: 'Origine', en: 'Origin' },
-    categories: ['professional', 'academic', 'training', 'personal', 'competition']
-  },
-  {
-    id: 'domain',
-    label: { fr: 'Domaine', en: 'Domain' },
-    categories: ['ai', 'web', 'cyber', 'embedded', 'network']
-  }
+const PROJECT_FILTERS: Array<'all' | ProjectCategory> = [
+  'all',
+  'featured',
+  'web',
+  'ai',
+  'network',
+  'embedded'
 ];
 
-const FILTER_LABELS: Record<ProjectCategory, { fr: string; en: string }> = {
+const FILTER_LABELS: Record<'all' | ProjectCategory, { fr: string; en: string }> = {
+  all: { fr: 'Tous', en: 'All' },
   featured: { fr: 'Phares', en: 'Featured' },
+  web: { fr: 'Web', en: 'Web' },
+  ai: { fr: 'IA', en: 'AI' },
+  network: { fr: 'Réseaux', en: 'Networks' },
+  embedded: { fr: 'Embarqué', en: 'Embedded' },
   more: { fr: 'Autres', en: 'More' },
   early: { fr: 'Premiers', en: 'Early' },
   lab: { fr: 'Laboratoire', en: 'Lab' },
@@ -36,11 +26,7 @@ const FILTER_LABELS: Record<ProjectCategory, { fr: string; en: string }> = {
   competition: { fr: 'Compétition', en: 'Competition' },
   personal: { fr: 'Personnel', en: 'Personal' },
   professional: { fr: 'Professionnel', en: 'Professional' },
-  embedded: { fr: 'Embarqué', en: 'Embedded' },
-  ai: { fr: 'IA', en: 'AI' },
-  cyber: { fr: 'Cyber', en: 'Cyber' },
-  web: { fr: 'Web', en: 'Web' },
-  network: { fr: 'Réseaux', en: 'Networks' }
+  cyber: { fr: 'Cyber', en: 'Cyber' }
 };
 
 interface ProjectsSectionProps {
@@ -55,23 +41,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   projects,
   onSelectProject,
 }) => {
-  const [selectedFilters, setSelectedFilters] = useState<
-    Partial<Record<ProjectFilterGroup['id'], ProjectCategory>>
-  >({ hierarchy: 'featured' });
-
-  const selectedCategories = Object.values(selectedFilters).filter(
-    (category): category is ProjectCategory => Boolean(category)
-  );
+  const [activeFilter, setActiveFilter] = useState<'all' | ProjectCategory>('featured');
   const visibleProjects = projects.filter((project) =>
-    selectedCategories.every((category) => project.categories.includes(category))
+    activeFilter === 'all' || project.categories.includes(activeFilter)
   );
-
-  const toggleFilter = (groupId: ProjectFilterGroup['id'], category: ProjectCategory) => {
-    setSelectedFilters((current) => ({
-      ...current,
-      [groupId]: current[groupId] === category ? undefined : category
-    }));
-  };
 
   const renderProjectCard = (project: Project) => (
     <article
@@ -131,44 +104,34 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   );
 
   return (
-    <section id="projects" className="px-5 py-10">
+    <section id="projects" className="projects-section px-5 py-10">
       <div className="mx-auto max-w-7xl px-0 sm:px-4 lg:px-6">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-bold tracking-tight text-[var(--color-text-main)] sm:text-xl">
-              {language === 'fr' ? 'Projets & Réalisations' : 'Projects'}
+              {language === 'fr' ? 'Projets d\'Ingénierie' : 'Engineering Projects'}
             </h2>
           </div>
         </div>
 
+        <p className="text-xs sm:text-sm text-[var(--color-text-muted)] mb-6 max-w-3xl">
+          {language === 'fr'
+            ? 'Je construis des projets pour résoudre des problèmes concrets, mais aussi pour comprendre les technologies qui les composent. Ces projets couvrent le logiciel, les données, l\'IA, les réseaux et les systèmes embarqués.'
+            : 'I build projects to solve concrete problems, but also to understand the technologies that compose them. These projects cover software, data, AI, networks, and embedded systems.'}
+        </p>
+
         <div className="relative mb-6 -mx-5 sm:mx-0" aria-label={language === 'fr' ? 'Filtres des projets' : 'Project filters'}>
           <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap px-5 pb-2 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <button
-              type="button"
-              aria-pressed={selectedCategories.length === 0}
-              onClick={() => setSelectedFilters({})}
-              className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${selectedCategories.length === 0 ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-lg shadow-[var(--color-accent)]/25' : 'border-[var(--color-border)]/50 bg-[var(--color-bg-soft)]/50 backdrop-blur-sm text-[var(--color-text-muted)] hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]'}`}
-            >
-              {language === 'fr' ? 'Tous' : 'All'}
-            </button>
-
-            {FILTER_GROUPS.map((group, groupIndex) => (
-              <React.Fragment key={group.id}>
-                {groupIndex > 0 && <span aria-hidden="true" className="mx-1 h-6 w-px shrink-0 bg-[var(--color-border-muted)]" />}
-                <div role="group" aria-label={group.label[language]} className="flex shrink-0 items-center gap-2">
-                  {group.categories.map((category) => (
-                    <button
-                      key={category}
-                      type="button"
-                      aria-pressed={selectedFilters[group.id] === category}
-                      onClick={() => toggleFilter(group.id, category)}
-                      className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${selectedFilters[group.id] === category ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-lg shadow-[var(--color-accent)]/25' : 'border-[var(--color-border)]/50 bg-[var(--color-bg-soft)]/50 backdrop-blur-sm text-[var(--color-text-muted)] hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]'}`}
-                    >
-                      {FILTER_LABELS[category][language]}
-                    </button>
-                  ))}
-                </div>
-              </React.Fragment>
+            {PROJECT_FILTERS.map((filter) => (
+              <button
+                key={filter}
+                type="button"
+                aria-pressed={activeFilter === filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${activeFilter === filter ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-lg shadow-[var(--color-accent)]/25' : 'border-[var(--color-border)]/50 bg-[var(--color-bg-soft)]/50 backdrop-blur-sm text-[var(--color-text-muted)] hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]'}`}
+              >
+                {FILTER_LABELS[filter][language]}
+              </button>
             ))}
           </div>
           <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[var(--color-bg-main)]/95 to-transparent sm:hidden" />

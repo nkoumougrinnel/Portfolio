@@ -31,7 +31,7 @@ export const ActivitiesSection: React.FC<ActivitiesSectionProps> = ({
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-6">
           <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
-            {language === 'fr' ? 'Activités' : 'Activities'}
+            {language === 'fr' ? 'Activités & Leadership' : 'Activities & Leadership'}
           </h2>
         </div>
 

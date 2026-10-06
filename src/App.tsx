@@ -5,6 +5,7 @@ import { AboutSection } from './components/AboutSection';
 import { SkillsSection } from './components/SkillsSection';
 import { ProjectsSection } from './components/ProjectsSection';
 import { ExperienceSection } from './components/ExperienceSection';
+import { CybersecuritySection } from './components/CybersecuritySection';
 import { EducationSection } from './components/EducationSection';
 import { CertificationsSection } from './components/CertificationsSection';
 import { ActivitiesSection } from './components/ActivitiesSection';
@@ -25,6 +26,7 @@ import {
   CERTIFICATIONS_DATA,
   PROJECTS,
   ACTIVITIES_DATA,
+  CYBERSECURITY_DATA,
 } from './data/portfolioData';
 import { Language, Project, ActivityItem, CertificationItem } from './types';
 
@@ -165,14 +167,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen text-[var(--color-text-main)] flex flex-col w-full relative z-0">
-        {/* Aurora Background Blobs — dark mode only */}
-        {isDark && (
-          <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-            <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent)]/30 blur-[100px] animate-blob"></div>
-            <div className="absolute top-[30%] right-[-10%] w-[35vw] h-[35vw] rounded-full bg-violet-500/25 blur-[120px] animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-[-10%] left-[10%] w-[45vw] h-[45vw] rounded-full bg-cyan-400/20 blur-[100px] animate-blob animation-delay-4000"></div>
-          </div>
-        )}
+
 
       <div className="w-full flex flex-col min-h-screen relative">
         {/* Header */}
@@ -196,11 +191,7 @@ export default function App() {
 
           <AboutSection language={language} />
 
-          <SkillsSection
-            language={language}
-            projects={projectsList}
-            onSelectProject={(project) => setSelectedProject(project)}
-          />
+          <ExperienceSection language={language} />
 
           <ProjectsSection
             language={language}
@@ -211,7 +202,16 @@ export default function App() {
             }}
           />
 
-          <ExperienceSection language={language} />
+          <CybersecuritySection
+            language={language}
+            cybersecurityData={CYBERSECURITY_DATA}
+          />
+
+          <SkillsSection
+            language={language}
+            projects={projectsList}
+            onSelectProject={(project) => setSelectedProject(project)}
+          />
 
           <EducationSection language={language} />
 
@@ -230,11 +230,6 @@ export default function App() {
           />
 
           <HeadingSection language={language} />
-
-          <ResourcesSection
-            language={language}
-            onOpenCvModal={() => setIsCvModalOpen(true)}
-          />
 
           <ContactSection language={language} />
 

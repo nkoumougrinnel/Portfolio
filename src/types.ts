@@ -26,6 +26,7 @@ export interface Project {
   id: string;
   title: string;
   categories: ProjectCategory[];
+  track?: string;
   status: string;
   period?: string;
   description: {
@@ -191,4 +192,12 @@ export interface ActivityItem {
   videoUrls?: string[];
   tag?: string;
   categories: ActivityCategory[];
+}
+
+export interface CyberLab {
+  title: string;
+  type: { fr: string; en: string };
+  topics: string[];
+  status: 'active' | 'done' | 'planned';
+  note?: { fr: string; en: string };
 }

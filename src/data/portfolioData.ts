@@ -27,6 +27,7 @@ export const PROJECTS: Project[] = [
   {
     id: "relio",
     title: "Relio",
+    track: "engineering",
     categories: ["featured", "personal", "web"],
     status: "Active MVP",
     imageUrl: "/images/projects/relio.png",
@@ -71,6 +72,7 @@ export const PROJECTS: Project[] = [
   {
     id: "carburflow",
     title: "Carburflow",
+    track: "engineering",
     categories: ["featured", "professional", "web", "network"],
     status: "Production Pilot",
     imageUrl: "/images/projects/carburflow.png",
@@ -114,6 +116,7 @@ export const PROJECTS: Project[] = [
   {
     id: "lekki",
     title: "Lekki",
+    track: "engineering",
     categories: ["featured", "competition", "ai", "web"],
     status: "Hackathon Winner / Active",
     imageUrl: "/images/projects/lekki.png",
@@ -157,6 +160,7 @@ export const PROJECTS: Project[] = [
   {
     id: "suponeai",
     title: "Suponeai",
+    track: "engineering",
     categories: ["featured", "academic", "ai"],
     status: "Deployed at SUP'PTIC",
     imageUrl: "/images/projects/suponeai.jpg",
@@ -196,6 +200,7 @@ export const PROJECTS: Project[] = [
   {
     id: "media-cloud-center",
     title: "Media cloud center",
+    track: "engineering",
     categories: ["more", "personal", "network"],
     status: "Completed",
     imageUrl: "/images/projects/mediacloudcenter.jpg",
@@ -222,6 +227,7 @@ export const PROJECTS: Project[] = [
   {
     id: "smart-trash",
     title: "Smart trash",
+    track: "engineering",
     categories: ["more", "personal", "embedded", "ai"],
     status: "Prototype",
     imageUrl: "/images/projects/smart-trash.jpg",
@@ -244,6 +250,7 @@ export const PROJECTS: Project[] = [
   {
     id: "campusflow",
     title: "Campusflow",
+    track: "engineering",
     categories: ["more", "academic", "web"],
     status: "In Progress",
     imageUrl: "/images/projects/campusflow.jpg",
@@ -266,6 +273,7 @@ export const PROJECTS: Project[] = [
   {
     id: "tasktrack",
     title: "Tasktrack",
+    track: "engineering",
     categories: ["early", "personal", "web"],
     status: "Completed",
     imageUrl: "/images/projects/tasktrack.jpg",
@@ -287,6 +295,7 @@ export const PROJECTS: Project[] = [
   {
     id: "site-club-info",
     title: "Site officiel du club info",
+    track: "engineering",
     categories: ["more", "web"],
     status: "Completed",
     imageUrl: "/images/projects/siteclubinfo.png",
@@ -309,6 +318,7 @@ export const PROJECTS: Project[] = [
   {
     id: "sango",
     title: "Sango",
+    track: "engineering",
     categories: ["more", "ai", "network"],
     status: "In Progress",
     imageUrl: "/images/projects/sango.jpg",
@@ -335,6 +345,7 @@ export const PROJECTS: Project[] = [
   {
     id: "shopkamer",
     title: "Shopkamer",
+    track: "engineering",
     categories: ["early", "training", "web"],
     status: "Completed",
     imageUrl: "/images/projects/shopkamer.jpg",
@@ -357,6 +368,7 @@ export const PROJECTS: Project[] = [
   {
     id: "bras-robotise",
     title: "Bras robotisé",
+    track: "engineering",
     categories: ["more", "training", "embedded"],
     status: "Completed",
     imageUrl: "/images/projects/bras-robotise.jpg",
@@ -377,8 +389,9 @@ export const PROJECTS: Project[] = [
     tags: ["Arduino", "Servomoteurs", "C++", "Embedded"]
   },
   {
-    id: "robot-eviteur",
-    title: "Robot éviteur d’obstacles",
+id: "robot-eviteur",
+    title: "Robot éviteur d'obstacles",
+    track: "engineering",
     categories: ["more", "training", "embedded"],
     status: "Completed",
     imageUrl: "/images/projects/robot-eviteur.jpg",
@@ -401,6 +414,7 @@ export const PROJECTS: Project[] = [
   {
     id: "compteur-7-segments",
     title: "Compteur 7 segments",
+    track: "engineering",
     categories: ["more", "training", "embedded"],
     status: "Completed",
     imageUrl: "/images/projects/compteur-7-segments.jpg",
@@ -547,8 +561,8 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
   {
     company: "CAMTEL — Cameroon Telecommunications",
     role: {
-      en: "Lead & Full-Stack Developer / Intern",
-      fr: "Développeur Full-Stack & Lead Technique / Stagiaire"
+      en: "Lead Tech & Fullstack Developer · Intern",
+      fr: "Lead Tech & Fullstack Developer · Stagiaire"
     },
     department: {
       en: "Direction Régionale du Littoral · Business Unit Fixe · Service de Lutte contre la Fraude",
@@ -557,8 +571,8 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     location: "Douala, Cameroun",
     period: "July — Sept 2026",
     description: {
-      en: "Academic internship during my second year of engineering studies. The internship exposed me to a real production-oriented environment involving system architecture, development, databases, deployment, and teamwork. Designed and developed CarburFlow, a multi-site fuel monitoring platform designed for telecom infrastructure. CarburFlow centralizes fuel readings from generator sites, structures the collected data, calculates consumption and autonomy indicators, and helps identify discrepancies that may require investigation. Effectively took on a lead role managing data modeling, business logic, API development, frontend integration, anomaly detection, containerization, and deployment preparation.",
-      fr: "Stage académique de deuxième année d'ingénierie. Immersion dans un environnement de production exigeant : architecture système, bases de données, déploiement et collaboration inter-équipes. Conception et développement de bout en bout de CarburFlow, plateforme de télémétrie et de suivi carburant pour l'infrastructure des générateurs télécoms. Prise d'un rôle de lead technique : modélisation des données, logique métier, détection d'anomalies de soutirage, APIs REST, intégration frontend et conteneurisation Docker."
+      en: "During my academic internship at CAMTEL, I worked within the Fraud Prevention Service on a concrete problem related to tracking fuel consumption at telecom sites. I took charge of designing and developing CarburFlow, a web platform to centralize data, track consumption, and facilitate site supervision. The project involved data modeling, business logic, REST APIs, frontend/backend integration, and containerization with Docker. Beyond development, this experience confronted me with the constraints of a system used in a real telecom context: data from multiple sites, business rules, verification needs, and the necessity to keep an architecture clear enough to evolve. It also strengthened my interest in real systems. Understanding how an application integrates into a broader environment, how its components depend on each other, and where its weak points lie has become as important to me as making it work.",
+      fr: "Lors de mon stage académique chez CAMTEL, j'ai travaillé au sein du Service de Lutte contre la Fraude sur un problème concret lié au suivi des consommations de carburant des sites télécoms. J'ai pris en charge la conception et le développement de CarburFlow, une plateforme web destinée à centraliser les données, suivre les consommations et faciliter la supervision des sites. Le projet m'a amené à travailler sur la modélisation des données, la logique métier, les APIs REST, l'intégration frontend/backend et la conteneurisation avec Docker. Au-delà du développement, cette expérience m'a surtout confronté aux contraintes d'un système utilisé dans un contexte télécom réel : données provenant de plusieurs sites, règles métier, besoins de vérification et nécessité de garder une architecture suffisamment claire pour pouvoir évoluer. C'est aussi une expérience qui a renforcé mon intérêt pour les systèmes réels. Comprendre comment une application s'intègre dans un environnement plus large, comment ses composants dépendent les uns des autres et où se trouvent ses points de faiblesse est devenu aussi important pour moi que de la faire fonctionner."
     },
     tags: ["Django", "React", "PostgreSQL", "Docker", "Telecom Auditing"]
   }
@@ -611,29 +625,29 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
     imageUrl: HACKVERSE_IMAGE,
     certificateImageUrl: "/images/certs/hackverse.jpeg",
     categories: ["competition"],
-    tag: "Cybersecurity Hackathon",
+    tag: "Development Hackathon",
     role: {
-      en: "Cybersecurity team participant",
-      fr: "Participant au sein de l’équipe cybersécurité"
+      en: "Development team participant",
+      fr: "Participant au sein de l'équipe développement"
     },
     description: {
-      en: "Participation in a high-intensity cybersecurity hackathon focusing on offensive and defensive strategies, network analysis, and vulnerability mitigation.",
-      fr: "Participation à un hackathon intense de cybersécurité centré sur les stratégies offensives et défensives, l'analyse de paquets et la remédiation de failles."
+      en: "Participation in a team development competition, in a short format that required designing and delivering a functional solution quickly.",
+      fr: "Participation à une compétition de développement en équipe, dans un format court qui demandait de concevoir et livrer rapidement une solution fonctionnelle."
     },
     details: {
-      en: "HackVerse 2026 is a 48-hour cybersecurity hackathon focused on security challenges, network analysis, and system defense.",
-      fr: "HackVerse 2026 est un hackathon de cybersécurité de 48 heures consacré à des défis de sécurité, à l’analyse réseau et à la défense des systèmes."
+      en: "HackVerse 2026 is a development hackathon where teams build software solutions within a 48-hour timeframe.",
+      fr: "HackVerse 2026 est un hackathon de développement où les équipes construisent des solutions logicielles en 48 heures."
     },
     highlights: {
       en: [
-        "Network traffic dissection & Wireshark protocol reverse-engineering",
-        "Linux server defense & privilege escalation mitigation",
-        "Rapid scripting in Python and Bash under strict competition timelines"
+        "Rapid prototyping and MVP development under time pressure",
+        "Team coordination and delivery of a working solution",
+        "Problem-solving and technical implementation in a competitive environment"
       ],
       fr: [
-        "Inspection approfondie des trames réseau et analyse de protocoles sous Wireshark",
-        "Durcissement de serveurs Linux et remédiation de vulnérabilités critiques",
-        "Automatisation de scripts de défense en Python et Bash sous fortes contraintes de temps"
+        "Prototypage rapide et développement d'une solution viable sous contrainte de temps",
+        "Coordination d'équipe et livraison d'une application fonctionnelle",
+        "Résolution de problèmes techniques dans un environnement compétitif"
       ]
     }
   },
@@ -651,8 +665,8 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
     },
     relatedProjectIds: ["lekki"],
     description: {
-      en: "Lead developer for the Lekki project, integrating a hybrid RAG pipeline for sovereign enterprise knowledge management.",
-      fr: "Lead développeur sur le projet Lekki, intégrant un pipeline RAG souverain primé pour la recherche sémantique en entreprise."
+      en: "Lead developer on Lekki, a knowledge management and semantic search project designed around data sovereignty.",
+      fr: "Lead développeur sur Lekki, un projet de gestion des connaissances et de recherche sémantique conçu autour de la souveraineté des données."
     },
     details: {
       en: "The 2026 J.U.I.N Cursor Hackathon challenged teams to build useful software solutions. LEKKI, an AI-assisted knowledge search project, was developed during the event.",
@@ -683,12 +697,12 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
       fr: "Vice-président du Club Informatique"
     },
     description: {
-      en: "Leading the computer science club at SUP'PTIC, organizing practical workshops in programming, networks, and technical bootcamps for students.",
-      fr: "Direction du Club Informatique de SUP'PTIC, organisation d'ateliers pratiques de code, réseau, IoT et sessions de mentorat pour les étudiants."
+      en: "Participating in the coordination of the SUP'PTIC Computer Club and setting up activities around technology, learning, and student projects.",
+      fr: "Participation à la coordination du Club Informatique de SUP'PTIC et à la mise en place d'activités autour de la technologie, de l'apprentissage et des projets étudiants."
     },
     details: {
-      en: "The SUP'PTIC Computer Club brings students together through practical workshops and peer learning in software, networks, and embedded technology.",
-      fr: "Le Club Informatique de SUP'PTIC réunit les étudiants autour d’ateliers pratiques et du partage de connaissances en développement, réseaux et systèmes embarqués."
+      en: "This responsibility taught me to work with different profiles, organize collective initiatives, and advance projects that don't rely solely on technical skills.",
+      fr: "Cette responsabilité m'a appris à travailler avec des profils différents, à organiser des initiatives collectives et à faire avancer des projets qui ne reposent pas uniquement sur la technique."
     },
     highlights: {
       en: [
@@ -704,3 +718,239 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
     }
   }
 ];
+
+export const CYBERSECURITY_DATA = {
+  intro: {
+    fr: "Je construis depuis plusieurs années des logiciels et des systèmes réseau, puis j'explore aujourd'hui la manière dont ces systèmes peuvent être attaqués, analysés et sécurisés. Cette curiosité m'oriente vers la compréhension des mécanismes d'attaque, de l'observation des risques et de la protection des infrastructures numériques.",
+    en: "For several years, I have built software and worked with network systems. Today, I explore how these systems can be attacked, analyzed, and secured, with a focus on understanding attack mechanisms, detecting risks, and protecting digital infrastructure."
+  },
+
+  direction: {
+    fr: "Je souhaite approfondir la sécurité des systèmes et des réseaux, en conservant un lien constant avec les environnements télécoms, les infrastructures numériques et les systèmes distribués. Mon objectif est de développer une vision complète de la protection des systèmes, depuis l'analyse du trafic et les vulnérabilités jusqu'à la conception de contrôles et de résilience.",
+    en: "I want to deepen my understanding of systems and network security while maintaining a close connection with telecom environments, digital infrastructure, and distributed systems. My goal is to develop a complete view of system protection, from traffic analysis and vulnerability assessment to controls and resilience."
+  },
+
+  // SECURITY PROJECTS — Ce que tu construis toi-même avec un objectif de sécurité
+  securityProjects: [
+    {
+      id: "mock-network-sentinel",
+      title: "Mock Network Sentinel",
+      description: {
+        fr: "Projet de démonstration pour visualiser la carte d'un outil de surveillance réseau.",
+        en: "Mock project to preview the card layout for a network monitoring tool."
+      },
+      tags: ["Python", "Scapy", "Linux"],
+      imageUrl: "/images/projects/relio.png",
+      githubUrl: undefined,
+      caseStudyUrl: undefined
+    },
+    // Placeholder for future projects - structure ready
+    // {
+    //   id: "network-sentinel",
+    //   title: "Network Sentinel",
+    //   description: {
+    //     fr: "Outil léger de surveillance réseau pour identifier des patterns de trafic suspects en réseau local.",
+    //     en: "Lightweight network monitoring tool to identify suspicious traffic patterns in a local network."
+    //   },
+    //   tags: ["Python", "Scapy", "Linux"],
+    //   imageUrl: "/images/cyber/network-sentinel.png",
+    //   githubUrl: "https://github.com/nkoumougrinnel/network-sentinel",
+    //   caseStudyUrl: null,
+    //   featured: true
+    // },
+    // {
+    //   id: "web-security-scanner",
+    //   title: "Web Security Scanner",
+    //   description: {
+    //     fr: "Outil expérimental de détection de failles communes dans les applications web.",
+    //     en: "Experimental tool for detecting common security issues in web applications."
+    //   },
+    //   tags: ["Python", "HTTP", "OWASP"],
+    //   imageUrl: "/images/cyber/web-scanner.png",
+    //   githubUrl: "https://github.com/nkoumougrinnel/web-security-scanner",
+    //   caseStudyUrl: null,
+    //   featured: false
+    // },
+    // {
+    //   id: "secure-file-exchange",
+    //   title: "Secure File Exchange",
+    //   description: {
+    //     fr: "Système de partage de fichiers sécurisé explorant authentification, chiffrage et contrôle d'accès.",
+    //     en: "Secure file-sharing system exploring authentication, encryption and access control."
+    //   },
+    //   tags: ["Django", "PostgreSQL", "Cryptography"],
+    //   imageUrl: "/images/cyber/secure-file-exchange.png",
+    //   githubUrl: "https://github.com/nkoumougrinnel/secure-file-exchange",
+    //   caseStudyUrl: null,
+    //   featured: false
+    // }
+  ],
+
+  // SECURITY LABS — Expérimentations pratiques dans des environnements contrôlés
+  securityLabs: [
+    {
+      id: "cylab-academy",
+      title: "CyLab Security Academy",
+      platform: "CyLab Security Academy",
+      type: { fr: "Plateforme de cours et labs", en: "Course platform & labs" },
+      topics: ["Web Security", "Linux hardening", "Practical challenges"],
+      status: "active",
+      description: {
+        fr: "Fondamentaux et exercices pratiques sur les vulnérabilités web et systèmes via la plateforme CyLab.",
+        en: "Foundations and hands-on exercises on web and system vulnerabilities via CyLab platform."
+      },
+      imageUrl: "/images/cyber/cylab-lab.png"
+    },
+    {
+      id: "network-traffic-analysis",
+      title: "Network Traffic Investigation",
+      platform: "Personal Lab",
+      type: { fr: "Lab personnel", en: "Personal lab" },
+      topics: ["Wireshark", "Nmap", "Protocol inspection", "tcpdump"],
+      status: "active",
+      description: {
+        fr: "Capture et analyse de trafic réseau, reconnaissance, inspection de protocoles.",
+        en: "Network traffic capture and analysis, reconnaissance, protocol inspection."
+      },
+      imageUrl: "/images/cyber/network-traffic-lab.png"
+    },
+    {
+      id: "linux-security-experiments",
+      title: "Linux Security Experiments",
+      platform: "Personal Lab",
+      type: { fr: "Lab personnel", en: "Personal lab" },
+      topics: ["Permissions", "File system", "Hardening", "SSH config"],
+      status: "active",
+      description: {
+        fr: "Expérimentations sur le durcissement Linux, permissions et configuration système.",
+        en: "Experiments on Linux hardening, permissions, and system configuration."
+      },
+      imageUrl: "/images/cyber/linux-security-lab.png"
+    }
+  ],
+
+  // CTFs — Challenges de différentes plateformes
+  ctfs: [
+    {
+      id: "mock-auth-bypass",
+      title: "Mock Authentication Bypass",
+      platform: "TryHackMe",
+      category: "Web Security",
+      tags: ["Authentication", "HTTP", "Burp Suite"],
+      description: {
+        fr: "Challenge de démonstration pour visualiser la carte CTF et ses informations.",
+        en: "Mock challenge to preview the CTF card and its information."
+      },
+      writeupUrl: undefined,
+      difficulty: "Easy",
+      date: "2026"
+    },
+    // Placeholder for future CTF challenges - structure ready
+    // {
+    //   id: "auth-bypass",
+    //   title: "Authentication Bypass",
+    //   platform: "TryHackMe",
+    //   category: "Web Security",
+    //   tags: ["Authentication", "HTTP", "Burp Suite"],
+    //   description: {
+    //     fr: "Exploration d'un mécanisme d'authentification défaillant et identification d'un contournement du contrôle d'accès.",
+    //     en: "Explored a flawed authentication mechanism and identified a way to bypass the intended access control."
+    //   },
+    //   writeupUrl: "https://github.com/nkoumougrinnel/writeups/tree/main/auth-bypass",
+    //   difficulty: "Easy",
+    //   date: "2026"
+    // },
+    // {
+    //   id: "linux-privesc",
+    //   title: "Linux Privilege Escalation",
+    //   platform: "Hack The Box",
+    //   category: "Linux",
+    //   tags: ["Privilege Escalation", "Enumeration", "Linux"],
+    //   description: {
+    //     fr: "Énumération d'un hôte Linux, identification d'un vecteur d'élévation de privilèges et obtention d'un accès élevé.",
+    //     en: "Enumerated a Linux host, identified a privilege escalation vector and obtained elevated access."
+    //   },
+    //   writeupUrl: "https://github.com/nkoumougrinnel/writeups/tree/main/linux-privesc",
+    //   difficulty: "Medium",
+    //   date: "2026"
+    // },
+    // {
+    //   id: "weak-rsa",
+    //   title: "Weak RSA Implementation",
+    //   platform: "CyLab Security Academy",
+    //   category: "Cryptography",
+    //   tags: ["RSA", "Cryptography", "Number Theory"],
+    //   description: {
+    //     fr: "Investigation des faiblesses dans une implémentation RSA incorrecte.",
+    //     en: "Investigated weaknesses in an improperly implemented RSA scheme."
+    //   },
+    //   writeupUrl: "https://github.com/nkoumougrinnel/writeups/tree/main/weak-rsa",
+    //   difficulty: "Medium",
+    //   date: "2026"
+    // },
+    // {
+    //   id: "sql-injection",
+    //   title: "SQL Injection",
+    //   platform: "PortSwigger Web Security Academy",
+    //   category: "Web Security",
+    //   tags: ["SQL Injection", "Web Security", "Database"],
+    //   description: {
+    //     fr: "Investigation d'une requête vulnérable et démonstration de comment une gestion d'entrée défaillante permet l'injection SQL.",
+    //     en: "Investigated a vulnerable query and demonstrated how improper input handling enables SQL injection."
+    //   },
+    //   writeupUrl: "https://github.com/nkoumougrinnel/writeups/tree/main/sql-injection",
+    //   difficulty: "Easy",
+    //   date: "2026"
+    // }
+  ],
+
+  // RESEARCH & WRITE-UPS — Analyses techniques et documentations
+  writeups: [
+    // Placeholder for future write-ups - structure ready
+    // {
+    //   id: "understanding-sql-injection",
+    //   title: "Understanding SQL Injection",
+    //   description: {
+    //     fr: "Investigation sur le fonctionnement de l'injection SQL de la requête HTTP à la requête base de données, patterns d'exploitation et défenses.",
+    //     en: "Investigation into how SQL injection works from HTTP request to database query, including common exploitation patterns and defensive mechanisms."
+    //   },
+    //   tags: ["Web Security", "SQL Injection", "Defense"],
+    //   url: "https://github.com/nkoumougrinnel/writeups/tree/main/understanding-sql-injection",
+    //   date: "2026"
+    // },
+    // {
+    //   id: "tls-handshake-breakdown",
+    //   title: "How HTTPS Protects a Connection",
+    //   description: {
+    //     fr: "Décomposition du handshake TLS pour comprendre comment authentification, échange de clés et chiffrement travaillent ensemble.",
+    //     en: "Breaking down the TLS handshake to understand how authentication, key exchange and encryption work together."
+    //   },
+    //   tags: ["Cryptography", "TLS", "Network Security"],
+    //   url: "https://github.com/nkoumougrinnel/writeups/tree/main/tls-handshake",
+    //   date: "2026"
+    // },
+    // {
+    //   id: "pcap-analysis",
+    //   title: "Investigating a Suspicious Network Capture",
+    //   description: {
+    //     fr: "Analyse d'un fichier PCAP pour comprendre la séquence d'événements réseau et identifier un comportement potentiellement malveillant.",
+    //     en: "Analysis of a PCAP file to understand the sequence of network events and identify potentially malicious behavior."
+    //   },
+    //   tags: ["Network Security", "Wireshark", "PCAP Analysis"],
+    //   url: "https://github.com/nkoumougrinnel/writeups/tree/main/pcap-analysis",
+    //   date: "2026"
+    // },
+    // {
+    //   id: "linux-permissions-privesc",
+    //   title: "Linux Permissions & Privilege Escalation",
+    //   description: {
+    //     fr: "Exploration pratique des permissions Linux et des mécanismes pouvant mener à l'élévation de privilèges.",
+    //     en: "Practical exploration of Linux permissions and mechanisms that can lead to privilege escalation."
+    //   },
+    //   tags: ["Linux", "Privilege Escalation", "System Security"],
+    //   url: "https://github.com/nkoumougrinnel/writeups/tree/main/linux-permissions",
+    //   date: "2026"
+    // }
+  ]
+};
+

@@ -406,7 +406,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
     <section
       ref={sectionRef}
       id="skills"
-      className="skills-experience-section"
+      className="skills-experience-section skills-section"
       data-started={hasStarted}
     >
       <div className="skills-inner">
@@ -442,26 +442,48 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
 
           <div className="skills-conveyor-content">
             <div className="skills-lanes-stack">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-accent)] mb-3">
+                {language === 'fr' ? 'Fondations Techniques' : 'Engineering Foundation'}
+              </h3>
               {SKILL_CATEGORIES.map((category, categoryIndex) => (
-                <SkillLane
-                  key={category.id}
-                  category={category}
-                  categoryIndex={categoryIndex}
-                  marqueeSkills={MARQUEE_DATA[categoryIndex]}
-                  direction={categoryIndex % 2 === 0 ? 'left' : 'right'}
-                  isPaused={pausedCategory === category.id}
-                  isSettled={isSettled}
-                  hasStarted={hasStarted}
-                  prefersReducedMotion={prefersReducedMotion}
-                  language={language}
-                  activeTooltipId={activeTooltip?.id ?? null}
-                  projectsMap={projectsMap}
-                  isInView={isInView}
-                  onMouseEnter={openTooltip}
-                  onMouseLeave={handleCardMouseLeave}
-                  onFocusCapture={openTooltip}
-                  onBlurCapture={handleCardBlur}
-                />
+                <>
+                  {category.id === 'cybersecurity' && (
+                    <div
+                      key={`separator-${category.id}`}
+                      className="border-t border-[var(--color-border)]/50 my-6 pt-6"
+                    >
+                      <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-accent)] mb-3">
+                        {language === 'fr'
+                          ? 'Cybersécurité — Spécialisation en cours'
+                          : 'Cybersecurity — Current Focus'}
+                      </h3>
+                      <p className="text-[12px] text-[var(--color-text-muted)] mb-3">
+                        {language === 'fr'
+                          ? 'Je développe actuellement mes compétences en sécurité des systèmes et des réseaux.'
+                          : 'I am currently developing my expertise in systems and network security.'}
+                      </p>
+                    </div>
+                  )}
+                  <SkillLane
+                    key={category.id}
+                    category={category}
+                    categoryIndex={categoryIndex}
+                    marqueeSkills={MARQUEE_DATA[categoryIndex]}
+                    direction={categoryIndex % 2 === 0 ? 'left' : 'right'}
+                    isPaused={pausedCategory === category.id}
+                    isSettled={isSettled}
+                    hasStarted={hasStarted}
+                    prefersReducedMotion={prefersReducedMotion}
+                    language={language}
+                    activeTooltipId={activeTooltip?.id ?? null}
+                    projectsMap={projectsMap}
+                    isInView={isInView}
+                    onMouseEnter={openTooltip}
+                    onMouseLeave={handleCardMouseLeave}
+                    onFocusCapture={openTooltip}
+                    onBlurCapture={handleCardBlur}
+                  />
+                </>
               ))}
             </div>
           </div>

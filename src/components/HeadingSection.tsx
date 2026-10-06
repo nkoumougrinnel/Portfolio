@@ -12,35 +12,41 @@ export const HeadingSection: React.FC<HeadingSectionProps> = ({ language }) => {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
-              {language === 'fr' ? 'Où je vais' : "Where I'm Heading"}
+              {language === 'fr' ? 'Direction Actuelle' : 'Current Direction'}
             </h2>
           </div>
         </div>
 
         <div className="rounded-2xl glass-card p-5 sm:p-6">
-          <div className="space-y-4 text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
+<div className="space-y-4 text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
             {language === 'fr' ? (
               <>
                 <p>
-                  Je m’intéresse de plus en plus à la cybersécurité, notamment à la protection des systèmes, des réseaux et des infrastructures. Les environnements télécoms m’intéressent particulièrement, car ils reposent sur de nombreux systèmes et moyens de communication qui doivent fonctionner de manière fiable et sécurisée.
+                  Je me dirige aujourd'hui vers la cybersécurité avec une priorité particulière donnée à la sécurité des systèmes, des réseaux et des infrastructures.
                 </p>
                 <p>
-                  Je suis encore en phase d’apprentissage dans ce domaine, mais j’ai envie d’aller plus loin et de mieux comprendre comment un système peut être compromis, quelles faiblesses peuvent être exploitées et comment les prévenir.
+                  La prochaine étape est de transformer cette orientation en expérience concrète : approfondir les fondamentaux, multiplier les labs et les CTF, construire des projets de sécurité et développer une meilleure compréhension des mécanismes d'attaque et de défense.
                 </p>
                 <p>
-                  Mon objectif est de développer progressivement une compréhension solide de la sécurité des systèmes et des infrastructures, en m’appuyant sur mes bases en développement, en réseaux et en systèmes embarqués.
+                  Je veux continuer à m'appuyer sur mes bases en développement, en réseaux et en systèmes pour aller plus loin. La cybersécurité devient mon axe principal, sans pour autant fermer les autres dimensions de l'ingénierie qui font partie de mon parcours.
+                </p>
+                <p>
+                  À plus long terme, je souhaite approfondir cette expertise dans des environnements où logiciel, réseaux, systèmes et sécurité se rencontrent, que ce soit dans l'industrie, la recherche ou une formation d'ingénierie avancée.
                 </p>
               </>
             ) : (
               <>
                 <p>
-                  I’m becoming increasingly interested in cybersecurity, particularly in protecting systems, networks, and infrastructure. Telecommunications environments especially interest me because they rely on many systems and communication channels that need to operate reliably and securely.
+                  I'm moving today toward cybersecurity with particular focus on systems, network, and infrastructure security.
                 </p>
                 <p>
-                  I’m still learning in this field, but I want to go further and better understand how systems can be compromised, which weaknesses can be exploited, and how they can be prevented.
+                  The next step is to transform this direction into concrete experience: deepen fundamentals, increase labs and CTFs, build security projects, and develop a better understanding of attack and defense mechanisms.
                 </p>
                 <p>
-                  My goal is to progressively build a solid understanding of systems and infrastructure security, drawing on my foundations in software development, networking, and embedded systems.
+                  I want to continue building on my foundations in development, networks, and systems to go further. Cybersecurity becomes my primary focus, without closing off the other dimensions of engineering that are part of my journey.
+                </p>
+                <p>
+                  In the longer term, I want to deepen this expertise in environments where software, networks, systems, and security meet, whether in industry, research, or advanced engineering study.
                 </p>
               </>
             )}

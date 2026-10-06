@@ -17,7 +17,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section
       id="hero"
-      className="relative w-full min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-between items-center px-5 py-6 sm:py-8 overflow-hidden"
+      className="hero-section relative w-full min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-between items-center px-5 py-6 sm:py-8 overflow-hidden"
     >
       {/* Top spacer for perfect vertical balancing on large screens */}
       <div className="hidden sm:block h-2 pointer-events-none"></div>
@@ -58,10 +58,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             Grinnel Germain
           </h2>
 
-          <p className="my-2 max-w-lg text-[15px] leading-relaxed text-[var(--color-text-muted)]">
+<p className="my-2 max-w-lg text-[15px] leading-relaxed text-[var(--color-text-muted)]">
             {language === 'fr'
-              ? 'Je m’intéresse au développement, aux systèmes et aux réseaux, avec un intérêt grandissant pour la cybersécurité.'
-              : 'I’m interested in software development, systems, and networks, with a growing interest in cybersecurity.'}
+              ? "Je construis des systèmes pour comprendre comment ils fonctionnent. Aujourd'hui, je me concentre sur la manière dont ils peuvent être sécurisés."
+              : 'I build systems to understand how they work. Today, I focus on how they can be secured.'}
           </p>
 
           {/* Action Buttons */}

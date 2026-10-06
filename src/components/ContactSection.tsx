@@ -22,7 +22,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
   };
 
   return (
-    <section id="contact" className="px-5 py-12">
+    <section id="contact" className="contact-section px-5 py-12">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-3">
           <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
@@ -30,11 +30,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
           </h2>
         </div>
 
-        <div className="mb-8">
+<div className="mb-8">
           <p className="text-xs sm:text-sm text-[var(--color-text-muted)] mt-1 max-w-2xl">
             {language === 'fr'
-              ? 'Disponible pour discuter d’opportunités d’ingénierie logicielle, de télécommunications, de projets IoT et de collaborations en cybersécurité.'
-              : 'Available to discuss software engineering opportunities, telecom architectures, IoT systems, and cybersecurity collaborations.'}
+              ? "Vous souhaitez échanger autour d'un projet, d'une opportunité d'ingénierie ou d'un sujet lié aux systèmes, aux réseaux et à la cybersécurité ? Je suis disponible pour en discuter."
+              : 'Do you want to discuss a project, an engineering opportunity, or a topic related to systems, networks, and cybersecurity? I am available to talk.'}
           </p>
         </div>
 
@@ -57,8 +57,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
               </a>
               <p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">
                 {language === 'fr'
-                  ? 'Pour tout échange professionnel, proposition de poste ou collaboration.'
-                  : 'For professional inquiries, roles, or project proposals.'}
+                  ? 'Pour les échanges professionnels, les opportunités et les collaborations.'
+                  : 'For professional exchanges, opportunities, and collaborations.'}
               </p>
             </div>
 
@@ -113,8 +113,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
               </span>
               <p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">
                 {language === 'fr'
-                  ? 'Code source des projets, dépôts publics, architectures et contributions open source.'
-                  : 'Source code, public repositories, system architectures, and open source contributions.'}
+                  ? 'Projets, expérimentations et code source.'
+                  : 'Projects, experiments, and source code.'}
               </p>
             </div>
 
@@ -146,10 +146,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
               <span className="text-sm sm:text-base font-bold text-[var(--color-text-main)] group-hover:text-[var(--color-accent)] transition-colors break-all block">
                 cm.linkedin.com/in/nkoumougrinnel
               </span>
-              <p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">
+<p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">
                 {language === 'fr'
-                  ? 'Réseau professionnel, parcours d’ingénieur, publications et actualités technologiques.'
-                  : 'Professional network, engineering trajectory, publications, and technical posts.'}
+                  ? 'Parcours professionnel, activités et actualités.'
+                  : 'Professional background, activities, and news.'}
               </p>
             </div>
 

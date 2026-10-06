@@ -53,7 +53,7 @@ export const CertificationsSection: React.FC<CertificationsSectionProps> = ({
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-5">
           <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
-            Certifications
+            {language === 'fr' ? 'Certifications' : 'Certifications'}
           </h2>
         </div>
 

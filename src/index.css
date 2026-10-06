@@ -1,28 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════
-   LIGHT THEME — "Menuisier" (default)
-   Warm craft paper, no glassmorphism
+   LIGHT THEME — "Technical Editorial" (default)
+   Clean grey/white, professional blue accent
 ═══════════════════════════════════════════ */
 :root {
-  --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-technical: 'JetBrains Mono', monospace;
+  --font-ui: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-technical: 'IBM Plex Mono', monospace;
 
   /* ── Backgrounds ───────────────────────── */
-  --color-bg-main:   #F5EDD8;   /* crème menuisier chaud */
-  --color-bg-soft:   #FFFFFF;   /* cartes blanches */
-  --color-bg-accent: #F9FAFB;   /* fond léger survol */
-  --color-bg-panel:  #FFFFFF;   /* modales blanches */
+  --color-bg-main:   #F4F5F6;   /* Gris très clair (papier technique) */
+  --color-bg-soft:   #FFFFFF;   /* Blanc pur */
+  --color-bg-accent: #EAEDF0;   /* Gris léger accent */
+  --color-bg-panel:  #FFFFFF;   /* Blanc panel */
 
   /* ── Texte ─────────────────────────────── */
-  --color-text-main:   #1A1209;  /* quasi noir chaud */
-  --color-text-muted:  #5C4A2A;  /* brun lisible */
-  --color-text-subtle: #7A6240;
-  --color-text-faint:  #A08C68;
+  --color-text-main:   #17191C;  /* Quasi noir (très lisible) */
+  --color-text-muted:  #5F6670;  /* Gris moyen */
+  --color-text-subtle: #7C838D;  /* Gris */
+  --color-text-faint:  #A4AAB2;  /* Gris clair */
 
   /* ── Accent principal ──────────────────── */
-  --color-accent:       #7C3A0D;  /* brun roux fonce */
-  --color-accent-hover: #5C2A08;
+  --color-accent:       #245EBA;  /* Bleu froid professionnel */
+  --color-accent-hover: #194B98;  /* Bleu hover */
 
   /* ── Utilitaires ───────────────────────── */
   --color-success:              #166534;
@@ -31,10 +33,10 @@
   --color-category-neutral:     #6B7280;
 
   /* ── Bordures ──────────────────────────── */
-  --color-border:       rgba(92, 74, 42, 0.20);
-  --color-border-muted: rgba(92, 74, 42, 0.12);
+  --color-border:       rgba(23, 25, 28, 0.11);
+  --color-border-muted: rgba(23, 25, 28, 0.055);
 
-  /* ── Médias (modals sombres) ───────────── */
+  /* ── Médias (modals) ───────────────────── */
   --color-media-overlay:  #000000;
   --color-media-surface:  #0f172a;
   --color-media-panel:    #020617;
@@ -46,35 +48,45 @@
 }
 
 /* ═══════════════════════════════════════════
-   DARK THEME — "Midnight" (data-theme=dark)
-   Deep night, glassmorphism + aurora blobs
+   DARK THEME — "Digital Engineering" (data-theme=dark)
+   Graphite + maîtrisé blue accent, no glassmorphism
 ═══════════════════════════════════════════ */
 [data-theme="dark"] {
   /* ── Backgrounds ───────────────────────── */
-  --color-bg-main:   #0A0F1E;
-  --color-bg-soft:   #111827;
-  --color-bg-accent: #1E2A3A;
-  --color-bg-panel:  #0D1422;
+  --color-bg-main:   #0B0D10;   /* Graphite très profond */
+  --color-bg-soft:   #111419;   /* Graphite doux */
+  --color-bg-accent: #171B21;   /* Graphite accent */
+  --color-bg-panel:  #0F1217;   /* Graphite panel */
 
   /* ── Texte ─────────────────────────────── */
-  --color-text-main:   #F1F5F9;
-  --color-text-muted:  #94A3B8;
-  --color-text-subtle: #64748B;
-  --color-text-faint:  #475569;
+  --color-text-main:   #F2F3F5;  /* Blanc cassé principal */
+  --color-text-muted:  #9DA4AE;  /* Gris moyen lisible */
+  --color-text-subtle: #707883;  /* Gris plus foncé */
+  --color-text-faint:  #4B525C;  /* Gris très foncé */
 
   /* ── Accent principal ──────────────────── */
-  --color-accent:       #38BDF8;
-  --color-accent-hover: #7DD3FC;
+  --color-accent:       #6EA8FF;  /* Bleu froid maîtrisé */
+  --color-accent-hover: #8AB8FF;  /* Bleu hover */
 
   /* ── Utilitaires ───────────────────────── */
   --color-success:              #34D399;
   --color-danger:               #F87171;
   --color-category-competition: #FBBF24;
-  --color-category-neutral:     #94A3B8;
+  --color-category-neutral:     #9DA4AE;
 
   /* ── Bordures ──────────────────────────── */
-  --color-border:       rgba(148, 163, 184, 0.12);
-  --color-border-muted: rgba(148, 163, 184, 0.08);
+  --color-border:       rgba(255, 255, 255, 0.10);
+  --color-border-muted: rgba(255, 255, 255, 0.055);
+
+  /* ── Médias (modals) ───────────────────── */
+  --color-media-overlay:  #000000;
+  --color-media-surface:  #0f172a;
+  --color-media-panel:    #020617;
+  --color-media-control:  #1e293b;
+  --color-media-border:   #334155;
+  --color-media-text:     #e2e8f0;
+  --color-media-muted:    #94a3b8;
+  --color-media-subtle:   #cbd5e1;
 }
 
 @layer base {
@@ -101,10 +113,10 @@
     background-color: var(--color-bg-main);
     -webkit-font-smoothing: antialiased;
 
-    /* Global Dot Grid */
-    --dot-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
-    --dot-size: 1.5px;
-    --dot-gap: 24px;
+    /* Global Dot Grid — architectural texture */
+    --dot-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    --dot-size: 1px;
+    --dot-gap: 28px;
     background-image:
       radial-gradient(circle at 50% 50%,
         transparent 0%,
@@ -153,53 +165,50 @@
 }
 
 @layer utilities {
-  /* Light mode: solid cards, no blur */
+  /* ── Flat editorial cards ─────────────── */
   .glass-card {
     background-color: var(--color-bg-soft);
     border: 1px solid var(--color-border);
-    box-shadow: 0 2px 12px 0 rgba(92, 74, 42, 0.07);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
   }
 
-  /* Dark mode only: real glassmorphism */
   [data-theme="dark"] .glass-card {
-    background-color: color-mix(in srgb, var(--color-bg-panel) 45%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+    background-color: var(--color-bg-panel);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.10);
+    /* NO blur / NO backdrop-filter */
   }
 
-  /* Skill icon stage: solid in light, glass in dark */
+  /* ── Skill icon stage ─────────────────── */
   [data-theme="dark"] .skills-icon-stage {
-    background-color: color-mix(in srgb, var(--color-bg-panel) 35%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: var(--color-bg-accent);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    /* NO blur / NO backdrop-filter */
   }
 
   [data-theme="dark"] .skills-skill-button:hover .skills-icon-stage,
   [data-theme="dark"] .skills-skill-button:focus-visible .skills-icon-stage {
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
-  }
-
-  .animate-blob {
-    animation: blob 10s infinite alternate;
-  }
-
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-
-  .animation-delay-4000 {
-    animation-delay: 4s;
+    border-color: var(--color-accent);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   }
 }
 
-@keyframes blob {
-  0%   { transform: translate(0px, 0px) scale(1); }
-  33%  { transform: translate(30px, -50px) scale(1.1); }
-  66%  { transform: translate(-20px, 20px) scale(0.9); }
-  100% { transform: translate(0px, 0px) scale(1); }
+/* ── Dot intensity varies by section ────── */
+.hero-section {
+  --dot-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
+
+.about-section,
+.skills-section {
+  --dot-color: color-mix(in srgb, var(--color-accent) 6%, transparent);
+}
+
+.projects-section {
+  --dot-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+.contact-section {
+  --dot-color: color-mix(in srgb, var(--color-accent) 4%, transparent);
+}
+

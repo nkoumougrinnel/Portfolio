@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, Eye } from 'lucide-react';
+import { Download, Eye, Github, Linkedin } from 'lucide-react';
 import { Language } from '../types';
 
 interface ResourcesSectionProps {
@@ -11,12 +11,15 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
   language,
   onOpenCvModal,
 }) => {
+  const githubUrl = "https://github.com/nkoumougrinnel";
+  const linkedinUrl = "https://cm.linkedin.com/in/nkoumougrinnel";
+
   return (
     <section id="resources" className="px-5 py-10">
       <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
         <div className="flex items-center gap-2 mb-4">
           <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
-            {language === 'fr' ? 'Ressources & Documents' : 'Resources'}
+            {language === 'fr' ? 'Ressources' : 'Resources'}
           </h2>
         </div>
 
@@ -29,8 +32,8 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
               </h3>
               <p className="text-xs text-[var(--color-text-muted)] mt-0.5 leading-snug">
                 {language === 'fr'
-                  ? 'Parcours académique, compétences et expériences détaillées.'
-                  : 'Detailed professional background and academic record.'}
+                  ? 'Mon parcours académique, mes compétences, mes expériences et mes projets en un seul document.'
+                  : 'My academic background, skills, experiences, and projects in one document.'}
               </p>
             </div>
 
@@ -49,12 +52,12 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
           <div className="p-4 sm:p-5 rounded-2xl glass-card flex items-center justify-between gap-3 hover:border-[var(--color-accent)]/40 transition-all">
             <div className="min-w-0">
               <h3 className="text-sm sm:text-base font-bold text-[var(--color-text-main)] truncate">
-                {language === 'fr' ? 'Version Imprimable / PDF' : 'Portfolio PDF Document'}
+                {language === 'fr' ? 'Portfolio' : 'Portfolio'}
               </h3>
               <p className="text-xs text-[var(--color-text-muted)] mt-0.5 leading-snug">
                 {language === 'fr'
-                  ? 'Format condensé pour impression ou archivage hors-ligne.'
-                  : 'A condensed, printable version of this interactive portfolio.'}
+                  ? 'Une version complète de mon parcours et de mes travaux, avec davantage de contexte sur les projets réalisés.'
+                  : 'A complete version of my background and work, with more context on the projects completed.'}
               </p>
             </div>
 
@@ -68,6 +71,58 @@ export const ResourcesSection: React.FC<ResourcesSectionProps> = ({
               </span>
             </button>
           </div>
+
+          {/* GitHub */}
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-4 sm:p-5 rounded-2xl glass-card flex items-center justify-between gap-3 hover:border-[var(--color-accent)]/40 transition-all"
+          >
+            <div className="min-w-0">
+              <h3 className="text-sm sm:text-base font-bold text-[var(--color-text-main)] truncate">
+                GitHub
+              </h3>
+              <p className="text-xs text-[var(--color-text-muted)] mt-0.5 leading-snug">
+                {language === 'fr'
+                  ? 'Mes dépôts, expérimentations et projets open source.'
+                  : 'My repositories, experiments, and open source projects.'}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-accent)]">
+                <span>{language === 'fr' ? 'Consulter' : 'Visit'}</span>
+                <Github className="w-3.5 h-3.5" />
+              </span>
+            </div>
+          </a>
+
+          {/* LinkedIn */}
+          <a
+            href={linkedinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-4 sm:p-5 rounded-2xl glass-card flex items-center justify-between gap-3 hover:border-[var(--color-accent)]/40 transition-all"
+          >
+            <div className="min-w-0">
+              <h3 className="text-sm sm:text-base font-bold text-[var(--color-text-main)] truncate">
+                LinkedIn
+              </h3>
+              <p className="text-xs text-[var(--color-text-muted)] mt-0.5 leading-snug">
+                {language === 'fr'
+                  ? 'Mon parcours professionnel, mes activités et les projets sur lesquels je travaille.'
+                  : 'My professional background, activities, and the projects I work on.'}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-accent)]">
+                <span>{language === 'fr' ? 'Consulter' : 'Visit'}</span>
+                <Linkedin className="w-3.5 h-3.5" />
+              </span>
+            </div>
+          </a>
         </div>
       </div>
     </section>
