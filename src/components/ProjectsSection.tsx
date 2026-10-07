@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, Layers } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { Language, Project, ProjectCategory } from '../types';
 
 const PROJECT_FILTERS: Array<'all' | ProjectCategory> = [
@@ -87,14 +87,13 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       </div>
 
       <div className="mt-1 flex items-center justify-between border-t border-[var(--color-border)] pt-3">
-        <span className="flex items-center gap-1 font-mono text-[10.5px] text-[var(--color-text-muted)]">
-          <Layers className="h-3 w-3 text-[var(--color-accent)]" />
-          {project.status}
+        <span className="min-w-0 truncate font-mono text-[10.5px] text-[var(--color-text-muted)]">
+          {project.context?.[language] ?? project.period}
         </span>
         <button
           type="button"
           onClick={() => onSelectProject(project)}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--color-accent)]/25 bg-[var(--color-bg-accent)]/50 px-3.5 py-1.5 text-xs font-semibold text-[var(--color-accent)] shadow-xs transition-all hover:bg-[var(--color-accent)] hover:text-white active:scale-98"
+          className="ml-3 inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-[var(--color-accent)]/25 bg-[var(--color-bg-accent)]/50 px-3.5 py-1.5 text-xs font-semibold text-[var(--color-accent)] shadow-xs transition-all hover:bg-[var(--color-accent)] hover:text-white active:scale-98"
         >
           <span>{language === 'fr' ? 'Détails' : 'Details'}</span>
           <ExternalLink className="h-3.5 w-3.5" />
@@ -109,7 +108,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-bold tracking-tight text-[var(--color-text-main)] sm:text-xl">
-              {language === 'fr' ? 'Projets d\'Ingénierie' : 'Engineering Projects'}
+              {language === 'fr' ? 'Réalisations' : 'Realisations'}
             </h2>
           </div>
         </div>

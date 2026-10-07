@@ -170,6 +170,8 @@ const SkillLane = memo(({
   onBlurCapture,
 }: SkillLaneProps) => {
   const isRunning = isSettled && !prefersReducedMotion && isInView;
+  const isCybersecurity = category.id === 'cybersecurity';
+  const laneTitle = isCybersecurity ? 'Cybersecurité' : category.title[language];
 
   return (
     <section
@@ -179,7 +181,12 @@ const SkillLane = memo(({
       data-paused={isPaused}
     >
       <div className="skills-lane-header">
-        <h3 className="skills-lane-title">{category.title[language]}</h3>
+        {isCybersecurity && (
+          <span className="skills-lane-marker" aria-hidden="true">
+            <span className="skills-lane-marker-dot" />
+          </span>
+        )}
+        <h3 className="skills-lane-title">{laneTitle}</h3>
       </div>
 
       <div className="skills-marquee-viewport">
@@ -434,43 +441,26 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
 
           <div className="skills-conveyor-content">
             <div className="skills-lanes-stack">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-accent)] mb-3">
-                {language === 'fr' ? 'Fondations Techniques' : 'Engineering Foundation'}
-              </h3>
               {SKILL_CATEGORIES.map((category, categoryIndex) => (
-                <>
-                  {category.id === 'cybersecurity' && (
-                    <div
-                      key={`separator-${category.id}`}
-                      className="border-t border-[var(--color-border)]/50 my-6 pt-6"
-                    >
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-accent)] mb-3">
-                        {language === 'fr'
-                          ? 'Cybersécurité — Spécialisation en cours'
-                          : 'Cybersecurity — Current Focus'}
-                      </h3>
-                    </div>
-                  )}
-                  <SkillLane
-                    key={category.id}
-                    category={category}
-                    categoryIndex={categoryIndex}
-                    marqueeSkills={MARQUEE_DATA[categoryIndex]}
-                    direction={categoryIndex % 2 === 0 ? 'left' : 'right'}
-                    isPaused={pausedCategory === category.id}
-                    isSettled={isSettled}
-                    hasStarted={hasStarted}
-                    prefersReducedMotion={prefersReducedMotion}
-                    language={language}
-                    activeTooltipId={activeTooltip?.id ?? null}
-                    projectsMap={projectsMap}
-                    isInView={isInView}
-                    onMouseEnter={openTooltip}
-                    onMouseLeave={handleCardMouseLeave}
-                    onFocusCapture={openTooltip}
-                    onBlurCapture={handleCardBlur}
-                  />
-                </>
+                <SkillLane
+                  key={category.id}
+                  category={category}
+                  categoryIndex={categoryIndex}
+                  marqueeSkills={MARQUEE_DATA[categoryIndex]}
+                  direction={categoryIndex % 2 === 0 ? 'left' : 'right'}
+                  isPaused={pausedCategory === category.id}
+                  isSettled={isSettled}
+                  hasStarted={hasStarted}
+                  prefersReducedMotion={prefersReducedMotion}
+                  language={language}
+                  activeTooltipId={activeTooltip?.id ?? null}
+                  projectsMap={projectsMap}
+                  isInView={isInView}
+                  onMouseEnter={openTooltip}
+                  onMouseLeave={handleCardMouseLeave}
+                  onFocusCapture={openTooltip}
+                  onBlurCapture={handleCardBlur}
+                />
               ))}
             </div>
           </div>

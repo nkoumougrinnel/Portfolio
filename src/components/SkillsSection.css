@@ -141,6 +141,30 @@
   padding-inline: 0.25rem;
 }
 
+.skills-lane-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: none;
+  color: var(--color-accent);
+}
+
+.skills-lane-marker-dot {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 0.18rem color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+.skills-lane-marker-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
 .skills-lane-title {
   font-size: 0.75rem;
   font-weight: 700;

@@ -33,8 +33,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ language }) => {
 <div className="mb-8">
           <p className="text-xs sm:text-sm text-[var(--color-text-muted)] mt-1 max-w-2xl">
             {language === 'fr'
-              ? "Vous souhaitez échanger autour d'un projet, d'une opportunité d'ingénierie ou d'un sujet lié aux systèmes, aux réseaux et à la cybersécurité ? Je suis disponible pour en discuter."
-              : 'Do you want to discuss a project, an engineering opportunity, or a topic related to systems, networks, and cybersecurity? I am available to talk.'}
+              ? "Ouvert aux échanges autour de projets techniques, d'opportunités ou de problématiques liées aux systèmes, aux réseaux et à la cybersécurité."
+              : 'Open to exchanges around technical projects, opportunities, or issues related to systems, networks, and cybersecurity.'}
           </p>
         </div>
 

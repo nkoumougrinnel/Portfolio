@@ -27,7 +27,6 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }
               {/* Company & Date */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                 <span className="text-sm text-[var(--color-accent)] font-bold flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5" />
                   {exp.company}
                 </span>
                 <span className="text-[var(--color-text-muted)] text-[11px] flex items-center gap-1 bg-[var(--color-bg-soft)] px-2.5 py-0.5 rounded-full border border-[var(--color-border-muted)]/30 w-fit">
@@ -51,18 +50,6 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }
               <p className="text-[12.5px] sm:text-[13px] leading-relaxed text-[var(--color-text-muted)] mt-1 text-justify">
                 {exp.description[language]}
               </p>
-
-              {/* Badges */}
-              <div className="flex flex-wrap gap-1.5 mt-2 font-mono text-[11px]">
-                {exp.tags.map((tag, tIdx) => (
-                  <span
-                    key={tIdx}
-                    className="px-2.5 py-0.5 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/20 font-medium transition-colors hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/20"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
             </div>
           ))}
         </div>

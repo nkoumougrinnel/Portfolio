@@ -52,7 +52,7 @@ export const CertificationModal: React.FC<CertificationModalProps> = ({
     ?? (language === 'fr' ? 'Projets liés' : 'Related projects');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-5 bg-[var(--color-text-main)]/75 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-5 bg-[var(--color-media-overlay)]/90 animate-in fade-in duration-200">
       <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden border-0 bg-[var(--color-bg-main)] shadow-2xl sm:h-auto sm:max-h-[92vh] sm:max-w-2xl sm:rounded-2xl sm:border sm:border-[var(--color-border)]">
 
         {/* Header */}

@@ -111,7 +111,7 @@ export const PROJECTS: Project[] = [
       en: "Dockerized multi-container setup with Django backend, PostgreSQL time-series storage, and a high-performance React management dashboard.",
       fr: "Déploiement conteneurisé Docker multi-services combinant API Django, stockage optimisé PostgreSQL pour séries temporelles et dashboard React interactif."
     },
-    tags: ["Django", "React", "PostgreSQL", "Docker", "Anti-Fraud"],
+    tags: ["Django", "React", "PostgreSQL", "Docker"],
   },
   {
     id: "lekki",
@@ -573,8 +573,7 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     description: {
       en: "During my academic internship at CAMTEL, I worked within the Fraud Prevention Service on a concrete problem related to tracking fuel consumption at telecom sites. I took charge of designing and developing CarburFlow, a web platform to centralize data, track consumption, and facilitate site supervision. The project involved data modeling, business logic, REST APIs, frontend/backend integration, and containerization with Docker. Beyond development, this experience confronted me with the constraints of a system used in a real telecom context: data from multiple sites, business rules, verification needs, and the necessity to keep an architecture clear enough to evolve. It also strengthened my interest in real systems. Understanding how an application integrates into a broader environment, how its components depend on each other, and where its weak points lie has become as important to me as making it work.",
       fr: "Lors de mon stage académique chez CAMTEL, j'ai travaillé au sein du Service de Lutte contre la Fraude sur un problème concret lié au suivi des consommations de carburant des sites télécoms. J'ai pris en charge la conception et le développement de CarburFlow, une plateforme web destinée à centraliser les données, suivre les consommations et faciliter la supervision des sites. Le projet m'a amené à travailler sur la modélisation des données, la logique métier, les APIs REST, l'intégration frontend/backend et la conteneurisation avec Docker. Au-delà du développement, cette expérience m'a surtout confronté aux contraintes d'un système utilisé dans un contexte télécom réel : données provenant de plusieurs sites, règles métier, besoins de vérification et nécessité de garder une architecture suffisamment claire pour pouvoir évoluer. C'est aussi une expérience qui a renforcé mon intérêt pour les systèmes réels. Comprendre comment une application s'intègre dans un environnement plus large, comment ses composants dépendent les uns des autres et où se trouvent ses points de faiblesse est devenu aussi important pour moi que de la faire fonctionner."
-    },
-    tags: ["Django", "React", "PostgreSQL", "Docker", "Telecom Auditing"]
+    }
   }
 ];
 

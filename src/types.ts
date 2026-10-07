@@ -102,7 +102,6 @@ export interface ExperienceItem {
     fr: string;
     en: string;
   };
-  tags: string[];
 }
 
 export interface EducationItem {

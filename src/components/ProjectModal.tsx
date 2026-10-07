@@ -9,16 +9,6 @@ interface ProjectModalProps {
   onUpdateProjectImage?: (projectId: string, newUrl: string) => void;
 }
 
-const STATUS_LABELS: Record<string, { fr: string; en: string }> = {
-  'Active MVP': { fr: 'MVP en cours', en: 'Active MVP' },
-  'Production Pilot': { fr: 'Pilote en production', en: 'Production pilot' },
-  'Hackathon Winner / Active': { fr: 'Lauréat de hackathon · Actif', en: 'Hackathon winner · Active' },
-  "Deployed at SUP'PTIC": { fr: "Déployé à SUP'PTIC", en: "Deployed at SUP'PTIC" },
-  Completed: { fr: 'Projet livré', en: 'Delivered' },
-  Prototype: { fr: 'Prototype', en: 'Prototype' },
-  'In Progress': { fr: 'En cours', en: 'In progress' }
-};
-
 function getLinkIcon(label: string) {
   const l = label.toLowerCase();
   if (l.includes('github')) return <Github className="h-4 w-4" />;
@@ -61,22 +51,25 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, language, o
       ? [{ label: language === 'fr' ? 'Démo live' : 'Live demo', url: project.link }]
       : [])
   ];
-  const status = STATUS_LABELS[project.status]?.[language] ?? project.status;
+  const contributions = project.features?.[language] ?? [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-text-main)]/75 p-0 backdrop-blur-sm animate-in fade-in duration-200 sm:p-5">
-      <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden border-0 bg-[var(--color-bg-main)] shadow-2xl sm:h-auto sm:max-h-[92vh] sm:max-w-3xl sm:rounded-2xl sm:border sm:border-[var(--color-border)]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-media-overlay)]/90 p-0 animate-in fade-in duration-200 pointer-events-none sm:p-5">
+      <div className="relative pointer-events-auto flex h-[100dvh] w-full flex-col overflow-hidden border-0 bg-[var(--color-bg-main)] shadow-2xl sm:h-auto sm:max-h-[92vh] sm:max-w-3xl sm:rounded-2xl sm:border sm:border-[var(--color-border)]">
 
         {/* Header */}
-        <header className="sticky top-0 z-20 flex items-start justify-between border-b border-[var(--color-border)] bg-[var(--color-bg-main)] px-5 py-4 sm:px-7">
-          <div className="min-w-0 flex-1">
-            <h3 className="text-lg font-bold leading-tight text-[var(--color-text-main)] sm:text-xl">{project.title}</h3>
-            <div className="mt-1.5 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[var(--color-accent)] border border-[var(--color-accent)]/20">
-                {status}
-              </span>
-              {project.period && (
-                <span className="text-xs text-[var(--color-text-muted)]">{project.period}</span>
+        <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-[var(--color-border)] bg-[var(--color-bg-main)] px-5 py-4 sm:px-7">
+          <div className="min-w-0">
+            <h3 className="truncate text-lg font-bold leading-tight text-[var(--color-text-main)] sm:text-xl">{project.title}</h3>
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--color-text-muted)]">
+              {project.context && <span>{project.context[language]}</span>}
+              {project.context && project.period && <span aria-hidden="true">·</span>}
+              {project.period && <span>{project.period}</span>}
+              {project.role && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span className="font-medium text-[var(--color-text-main)]">{project.role[language]}</span>
+                </>
               )}
             </div>
           </div>
@@ -107,48 +100,37 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, language, o
             </button>
           </div>
 
-          {/* Description */}
-          <section className="space-y-2">
-            <h4 className="text-sm font-semibold text-[var(--color-text-main)]">
-              {language === 'fr' ? 'À propos du projet' : 'About the project'}
-            </h4>
-            <p className="text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
-              {project.longDescription?.[language] || project.description[language]}
-            </p>
-          </section>
-
-          {/* Context — distinct block with left accent border */}
           {project.context && (
-            <div className="rounded-xl border border-[var(--color-accent)]/15 bg-[var(--color-accent)]/5 px-4 py-3">
-              <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
+            <section className="space-y-1.5 border-t border-[var(--color-border)] pt-5">
+              <h4 className="text-sm font-semibold text-[var(--color-text-main)]">
                 {language === 'fr' ? 'Contexte' : 'Context'}
-              </p>
+              </h4>
               <p className="text-[13px] leading-relaxed text-[var(--color-text-muted)]">
                 {project.context[language]}
               </p>
-            </div>
-          )}
-
-          {/* Role */}
-          {project.role && (
-            <section className="space-y-1.5">
-              <h4 className="text-sm font-semibold text-[var(--color-text-main)]">
-                {language === 'fr' ? 'Mon rôle' : 'My role'}
-                {project.draftDetails && (
-                  <span className="ml-2 text-[10px] font-normal text-[var(--color-text-muted)]">
-                    {language === 'fr' ? '(à confirmer)' : '(to confirm)'}
-                  </span>
-                )}
-              </h4>
-              <p className="text-[13px] leading-relaxed text-[var(--color-text-muted)]">{project.role[language]}</p>
             </section>
           )}
 
-          {/* Architecture notes */}
-          {project.architectureNotes && (
-            <section className="space-y-1.5">
+          {contributions.length > 0 && (
+            <section className="space-y-3 border-t border-[var(--color-border)] pt-5">
               <h4 className="text-sm font-semibold text-[var(--color-text-main)]">
-                {language === 'fr' ? 'Conception' : 'Design & implementation'}
+                {language === 'fr' ? 'Contribution' : 'Contribution'}
+              </h4>
+              <ul className="space-y-2">
+                {contributions.map((contribution, index) => (
+                  <li key={`${contribution}-${index}`} className="flex gap-2.5 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
+                    {contribution}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {project.architectureNotes && (
+            <section className="space-y-1.5 border-t border-[var(--color-border)] pt-5">
+              <h4 className="text-sm font-semibold text-[var(--color-text-main)]">
+                {language === 'fr' ? 'Architecture & implémentation' : 'Architecture & implementation'}
               </h4>
               <p className="text-[13px] leading-relaxed text-[var(--color-text-muted)]">{project.architectureNotes[language]}</p>
             </section>
@@ -209,26 +191,46 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, language, o
             </section>
           )}
 
-          {/* Links — prominent buttons at the bottom */}
+          {/* Links — GitHub on the left, demo on the right */}
           {links.length > 0 && (
             <div className="border-t border-[var(--color-border)] pt-5">
               <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
                 {language === 'fr' ? 'Liens du projet' : 'Project links'}
               </p>
-              <nav aria-label={language === 'fr' ? 'Liens du projet' : 'Project links'} className="flex flex-wrap gap-3">
-                {links.map((link) => (
-                  <a
-                    key={`${link.label}-${link.url}`}
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl border border-[var(--color-accent)]/25 bg-[var(--color-accent)]/10 px-4 py-2.5 text-sm font-semibold text-[var(--color-accent)] transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white hover:shadow-lg hover:shadow-[var(--color-accent)]/20 hover:-translate-y-0.5"
-                  >
-                    {getLinkIcon(link.label)}
-                    {link.label}
-                  </a>
-                ))}
-              </nav>
+              <div className="flex w-full max-w-full items-end justify-between gap-3">
+                <nav aria-label={language === 'fr' ? 'Liens du projet' : 'Project links'} className="flex min-w-0 flex-1 flex-wrap items-center justify-start gap-2.5">
+                  {links
+                    .filter((link) => link.label.toLowerCase().includes('github') || (!link.label.toLowerCase().includes('demo') && !link.label.toLowerCase().includes('live')))
+                    .map((link) => (
+                      <a
+                        key={`${link.label}-${link.url}`}
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-xl border border-[var(--color-accent)]/25 bg-[var(--color-accent)]/10 px-4 py-2.5 text-sm font-semibold text-[var(--color-accent)] transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white hover:shadow-lg hover:shadow-[var(--color-accent)]/20 hover:-translate-y-0.5"
+                      >
+                        {getLinkIcon(link.label)}
+                        {link.label}
+                      </a>
+                    ))}
+                </nav>
+                <div className="flex shrink-0 flex-wrap items-center justify-end gap-2.5">
+                  {links
+                    .filter((link) => link.label.toLowerCase().includes('demo') || link.label.toLowerCase().includes('live'))
+                    .map((link) => (
+                      <a
+                        key={`${link.label}-${link.url}`}
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-xl border border-[var(--color-accent)]/25 bg-[var(--color-accent)]/10 px-4 py-2.5 text-sm font-semibold text-[var(--color-accent)] transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white hover:shadow-lg hover:shadow-[var(--color-accent)]/20 hover:-translate-y-0.5"
+                      >
+                        {getLinkIcon(link.label)}
+                        {link.label}
+                      </a>
+                    ))}
+                </div>
+              </div>
             </div>
           )}
         </div>

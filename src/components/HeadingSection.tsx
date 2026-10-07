@@ -17,7 +17,7 @@ export const HeadingSection: React.FC<HeadingSectionProps> = ({ language }) => {
           </div>
         </div>
 
-        <div className="rounded-2xl glass-card p-5 sm:p-6">
+        <div className="space-y-6">
           <div className="space-y-4 text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
             {language === 'fr' ? (
               <>

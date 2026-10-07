@@ -229,8 +229,6 @@ export default function App() {
             onSelectActivity={(act) => setSelectedActivity(act)}
           />
 
-          <HeadingSection language={language} />
-
           <ContactSection language={language} />
 
           <Footer language={language} />

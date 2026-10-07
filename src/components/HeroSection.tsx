@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Download, Eye } from 'lucide-react';
 import { Language } from '../types';
 
 interface HeroSectionProps {
@@ -60,8 +60,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
 <p className="my-2 max-w-lg text-[15px] leading-relaxed text-[var(--color-text-muted)]">
             {language === 'fr'
-              ? "Je construis des systèmes pour comprendre comment ils fonctionnent. Aujourd'hui, je me concentre sur la manière dont ils peuvent être sécurisés."
-              : 'I build systems to understand how they work. Today, I focus on how they can be secured.'}
+              ? 'J’explore le logiciel, les réseaux, les systèmes et l’embarqué, avec un intérêt particulier pour la cybersécurité.'
+              : 'I explore software, networks, systems, and embedded technology, with a particular interest in cybersecurity.'}
           </p>
 
           {/* Action Buttons */}

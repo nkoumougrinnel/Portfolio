@@ -18,66 +18,50 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
           </h2>
         </div>
 
-        <div className="p-5 sm:p-6 rounded-2xl glass-card">
-          <div className="pb-3 mb-4 border-b border-[var(--color-border)]/80">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
-              {language === 'fr' ? 'À PROPOS' : 'ABOUT'}
-            </span>
-          </div>
-
+        <div className="space-y-6">
           <div className="space-y-4 font-sans text-[13px] leading-relaxed text-[var(--color-text-muted)] text-justify">
             {language === 'fr' ? (
               <>
                 <p>
-                  Je suis étudiant ingénieur en Informatique et Réseaux à
-                  SUP’PTIC, avec une approche très orientée pratique. Je
-                  construis des applications, travaille avec les réseaux et
-                  explore les systèmes embarqués pour mieux comprendre leur
-                  fonctionnement et leurs contraintes.
+                  Étudiant ingénieur à SUP’PTIC, je privilégie une approche
+                  concrète : concevoir des applications, configurer des
+                  infrastructures réseau et explorer les systèmes embarqués
+                  pour en maîtriser les contraintes et les vulnérabilités.
                 </p>
 
                 <p>
-                  J’apprends principalement en expérimentant : partir d’un
-                  problème, construire, tester, chercher ce qui ne fonctionne
-                  pas et approfondir jusqu’à comprendre le système. Cette
-                  manière de travailler m’a permis d’explorer plusieurs
-                  domaines tout en développant une vision plus globale des
-                  systèmes informatiques.
+                  Cette démarche d’expérimentation me permet d’appréhender les
+                  systèmes informatiques dans leur globalité, de la couche
+                  matérielle jusqu’à l’application, ce qui me permettra de
+                  relever les défis techniques liés à la sécurisation
+                  d’environnements complexes.
+                </p>
+
+                <p className="pt-4 italic opacity-80">
+                  En dehors de la technologie, je passe du temps à jouer aux jeux vidéo, regarder des anime, jouer aux échecs et faire du basketball.
                 </p>
               </>
             ) : (
               <>
                 <p>
-                  I’m an engineering student in Computer Science and Networks
-                  at SUP’PTIC, with a strongly hands-on approach. I build
-                  applications, work with networks, and explore embedded
-                  systems to better understand how they work and the
-                  constraints they involve.
+                  Engineering student at SUP’PTIC, I favor a concrete approach:
+                  designing applications, configuring network infrastructure,
+                  and exploring embedded systems to master their constraints and
+                  vulnerabilities.
                 </p>
 
                 <p>
-                  I mainly learn by experimenting: starting with a problem,
-                  building, testing, investigating what does not work, and
-                  digging deeper until I understand the system. This approach
-                  has allowed me to explore different areas while developing a
-                  broader understanding of computer systems.
+                  This experimental approach lets me understand computer systems
+                  in their entirety, from the hardware layer up to the
+                  application, helping me tackle technical challenges related to
+                  securing complex environments.
+                </p>
+
+                <p className="pt-4 italic opacity-80">
+                  Outside of technology, I enjoy video games, anime, chess, and basketball.
                 </p>
               </>
             )}
-          </div>
-
-          <div className="pt-5 mt-5 border-t border-[var(--color-border)]">
-            <div className="mb-3">
-              <span className="text-[11px] text-[var(--color-accent)] font-bold uppercase tracking-wider">
-                {language === 'fr' ? 'Au-delà du code' : 'Beyond the Code'}
-              </span>
-            </div>
-
-            <p className="text-[13px] leading-relaxed text-[var(--color-text-muted)]">
-              {language === 'fr'
-                ? 'En dehors de la technologie, je passe du temps à jouer aux jeux vidéo, regarder des anime, jouer aux échecs et faire du basketball.'
-                : 'Outside of technology, I enjoy video games, anime, chess, and basketball.'}
-            </p>
           </div>
         </div>
       </div>
