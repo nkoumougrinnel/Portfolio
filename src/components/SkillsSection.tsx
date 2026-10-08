@@ -1,10 +1,20 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
-import { useReducedMotion } from 'motion/react';
+import { useReducedMotion, motion, AnimatePresence } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Language, Project, SkillCategory, SkillItem } from '../types';
 import { SKILL_CATEGORIES } from '../data/portfolioData';
+import { getSimpleIconDataUrl } from '../data/simpleIcons';
 import './SkillsSection.css';
+
+// ─── Types ────────────────────────────────────────────────────────
 
 interface SkillsSectionProps {
   language: Language;
@@ -20,45 +30,38 @@ interface ActiveTooltip {
   left: number;
 }
 
+// ─── Constants ────────────────────────────────────────────────────
+
 const SKILLS_PER_MARQUEE_GROUP = 16;
 const TOOLTIP_WIDTH = 224;
 
-// Pre-compute at module level — pure functions, never change
+/**
+ * Each orbit config maps to SKILL_CATEGORIES[i].
+ * --orbit-r is read from CSS (set per breakpoint via .orbit-ring-N).
+ * durationBase controls animation speed in seconds.
+ * The CSS variables --orbit-r are defined in the .orbit-ring-N selectors,
+ * so we only need the duration here.
+ */
+const ORBIT_DURATION = [28, 38, 48] as const; // seconds per category
+
+// ─── Module-level precomputed data (never changes) ─────────────────
+
 function buildMarqueeSkills(category: SkillCategory): SkillItem[] {
   const result = [...category.skills];
   while (result.length < SKILLS_PER_MARQUEE_GROUP) result.push(...category.skills);
   return result;
 }
 
-// Cloud icons orbit the shared center on staggered radii and phases.
-function buildCloudStyles(total: number): React.CSSProperties[] {
-  return Array.from({ length: total }, (_, index) => {
-    const orbitRadius = 2.5 + ((index * 7) % 8) * 1.25;
-    return {
-      ['--orbit-radius' as string]: `${orbitRadius}rem`,
-      ['--orbit-duration' as string]: `${24 + (index % 5) * 4}s`,
-      animationDelay: `${-(index / Math.max(1, total)) * 28}s`,
-      opacity: 0.55 + ((total - index) % 5) * 0.08,
-    };
-  });
-}
+const MARQUEE_DATA = SKILL_CATEGORIES.map(buildMarqueeSkills);
 
-// Pre-compute marquee data and cloud styles once at module level
-const MARQUEE_DATA = SKILL_CATEGORIES.map((cat) => buildMarqueeSkills(cat));
-const ALL_SKILLS = SKILL_CATEGORIES.flatMap((cat) => cat.skills);
-const CLOUD_STYLES = buildCloudStyles(ALL_SKILLS.length);
-
-// --- Sub-components (memoized to avoid re-renders) ---
+// ─── SkillCard ────────────────────────────────────────────────────
 
 interface SkillCardProps {
   skill: SkillItem;
-  itemIndex: number;
-  categoryIndex: number;
-  skillIndex: number;
   isInteractiveCopy: boolean;
   hasTooltip: boolean;
   tooltipId: string;
-  hasStarted: boolean;
+  isOrdered: boolean;
   activeTooltipId: string | null;
   relatedProjects: Project[];
   onMouseEnter: (id: string, skill: SkillItem, projects: Project[], el: HTMLElement) => void;
@@ -69,13 +72,10 @@ interface SkillCardProps {
 
 const SkillCard = memo(({
   skill,
-  itemIndex,
-  categoryIndex,
-  skillIndex,
   isInteractiveCopy,
   hasTooltip,
   tooltipId,
-  hasStarted,
+  isOrdered,
   activeTooltipId,
   relatedProjects,
   onMouseEnter,
@@ -83,54 +83,57 @@ const SkillCard = memo(({
   onFocusCapture,
   onBlurCapture,
 }: SkillCardProps) => {
-  const scatterX = ((skillIndex * 37 + categoryIndex * 29) % 150) - 75;
-  const scatterY = ((skillIndex * 23 + categoryIndex * 17) % 90) - 45;
-  const scatterRotation = ((skillIndex * 13 + categoryIndex * 11) % 36) - 18;
-  const delay = categoryIndex * 0.09 + skillIndex * 0.025;
+  // Only wire tooltip events when the lane is visible and interactive
+  const tooltipEvents = hasTooltip && isOrdered
+    ? {
+        onMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) =>
+          onMouseEnter(tooltipId, skill, relatedProjects, e.currentTarget),
+        onMouseLeave: (e: React.MouseEvent<HTMLButtonElement>) =>
+          onMouseLeave(tooltipId, e.relatedTarget),
+      }
+    : {};
+
+  const focusEvents = hasTooltip && isInteractiveCopy && isOrdered
+    ? {
+        onFocusCapture: (e: React.FocusEvent<HTMLButtonElement>) =>
+          onFocusCapture(tooltipId, skill, relatedProjects, e.target as HTMLElement),
+        onBlurCapture: (e: React.FocusEvent<HTMLButtonElement>) =>
+          onBlurCapture(tooltipId, e.relatedTarget),
+      }
+    : {};
 
   return (
-    <div
-      className="skills-marquee-item"
-      data-started={hasStarted || undefined}
-      style={{
-        '--scatter-x': `${scatterX}px`,
-        '--scatter-y': `${scatterY}px`,
-        '--scatter-r': `${scatterRotation}deg`,
-        '--enter-delay': `${delay}s`,
-      } as React.CSSProperties}
-      onMouseEnter={hasTooltip ? (e) => onMouseEnter(tooltipId, skill, relatedProjects, e.currentTarget) : undefined}
-      onMouseLeave={hasTooltip ? (e) => onMouseLeave(tooltipId, e.relatedTarget) : undefined}
-      onFocusCapture={hasTooltip && isInteractiveCopy ? (e) => onFocusCapture(tooltipId, skill, relatedProjects, e.target as HTMLElement) : undefined}
-      onBlurCapture={hasTooltip && isInteractiveCopy ? (e) => onBlurCapture(tooltipId, e.relatedTarget) : undefined}
+    <button
+      type="button"
+      tabIndex={isInteractiveCopy && isOrdered ? 0 : -1}
+      aria-label={skill.name}
+      aria-haspopup={hasTooltip && isInteractiveCopy && isOrdered ? 'true' : undefined}
+      aria-expanded={isOrdered && activeTooltipId === tooltipId}
+      className="skills-skill-button"
+      {...tooltipEvents}
+      {...focusEvents}
     >
-      <button
-        type="button"
-        tabIndex={isInteractiveCopy ? 0 : -1}
-        aria-label={skill.name}
-        aria-haspopup={hasTooltip && isInteractiveCopy ? 'true' : undefined}
-        aria-expanded={activeTooltipId === tooltipId}
-        className="skills-skill-button"
-      >
-        <span className="skills-icon-stage">
-          <img
-            src={`https://cdn.simpleicons.org/${skill.icon}`}
-            alt=""
-            loading="lazy"
-            width="36"
-            height="36"
-            decoding="async"
-            className="skills-icon-img"
-            onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
-          />
-        </span>
-        <span className={`skills-skill-name${hasStarted ? ' is-visible' : ''}`}>
-          {skill.name}
-        </span>
-      </button>
-    </div>
+      <span className="skills-icon-stage">
+        <img
+          src={getSimpleIconDataUrl(skill.icon)}
+          alt=""
+          loading="lazy"
+          width="36"
+          height="36"
+          decoding="async"
+          className="skills-icon-img"
+        />
+      </span>
+      {/* Always render name in DOM to avoid layout shift; hide via CSS */}
+      <span className={`skills-skill-name${isOrdered ? '' : ' hidden'}`}>
+        {skill.name}
+      </span>
+    </button>
   );
 });
 SkillCard.displayName = 'SkillCard';
+
+// ─── SkillLane ────────────────────────────────────────────────────
 
 interface SkillLaneProps {
   category: SkillCategory;
@@ -138,13 +141,11 @@ interface SkillLaneProps {
   marqueeSkills: SkillItem[];
   direction: 'left' | 'right';
   isPaused: boolean;
-  isSettled: boolean;
-  hasStarted: boolean;
-  prefersReducedMotion: boolean | null;
+  isOrdered: boolean;
+  isRunning: boolean; // computed outside to avoid recalc per-lane
   language: Language;
   activeTooltipId: string | null;
   projectsMap: Map<string, Project>;
-  isInView: boolean;
   onMouseEnter: (id: string, skill: SkillItem, projects: Project[], el: HTMLElement) => void;
   onMouseLeave: (id: string, relatedTarget: EventTarget | null) => void;
   onFocusCapture: (id: string, skill: SkillItem, projects: Project[], el: HTMLElement) => void;
@@ -157,28 +158,25 @@ const SkillLane = memo(({
   marqueeSkills,
   direction,
   isPaused,
-  isSettled,
-  hasStarted,
-  prefersReducedMotion,
+  isOrdered,
+  isRunning,
   language,
   activeTooltipId,
   projectsMap,
-  isInView,
   onMouseEnter,
   onMouseLeave,
   onFocusCapture,
   onBlurCapture,
 }: SkillLaneProps) => {
-  const isRunning = isSettled && !prefersReducedMotion && isInView;
   const isCybersecurity = category.id === 'cybersecurity';
-  const laneTitle = isCybersecurity ? 'Cybersecurité' : category.title[language];
+  const laneTitle = isCybersecurity ? 'Cybersécurité' : category.title[language];
 
   return (
     <section
       aria-label={category.title[language]}
       className="skills-lane"
       data-direction={direction}
-      data-paused={isPaused}
+      data-paused={isPaused || undefined}
     >
       <div className="skills-lane-header">
         {isCybersecurity && (
@@ -211,17 +209,17 @@ const SkillLane = memo(({
                 const hasTooltip = relatedProjects.length > 0 || Boolean(skill.context);
                 const tooltipId = `${category.id}:${skill.name}:${skillIndex}`;
 
-                return (
+                // Only the first copy and first iteration of skills get a layoutId
+                // AND only when isOrdered is true, to avoid conflicts with OrbitalView on page load.
+                const hasLayoutId = copy === 0 && itemIndex < category.skills.length && isOrdered;
+
+                const card = (
                   <SkillCard
-                    key={`${copy}-${itemIndex}-${skill.name}`}
                     skill={skill}
-                    itemIndex={itemIndex}
-                    categoryIndex={categoryIndex}
-                    skillIndex={skillIndex}
                     isInteractiveCopy={copy === 0}
                     hasTooltip={hasTooltip}
                     tooltipId={tooltipId}
-                    hasStarted={hasStarted}
+                    isOrdered={isOrdered}
                     activeTooltipId={activeTooltipId}
                     relatedProjects={relatedProjects}
                     onMouseEnter={onMouseEnter}
@@ -229,6 +227,22 @@ const SkillLane = memo(({
                     onFocusCapture={onFocusCapture}
                     onBlurCapture={onBlurCapture}
                   />
+                );
+
+                return (
+                  <div key={`${copy}-${itemIndex}-${skill.name}`}>
+                    {hasLayoutId ? (
+                      <motion.div
+                        layoutId={`skill-${skill.name}`}
+                        transition={{ type: 'spring', bounce: 0.15, duration: 0.65 }}
+                        style={{ borderRadius: 8 }}
+                      >
+                        {card}
+                      </motion.div>
+                    ) : (
+                      card
+                    )}
+                  </div>
                 );
               })}
             </div>
@@ -239,6 +253,8 @@ const SkillLane = memo(({
   );
 });
 SkillLane.displayName = 'SkillLane';
+
+// ─── Tooltip ──────────────────────────────────────────────────────
 
 interface TooltipProps {
   tooltip: ActiveTooltip;
@@ -305,19 +321,111 @@ const SkillTooltip = memo(({
 ));
 SkillTooltip.displayName = 'SkillTooltip';
 
-// --- Main component ---
+// ─── Orbital view ─────────────────────────────────────────────────
 
-export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects, onSelectProject }) => {
-  const [hasStarted, setHasStarted] = useState(false);
-  const [isSettled, setIsSettled] = useState(false);
-  const [isInView, setIsInView] = useState(true); // Default to true to prevent initial jump
+interface OrbitalViewProps {
+  onActivate: () => void;
+}
+
+const OrbitalView = memo(({ onActivate }: OrbitalViewProps) => (
+  <motion.div
+    className="atomic-system"
+    exit={{ opacity: 0, transition: { duration: 0.4 } }}
+  >
+    {/*
+      Circular hitbox sized to cover the outermost orbit.
+      Uses pointer events (works on both mouse and touch/stylus).
+    */}
+    <div
+      className="atomic-system-hitbox"
+      onPointerEnter={onActivate}
+    />
+
+    {/* Glowing nucleus */}
+    <div className="atomic-core-point" />
+
+    {SKILL_CATEGORIES.map((category, categoryIndex) => {
+      const duration = ORBIT_DURATION[categoryIndex];
+
+      return (
+        <div key={`orbit-${category.id}`} className="orbit-container">
+          {/* Visible tilted ring */}
+          <div className={`orbit-ring orbit-ring-${categoryIndex}`}>
+            {category.skills.map((skill, skillIndex) => {
+              /*
+               * Distribute electrons evenly around the orbit by staggering
+               * the animation delay. Negative delay starts the animation
+               * partway through its cycle.
+               */
+              const delay = -((skillIndex / category.skills.length) * duration);
+
+              return (
+                <div
+                  key={skill.name}
+                  className="electron-wrapper"
+                  style={{
+                    '--orbit-duration': `${duration}s`,
+                    '--orbit-delay': `${delay}s`,
+                  } as React.CSSProperties}
+                >
+                  <div className="electron-arm">
+                    {/*
+                      layoutId links this element to its counterpart in the lane.
+                      On activate, Framer Motion smoothly animates it there.
+                    */}
+                    <motion.div
+                      layoutId={`skill-${skill.name}`}
+                      className="electron-content"
+                      transition={{ type: 'spring', bounce: 0.15, duration: 0.65 }}
+                    >
+                      <SkillCard
+                        skill={skill}
+                        isInteractiveCopy={false}
+                        hasTooltip={false}
+                        tooltipId=""
+                        isOrdered={false}
+                        activeTooltipId={null}
+                        relatedProjects={[]}
+                        onMouseEnter={() => {/* noop in orbit state */}}
+                        onMouseLeave={() => {}}
+                        onFocusCapture={() => {}}
+                        onBlurCapture={() => {}}
+                      />
+                    </motion.div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    })}
+  </motion.div>
+));
+OrbitalView.displayName = 'OrbitalView';
+
+// ─── Main component ───────────────────────────────────────────────
+
+export const SkillsSection: React.FC<SkillsSectionProps> = ({
+  language,
+  projects,
+  onSelectProject,
+}) => {
+  const [isOrdered, setIsOrdered] = useState(false);
+  /*
+   * Delay marquee start so it doesn't compete with Framer Motion layout
+   * animations, which would cause visible jumps.
+   */
+  const [marqueeRunning, setMarqueeRunning] = useState(false);
+  const [isInView, setIsInView] = useState(true);
   const [activeTooltip, setActiveTooltip] = useState<ActiveTooltip | null>(null);
+
   const sectionRef = useRef<HTMLElement>(null);
   const closeTooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const settledTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const marqueeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prefersReducedMotion = useReducedMotion();
 
-  // O(1) project lookup — rebuild only when projects change
+  // O(1) lookup — rebuilt only when projects prop changes
   const projectsMap = useMemo(
     () => new Map(projects.map((p) => [p.id, p])),
     [projects],
@@ -325,15 +433,22 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
 
   const pausedCategory = activeTooltip ? activeTooltip.id.split(':')[0] : null;
 
-  const startExperience = useCallback(() => {
-    setHasStarted((prev) => {
-      if (!prev) {
-        settledTimer.current = setTimeout(() => setIsSettled(true), 1200);
-        return true;
-      }
-      return prev;
-    });
-  }, []);
+  // ── Activation ─────────────────────────────────────────────────
+
+  const activate = useCallback(() => {
+    if (isOrdered) return;
+    setIsOrdered(true);
+
+    if (prefersReducedMotion) {
+      // Skip animation delay for users who prefer reduced motion
+      setMarqueeRunning(true);
+    } else {
+      // Wait for layout animation to complete before scrolling
+      marqueeTimer.current = setTimeout(() => setMarqueeRunning(true), 800);
+    }
+  }, [isOrdered, prefersReducedMotion]);
+
+  // ── Tooltip helpers ────────────────────────────────────────────
 
   const cancelTooltipClose = useCallback(() => {
     if (closeTooltipTimer.current) {
@@ -354,15 +469,21 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
     target: HTMLElement,
   ) => {
     if (!relatedProjects.length && !skill.context) return;
-    if (closeTooltipTimer.current) { clearTimeout(closeTooltipTimer.current); closeTooltipTimer.current = null; }
+    cancelTooltipClose();
 
     const rect = target.getBoundingClientRect();
     const estimatedHeight = Math.min(260, 48 + relatedProjects.length * 26);
     const above = rect.top - estimatedHeight - 10;
-    const top = above > 8 ? above : Math.min(window.innerHeight - estimatedHeight - 8, rect.bottom + 10);
-    const left = Math.max(8, Math.min(rect.left + rect.width / 2 - TOOLTIP_WIDTH / 2, window.innerWidth - TOOLTIP_WIDTH - 8));
+    const top = above > 8
+      ? above
+      : Math.min(window.innerHeight - estimatedHeight - 8, rect.bottom + 10);
+    const left = Math.max(
+      8,
+      Math.min(rect.left + rect.width / 2 - TOOLTIP_WIDTH / 2, window.innerWidth - TOOLTIP_WIDTH - 8),
+    );
+
     setActiveTooltip({ id, skill, relatedProjects, top: Math.max(8, top), left });
-  }, []);
+  }, [cancelTooltipClose]);
 
   const handleCardMouseLeave = useCallback((id: string, relatedTarget: EventTarget | null) => {
     if (relatedTarget instanceof Element && relatedTarget.closest(`[data-skill-tooltip="${id}"]`)) return;
@@ -380,31 +501,36 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
 
   const closeTooltip = useCallback(() => setActiveTooltip(null), []);
 
+  // ── Intersection Observer (pause marquee when off-screen) ──────
+
   useEffect(() => {
     if (!sectionRef.current) return;
-    
+
     const observer = new IntersectionObserver(
-      (entries) => {
-        setIsInView(entries[0].isIntersecting);
-      },
-      { rootMargin: '200px' } // Pre-load slightly before coming into view
+      (entries) => setIsInView(entries[0].isIntersecting),
+      { rootMargin: '200px' },
     );
-    
+
     observer.observe(sectionRef.current);
-    
+
     return () => {
       observer.disconnect();
       if (closeTooltipTimer.current) clearTimeout(closeTooltipTimer.current);
-      if (settledTimer.current) clearTimeout(settledTimer.current);
+      if (marqueeTimer.current) clearTimeout(marqueeTimer.current);
     };
   }, []);
+
+  // ── Computed marquee state ─────────────────────────────────────
+
+  const marqueeCanRun = marqueeRunning && !prefersReducedMotion && isInView;
+
+  // ── Render ─────────────────────────────────────────────────────
 
   return (
     <section
       ref={sectionRef}
       id="skills"
       className="skills-experience-section skills-section"
-      data-started={hasStarted}
     >
       <div className="skills-inner">
         <div className="skills-heading-row">
@@ -413,33 +539,29 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
           </h2>
         </div>
 
-        <div
-          className="skills-content-stage"
-          onMouseEnter={startExperience}
-          onTouchStart={startExperience}
-          onFocusCapture={startExperience}
-        >
-          {/* Skills orbit individually until the cloud disperses. */}
-          <div aria-hidden="true" className="skills-chaos-cloud">
-            <div className="skills-chaos-orbit">
-              {ALL_SKILLS.map((skill, index) => (
-                <img
-                  key={skill.name}
-                  src={`https://cdn.simpleicons.org/${skill.icon}`}
-                  alt=""
-                  loading="lazy"
-                  width="26"
-                  height="26"
-                  decoding="async"
-                  className="skills-chaos-icon"
-                  style={CLOUD_STYLES[index]}
-                  onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
-                />
-              ))}
-            </div>
-          </div>
+        <div className="skills-content-stage">
+          {/* ── Orbital (chaos) state ── */}
+          <AnimatePresence>
+            {!isOrdered && (
+              <OrbitalView onActivate={activate} />
+            )}
+          </AnimatePresence>
 
-          <div className="skills-conveyor-content">
+          {/* ── Lane (ordered) state ── */}
+          {/*
+            Always mounted so Framer Motion layoutId targets are always present
+            in the DOM for the FLIP animation to work correctly.
+            Visibility and pointer-events are controlled via inline style.
+          */}
+          <div
+            className="skills-conveyor-content"
+            style={{
+              opacity: isOrdered ? 1 : 0,
+              pointerEvents: isOrdered ? 'auto' : 'none',
+              // The CSS transition has a 0.3s delay (see stylesheet) so
+              // it reveals AFTER the layout animation starts.
+            }}
+          >
             <div className="skills-lanes-stack">
               {SKILL_CATEGORIES.map((category, categoryIndex) => (
                 <SkillLane
@@ -449,13 +571,11 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ language, projects
                   marqueeSkills={MARQUEE_DATA[categoryIndex]}
                   direction={categoryIndex % 2 === 0 ? 'left' : 'right'}
                   isPaused={pausedCategory === category.id}
-                  isSettled={isSettled}
-                  hasStarted={hasStarted}
-                  prefersReducedMotion={prefersReducedMotion}
+                  isOrdered={isOrdered}
+                  isRunning={marqueeCanRun}
                   language={language}
                   activeTooltipId={activeTooltip?.id ?? null}
                   projectsMap={projectsMap}
-                  isInView={isInView}
                   onMouseEnter={openTooltip}
                   onMouseLeave={handleCardMouseLeave}
                   onFocusCapture={openTooltip}

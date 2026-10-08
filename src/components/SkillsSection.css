@@ -1,7 +1,6 @@
 /* ─── Section wrapper ──────────────────────────────────────────── */
 .skills-experience-section {
   --skills-lane-height: 6.25rem;
-
   position: relative;
   isolation: isolate;
   padding: 1.5rem 1.25rem;
@@ -43,75 +42,201 @@
 .skills-content-stage {
   position: relative;
   isolation: isolate;
+  /* Mobile-first: shorter so it doesn't eat the whole screen */
+  min-height: 26rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* overflow:hidden clips the orbit rings on mobile — use clip-path instead */
+  overflow: hidden;
+  border-radius: 1rem;
 }
 
-/* ─── Chaos cloud ──────────────────────────────────────────────── */
-.skills-chaos-cloud {
-  position: absolute;
-  z-index: 2;
-  inset: -3rem 0 3rem;
-  pointer-events: none;
-  /* CSS-only transition — zero JS overhead */
-  transition: opacity 650ms ease, transform 650ms ease;
-  transform-origin: center;
+@media (min-width: 640px) {
+  .skills-content-stage {
+    min-height: 32rem;
+  }
 }
 
-.skills-chaos-orbit {
+@media (min-width: 1024px) {
+  .skills-content-stage {
+    min-height: 38rem;
+  }
+}
+
+/* ─── Atomic System ─────────────────────────────────────────────── */
+.atomic-system {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* pointer-events:none on wrapper, re-enabled on hitbox only */
+  pointer-events: none;
+  z-index: 10;
 }
 
-.skills-chaos-icon {
+/*
+  Hitbox: circular area sized to the outermost orbit.
+  Uses rem values scaled down on mobile.
+  pointer-events:auto makes only this circle interactive.
+*/
+.atomic-system-hitbox {
+  --hitbox-size: 26rem;
+  width: var(--hitbox-size);
+  height: var(--hitbox-size);
+  border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 1.65rem;
-  height: 1.65rem;
-  margin: -0.825rem;
-  object-fit: contain;
-  filter: saturate(0.82);
-  animation: skills-electron-orbit var(--orbit-duration, 32s) linear infinite;
-  animation-delay: var(--orbit-delay, 0s);
-  will-change: transform;
-}
-
-@keyframes skills-electron-orbit {
-  from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
-  to   { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
-}
-
-/* ─── Conveyor reveal ──────────────────────────────────────────── */
-.skills-conveyor-content {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(0.75rem);
-  transition:
-    opacity 650ms ease,
-    transform 850ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 850ms;
-}
-
-.skills-experience-section[data-started='true'] .skills-conveyor-content {
-  opacity: 1;
-  visibility: visible;
+  transform: translate(-50%, -50%);
   pointer-events: auto;
-  transform: translateY(0);
-  transition:
-    opacity 650ms ease,
-    transform 850ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s;
+  z-index: 25;
 }
 
-.skills-experience-section[data-started='true'] .skills-chaos-cloud {
-  opacity: 0;
-  transform: scale(1.12);
+@media (min-width: 640px) { .atomic-system-hitbox { --hitbox-size: 32rem; } }
+@media (min-width: 1024px) { .atomic-system-hitbox { --hitbox-size: 38rem; } }
+
+/* ─── Core ──────────────────────────────────────────────────────── */
+.atomic-core-point {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--color-accent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 12px 4px color-mix(in srgb, var(--color-accent) 70%, transparent),
+    0 0 40px 16px color-mix(in srgb, var(--color-accent) 35%, transparent);
+  animation: core-pulse 2s ease-in-out infinite alternate;
+  position: absolute;
+  z-index: 20;
+}
+
+@keyframes core-pulse {
+  from { transform: scale(0.85); opacity: 0.75; }
+  to   { transform: scale(1.1);  opacity: 1; }
+}
+
+/* ─── Orbit container ───────────────────────────────────────────── */
+/*
+  CRITICAL: perspective must be on the direct parent of the transformed
+  elements, and transform-style:preserve-3d must propagate down the chain.
+*/
+.orbit-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  /* preserve-3d so children are rendered in 3D space */
+  transform-style: preserve-3d;
+}
+
+/* ─── Orbit rings ───────────────────────────────────────────────── */
+.orbit-ring {
+  position: absolute;
+  border: 1px dashed transparent;
+  border-radius: 50%;
+  /* CRITICAL: preserve-3d so the electron children inherit the 3D transform */
+  transform-style: preserve-3d;
   pointer-events: none;
 }
 
-.skills-experience-section[data-started='true'] .skills-chaos-icon {
-  animation-play-state: paused;
-  will-change: auto;
+/*
+  Orbit sizes scaled for mobile. The electrons travel on these ellipses
+  so the ring size MUST match --orbit-radius in the electron animation.
+  We define --orbit-r as a CSS var to keep them in sync.
+*/
+.orbit-ring-0 {
+  --orbit-r: 8rem;
+  width: calc(var(--orbit-r) * 2);
+  height: calc(var(--orbit-r) * 2);
+  transform: rotateX(72deg) rotateY(20deg);
+  border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
+.orbit-ring-1 {
+  --orbit-r: 10rem;
+  width: calc(var(--orbit-r) * 2);
+  height: calc(var(--orbit-r) * 2);
+  transform: rotateX(68deg) rotateY(-40deg);
+  border-color: color-mix(in srgb, #00ffcc 30%, transparent);
+}
+.orbit-ring-2 {
+  --orbit-r: 12rem;
+  width: calc(var(--orbit-r) * 2);
+  height: calc(var(--orbit-r) * 2);
+  transform: rotateX(65deg) rotateY(65deg);
+  border-color: color-mix(in srgb, #cc66ff 30%, transparent);
+}
+
+@media (min-width: 640px) {
+  .orbit-ring-0 { --orbit-r: 10rem; }
+  .orbit-ring-1 { --orbit-r: 13rem; }
+  .orbit-ring-2 { --orbit-r: 16rem; }
+}
+
+@media (min-width: 1024px) {
+  .orbit-ring-0 { --orbit-r: 11rem; }
+  .orbit-ring-1 { --orbit-r: 14rem; }
+  .orbit-ring-2 { --orbit-r: 17rem; }
+}
+
+/* ─── Electrons ─────────────────────────────────────────────────── */
+/*
+  Strategy:
+  1. .electron-wrapper is centered at the orbit ring's origin (top:50%, left:50%)
+     and rotates around the Z axis of the ring's LOCAL 3D space.
+     Because the ring itself is tilted (rotateX/Y), Z-rotation in local space
+     traces an ellipse in screen space — exactly what we want.
+  2. .electron-arm translates the icon OUT along the local X axis by the orbit
+     radius. translateX(var(--orbit-r)) in the ring's local coordinate system
+     places the electron on the ring edge.
+  3. No counter-rotation needed: we let the icon face the viewer naturally.
+     The slight perspective tilt is the visual "3D" cue we want to keep.
+*/
+.electron-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* zero-size so it doesn't affect layout */
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  /* Rotate in local Z = orbit motion in 3D tilt space */
+  animation: electron-spin linear infinite;
+  animation-duration: var(--orbit-duration, 20s);
+  animation-delay: var(--orbit-delay, 0s);
+}
+
+@keyframes electron-spin {
+  from { transform: rotateZ(0deg); }
+  to   { transform: rotateZ(360deg); }
+}
+
+.electron-arm {
+  position: absolute;
+  /* Center the arm on the pivot point */
+  top: -1.625rem; /* half of icon-stage height */
+  left: -1.625rem; /* half of icon-stage width */
+  /* Push out to the ring radius along local X */
+  transform: translateX(var(--orbit-r, 10rem));
+  transform-style: preserve-3d;
+}
+
+.electron-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Conveyor lanes ────────────────────────────────────────────── */
+.skills-conveyor-content {
+  width: 100%;
+  position: relative;
+  z-index: 5;
+  /* Delay start so Framer Motion layout animations finish first */
+  transition: opacity 0.5s ease 0.3s;
 }
 
 .skills-lanes-stack {
@@ -120,13 +245,12 @@
   gap: 0.75rem;
 }
 
-/* ─── Lane ─────────────────────────────────────────────────────── */
 .skills-lane {
   position: relative;
   z-index: 0;
 }
 
-/* Pause conveyor via CSS :hover (zero JS, compositor-only) */
+/* Pause marquee on hover / focus / active tooltip */
 .skills-lane:hover         .skills-marquee-track,
 .skills-lane:focus-within  .skills-marquee-track,
 .skills-lane[data-paused='true'] .skills-marquee-track {
@@ -157,14 +281,6 @@
   box-shadow: 0 0 0 0.18rem color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
-.skills-lane-marker-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  opacity: 0.8;
-}
-
 .skills-lane-title {
   font-size: 0.75rem;
   font-weight: 700;
@@ -176,18 +292,25 @@
 /* ─── Marquee ──────────────────────────────────────────────────── */
 .skills-marquee-viewport {
   position: relative;
-  overflow-x: clip;
-  overflow-y: visible;
+  /* Use overflow:hidden as fallback; clip is not supported everywhere */
+  overflow: hidden;
   min-height: var(--skills-lane-height);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* On browsers that support overflow:clip (avoids scroll snapping issues) */
+@supports (overflow-x: clip) {
+  .skills-marquee-viewport {
+    overflow: visible;
+    overflow-x: clip;
+  }
 }
 
 .skills-marquee-track {
   display: flex;
   width: max-content;
   min-height: var(--skills-lane-height);
-  /* translateX is compositor-thread only — no reflow */
   will-change: transform;
   backface-visibility: hidden;
 }
@@ -206,29 +329,7 @@
 @keyframes skills-conveyor-left  { from { transform: translateX(0);    } to { transform: translateX(-50%); } }
 @keyframes skills-conveyor-right { from { transform: translateX(-50%); } to { transform: translateX(0);    } }
 
-/* ─── Skill card ───────────────────────────────────────────────── */
-.skills-marquee-item {
-  position: relative;
-  z-index: 0;
-  /* CSS-driven scatter entry — replaces 100+ motion.div instances */
-  opacity: 0;
-  transform:
-    translateX(var(--scatter-x, 0px))
-    translateY(var(--scatter-y, 0px))
-    rotate(var(--scatter-r, 0deg))
-    scale(0.72);
-  transition: none;
-}
-
-/* Once data-started is on the item, animate to final position */
-.skills-marquee-item[data-started] {
-  opacity: 1;
-  transform: translateX(0) translateY(0) rotate(0deg) scale(1);
-  transition:
-    opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1) var(--enter-delay, 0s),
-    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1) var(--enter-delay, 0s);
-}
-
+/* ─── Skill card button ─────────────────────────────────────────── */
 .skills-skill-button {
   display: flex;
   flex-direction: column;
@@ -243,8 +344,9 @@
   border: none;
   cursor: pointer;
   text-align: center;
-  /* contain layout changes within this element */
-  contain: layout style;
+  /* contain only paint/style, NOT layout — layout contain breaks Framer Motion layoutId */
+  contain: paint style;
+  position: relative;
 }
 
 @media (min-width: 640px) { .skills-skill-button { width: 6rem; } }
@@ -270,14 +372,13 @@
 .skills-skill-button:focus-visible .skills-icon-stage {
   border-color: var(--color-accent);
   transform: translateY(-2px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .skills-icon-img {
   width: 1.625rem;
   height: 1.625rem;
   object-fit: contain;
-  /* Use opacity + scale instead of filter: grayscale — much cheaper */
   opacity: 0.75;
   transform: scale(1);
   transition: opacity 220ms ease, transform 220ms ease;
@@ -293,27 +394,29 @@
   transform: scale(1.12);
 }
 
+/* Skill name — hidden during orbit, shown in lanes */
 .skills-skill-name {
   font-size: 11px;
   font-weight: 600;
   line-height: 1.3;
   white-space: nowrap;
   color: var(--color-text-main);
-  opacity: 0;
-  transform: translateY(0.3rem);
-  transition: opacity 450ms ease, transform 450ms ease;
+  opacity: 1;
+  transition: opacity 400ms ease;
 }
 
-.skills-skill-name.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+.skills-skill-name.hidden {
+  opacity: 0;
+  /* keep in DOM so layout doesn't shift during Framer Motion transition */
+  pointer-events: none;
+  user-select: none;
 }
 
 /* ─── Tooltip ──────────────────────────────────────────────────── */
 .skills-tooltip {
   position: fixed;
-  z-index: 100;
-  max-height: min(18rem, calc(100vh - 1rem));
+  z-index: 200;
+  max-height: min(18rem, calc(100dvh - 1rem));
   overflow-y: auto;
   border-radius: 0.75rem;
   border: 1px solid var(--color-border);
@@ -325,13 +428,11 @@
   animation: skills-tooltip-in 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.skills-tooltip.no-motion {
-  animation: none;
-}
+.skills-tooltip.no-motion { animation: none; }
 
 @keyframes skills-tooltip-in {
   from { opacity: 0; transform: translateY(6px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)  scale(1);    }
+  to   { opacity: 1; transform: translateY(0)  scale(1); }
 }
 
 .skills-tooltip-label {
@@ -381,36 +482,20 @@
 
 /* ─── Reduced motion ───────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .skills-chaos-icon,
+  .electron-wrapper,
+  .atomic-core-point,
   .skills-marquee-track {
     animation: none !important;
     will-change: auto;
   }
 
   .skills-marquee-track { transform: none !important; }
+  .skills-tooltip { animation: none; }
 
+  /* Skip straight to ordered state — no animation */
   .skills-conveyor-content {
-    transition: none;
-    transform: none;
-  }
-
-  .skills-chaos-cloud {
-    transition: none;
-  }
-
-  .skills-marquee-item,
-  .skills-marquee-item[data-started] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .skills-skill-name {
-    opacity: 1;
-    transform: none;
-  }
-
-  .skills-tooltip {
-    animation: none;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transition: none !important;
   }
 }

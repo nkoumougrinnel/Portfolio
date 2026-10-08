@@ -1,4 +1,5 @@
 import { Project, SkillCategory, ExperienceItem, EducationItem, ActivityItem, CertificationItem } from '../types';
+import { getSimpleIcon } from './simpleIcons';
 
 export const PROFILE_AVATAR = "/images/profile/avatar.jpeg";
 
@@ -486,76 +487,175 @@ export const CERTIFICATIONS_DATA: CertificationItem[] = [
   }
 ];
 
-export const SKILL_CATEGORIES: SkillCategory[] = [
+const BASE_SKILL_CATEGORIES: SkillCategory[] = [
   {
-    id: "software",
-    title: { en: "Software", fr: "Software" },
-    skills: [
-      { name: "Python", icon: "python", relatedProjects: ["lekki", "suponeai", "sango"] },
-      { name: "Django", icon: "django", relatedProjects: ["relio", "carburflow", "suponeai"] },
-      { name: "FastAPI", icon: "fastapi", relatedProjects: ["lekki"] },
-      { name: "React", icon: "react", relatedProjects: ["carburflow", "lekki", "campusflow"] },
-      { name: "React Native", icon: "react", relatedProjects: ["relio"] },
-      { name: "TypeScript", icon: "typescript", relatedProjects: ["lekki", "campusflow"] },
-      { name: "JavaScript", icon: "javascript", relatedProjects: ["campusflow", "lekki"] },
-      { name: "PostgreSQL", icon: "postgresql", relatedProjects: ["relio", "carburflow", "campusflow"] },
-      { name: "SQLite", icon: "sqlite", relatedProjects: ["tasktrack"] },
-      { name: "Docker", icon: "docker", relatedProjects: ["carburflow"] },
-      { name: "Git", icon: "git", context: { fr: "Versionnement des projets de développement", en: "Version control for development projects" } },
-      { name: "GitHub", icon: "github", context: { fr: "Hébergement et partage de code", en: "Code hosting and collaboration" } },
-      { name: "VS Code", icon: "visualstudiocode" },
-      { name: "Postman", icon: "postman" },
-      { name: "Figma", icon: "figma" },
-      { name: "Notion", icon: "notion" }
-    ]
+  id: "development",
+  title: {
+    en: "Development",
+    fr: "Développement"
+  },
+  skills: [
+    { name: "Python", icon: "python", relatedProjects: ["lekki", "suponeai", "sango"] },
+    { name: "Django", icon: "django", relatedProjects: ["relio", "carburflow", "suponeai"] },
+    { name: "FastAPI", icon: "fastapi", relatedProjects: ["lekki"] },
+    { name: "React", icon: "react", relatedProjects: ["carburflow", "lekki", "campusflow"] },
+    { name: "TypeScript", icon: "typescript", relatedProjects: ["lekki", "campusflow"] },
+    { name: "JavaScript", icon: "javascript", relatedProjects: ["campusflow", "lekki"] },
+    { name: "HTML5", icon: "html5", relatedProjects: ["carburflow", "lekki", "campusflow"] },
+    { name: "CSS", icon: "css3", relatedProjects: ["carburflow", "lekki", "campusflow"] },
+    { name: "PostgreSQL", icon: "postgresql", relatedProjects: ["relio", "carburflow", "campusflow"] },
+    { name: "SQLite", icon: "sqlite", relatedProjects: ["tasktrack"] },
+    { name: "Docker", icon: "docker", relatedProjects: ["carburflow"] },
+    { name: "C", icon: "c" },
+    {
+      name: "C++",
+      icon: "cplusplus",
+      relatedProjects: [
+        "bras-robotise",
+        "robot-eviteur",
+        "compteur-7-segments",
+        "smart-trash"
+      ]
+    },
+    { name: "Git", icon: "git" },
+    { name: "GitHub", icon: "github" },
+    { name: "VS Code", icon: "visualstudiocode" },
+    { name: "Postman", icon: "postman" },
+    { name: "Node.js", icon: "nodedotjs" },
+    { name: "Vite", icon: "vite" },
+    { name: "ESLint", icon: "eslint" }
+  ]
   },
   {
-    id: "networks",
-    title: { en: "Networks", fr: "Réseaux" },
-    skills: [
-      { name: "GNS3", icon: "gns3", context: { fr: "TP Réseaux — SUP’PTIC", en: "Networking labs — SUP’PTIC" } },
-      { name: "Cisco Packet Tracer", icon: "cisco", context: { fr: "TP Réseaux — SUP’PTIC", en: "Networking labs — SUP’PTIC" } },
-      { name: "Wireshark", icon: "wireshark", context: { fr: "TP réseau — SUP’PTIC", en: "Network analysis — HackVerse 2026" } },
-      { name: "Nmap", icon: "nmap", context: { fr: "TP réseau — SUP’PTIC", en: "Network analysis — HackVerse 2026" } }
-    ]
+  id: "systems-iot",
+  title: {
+    en: "Systems & IoT",
+    fr: "Systèmes & IoT"
   },
+  skills: [
+    {
+      name: "Linux",
+      icon: "linux",
+      status: "proficient"
+    },
+    {
+      name: "Ubuntu",
+      icon: "ubuntu",
+      status: "proficient"
+    },
+    {
+      name: "VirtualBox",
+      icon: "virtualbox",
+      status: "proficient"
+    },
+    {
+      name: "Cisco",
+      icon: "cisco",
+      status: "proficient",
+      context: {
+        fr: "Travaux pratiques de réseaux — SUP’PTIC",
+        en: "Networking labs — SUP’PTIC"
+      }
+    },
+    {
+      name: "Arduino",
+      icon: "arduino",
+      relatedProjects: [
+        "bras-robotise",
+        "robot-eviteur",
+        "compteur-7-segments"
+      ],
+      status: "proficient"
+    },
+    {
+      name: "ESP32",
+      icon: "espressif",
+      relatedProjects: ["smart-trash"],
+      status: "proficient"
+    },
+    {
+      name: "Raspberry Pi",
+      icon: "raspberrypi",
+      status: "learning"
+    },
+    {
+      name: "GNU Bash",
+      icon: "gnubash",
+      status: "learning"
+    },
+    {
+      name: "Arduino IDE",
+      icon: "arduino",
+      status: "proficient"
+    }
+  ]
+},
   {
-    id: "ai-data",
-    title: { en: "AI & Data", fr: "IA & Données" },
-    skills: [
-      { name: "Scikit-learn", icon: "scikitlearn", relatedProjects: ["suponeai"] },
-      { name: "PyTorch", icon: "pytorch" },
-      { name: "OpenCV", icon: "opencv", relatedProjects: ["smart-trash"] },
-      { name: "Pandas", icon: "pandas", relatedProjects: ["suponeai"] },
-      { name: "ONNX", icon: "onnx" }
-    ]
+  id: "cybersecurity",
+  title: {
+    en: "Cybersecurity",
+    fr: "Cybersécurité"
   },
-  {
-    id: "systems",
-    title: { en: "Systems & IoT", fr: "Systèmes & IoT" },
-    skills: [
-      { name: "Arduino", icon: "arduino", relatedProjects: ["bras-robotise", "robot-eviteur", "compteur-7-segments"] },
-      { name: "ESP32", icon: "espressif", relatedProjects: ["smart-trash"] },
-      { name: "Raspberry Pi", icon: "raspberrypi" },
-      { name: "C", icon: "c" },
-      { name: "C++", icon: "cplusplus", relatedProjects: ["bras-robotise", "robot-eviteur", "compteur-7-segments", "smart-trash"] },
-      { name: "Linux", icon: "linux" },
-      { name: "Ubuntu", icon: "ubuntu" }
-    ]
-  },
-  {
-    id: "cybersecurity",
-    title: { en: "Cybersecurity", fr: "Cybersécurité" },
-    skills: [
-      { name: "Kali Linux", icon: "kalilinux" },
-      { name: "Wireshark", icon: "wireshark", context: { fr: "Analyse réseau — HackVerse 2026", en: "Network analysis — HackVerse 2026" } },
-      { name: "Nmap", icon: "nmap", context: { fr: "Analyse réseau — HackVerse 2026", en: "Network analysis — HackVerse 2026" } },
-      { name: "Burp Suite", icon: "burpsuite" },
-      { name: "Metasploit", icon: "metasploit" },
-      { name: "OpenSSL", icon: "openssl" }
-    ]
-  }
+  skills: [
+    {
+      name: "Kali Linux",
+      icon: "kalilinux",
+      status: "learning"
+    },
+    {
+      name: "Wireshark",
+      icon: "wireshark",
+      status: "proficient",
+      context: {
+        fr: "Analyse réseau — HackVerse 2026",
+        en: "Network analysis — HackVerse 2026"
+      }
+    },
+    {
+      name: "Burp Suite",
+      icon: "burpsuite",
+      status: "learning"
+    },
+    {
+      name: "Metasploit",
+      icon: "metasploit",
+      status: "learning"
+    },
+    {
+      name: "OpenSSL",
+      icon: "openssl",
+      status: "learning"
+    },
+    {
+      name: "OWASP",
+      icon: "owasp",
+      status: "learning"
+    },
+    {
+      name: "OpenVPN",
+      icon: "openvpn",
+      status: "learning"
+    },
+    {
+      name: "Hashcat",
+      icon: "hashcat",
+      status: "learning"
+    },
+    { name: "Nmap", icon: "nmap" },
+{ name: "Suricata", icon: "suricata" },
+{ name: "Hydra", icon: "hydra" },
+{ name: "John the Ripper", icon: "johntheripper" },
+{ name: "SQLmap", icon: "sqlmap" },
+{ name: "Nikto", icon: "nikto" },
+{ name: "Gobuster", icon: "gobuster" },
+  ]
+}
 ];
+
+export const SKILL_CATEGORIES: SkillCategory[] = BASE_SKILL_CATEGORIES.map((category) => ({
+  ...category,
+  skills: category.skills.filter((skill) => getSimpleIcon(skill.icon))
+}));
 
 export const EXPERIENCE_DATA: ExperienceItem[] = [
   {

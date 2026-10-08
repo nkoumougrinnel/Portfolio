@@ -73,12 +73,13 @@ export interface Skill {
     en: string;
   };
   relatedProjects?: string[];
+  status?: 'learning' | 'proficient' | 'expert';
 }
 
 export type SkillItem = Skill;
 
 export interface SkillCategory {
-  id: 'software' | 'networks' | 'ai-data' | 'systems' | 'cybersecurity';
+  id: 'development' | 'systems-iot' | 'cybersecurity';
   title: {
     fr: string;
     en: string;
