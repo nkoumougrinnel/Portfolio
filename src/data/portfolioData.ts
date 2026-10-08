@@ -830,20 +830,60 @@ export const CYBERSECURITY_DATA = {
 
   // CTFs — Challenges de différentes plateformes
   ctfs: [
-    {
-      id: "mock-auth-bypass",
-      title: "Mock Authentication Bypass",
-      platform: "TryHackMe",
-      category: "Web Security",
-      tags: ["Authentication", "HTTP", "Burp Suite"],
-      description: {
-        fr: "Challenge de démonstration pour visualiser la carte CTF et ses informations.",
-        en: "Mock challenge to preview the CTF card and its information."
-      },
-      writeupUrl: undefined,
-      difficulty: "Easy",
-      date: "2026"
+  {
+    id: "le-chat-obeissant",
+    title: {
+      fr: "Le chat obéissant",
+      en: "The Obedient Cat"
     },
+    imageUrl: "/images/cybersecurity/ctf/obedient-cat.png",
+    platform: "CyLab Security Academy",
+    category: "Compétences générales",
+    tags: ["Linux", "Terminal", "wget", "cat", "Fichiers"],
+    description: {
+      fr: "Premier défi pratique de familiarisation avec le terminal Linux. L’objectif consiste à télécharger un fichier fourni dans la description du challenge, puis à afficher son contenu pour retrouver le flag.",
+      en: "A first practical challenge introducing the Linux terminal. The goal is to download a file provided in the challenge description and display its contents to retrieve the flag."
+    },
+    content: {
+      steps: [
+        {
+          command: "man cat",
+          fr: "Consulte le manuel de la commande cat afin de comprendre comment afficher le contenu d’un fichier.",
+          en: "Opens the manual for the cat command to understand how to display a file's contents."
+        },
+        {
+          command: "wget <lien-vers-le-flag>",
+          fr: "Télécharge dans le Webshell le fichier accessible depuis le lien fourni dans la description du challenge. Remplace le texte entre chevrons par le lien réel.",
+          en: "Downloads the file into the Webshell using the link provided in the challenge description. Replace the text in angle brackets with the actual link."
+        },
+        {
+          command: "ls",
+          fr: "Vérifie que le fichier téléchargé, ici nommé flag, est présent dans le répertoire courant.",
+          en: "Checks that the downloaded file, here named flag, is present in the current directory."
+        },
+        {
+          command: "cat flag",
+          fr: "Affiche le contenu du fichier flag. Le texte obtenu correspond au flag à soumettre dans l’interface du challenge.",
+          en: "Displays the contents of the flag file. The output is the flag to submit in the challenge interface."
+        }
+      ],
+      learned: {
+        fr: [
+          "Télécharger un fichier depuis le terminal avec wget.",
+          "Vérifier la présence d’un fichier avec ls.",
+          "Afficher le contenu d’un fichier avec cat.",
+        ],
+        en: [
+          "Downloading a file from the terminal with wget.",
+          "Checking whether a file exists with ls.",
+          "Displaying a file's contents with cat.",
+        ]
+      }
+    },
+    writeupUrl: undefined,
+    difficulty: "Facile",
+    date: "Octobre 2026"
+  },
     // Placeholder for future CTF challenges - structure ready
     // {
     //   id: "auth-bypass",

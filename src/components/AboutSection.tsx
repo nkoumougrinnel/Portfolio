@@ -23,7 +23,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
             {language === 'fr' ? (
               <>
                 <p>
-                  Étudiant ingénieur à SUP’PTIC, je privilégie une approche
+                  Élève ingénieur à SUP’PTIC, je privilégie une approche
                   concrète : concevoir des applications, configurer des
                   infrastructures réseau et explorer les systèmes embarqués
                   pour en maîtriser les contraintes et les vulnérabilités.

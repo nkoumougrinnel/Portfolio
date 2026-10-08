@@ -200,3 +200,18 @@ export interface CyberLab {
   status: 'active' | 'done' | 'planned';
   note?: { fr: string; en: string };
 }
+
+export type CtfEntry = {
+  id: string;
+  title: { fr: string; en: string };
+  imageUrl: string;
+  platform: string;
+  category: string;
+  difficulty: string;
+  date: string;
+  description: { fr: string; en: string };
+  content?: {
+    steps?: { command: string; fr: string; en: string }[];
+    learned?: { fr: string[]; en: string[] };
+  };
+};

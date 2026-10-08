@@ -47,7 +47,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Left Column (Desktop) / Main Text Details (Mobile) */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left flex-1 max-w-2xl">
           <div className="mb-3 text-sm font-medium text-[var(--color-text-muted)]">
-            {language === 'fr' ? 'Étudiant ingénieur en 3e année · SUP’PTIC' : '3rd-year engineering student · SUP’PTIC'}
+            {language === 'fr' ? 'Élève ingénieur en 3e année · SUP’PTIC' : '3rd-year engineering student · SUP’PTIC'}
           </div>
 
           {/* Titles & Name */}
