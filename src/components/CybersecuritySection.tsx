@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Calendar, ExternalLink } from 'lucide-react';
-import { CtfEntry, Language } from '../types';
+import { Calendar, ExternalLink, ArrowUpRight, ShieldCheck } from 'lucide-react';
+import { CtfEntry, CyberPlatformProfile, Language } from '../types';
 import { CtfModal } from './CtfModal';
+import { getSimpleIcon } from '../data/simpleIcons';
 
 type TerminalEntry = {
   kind: 'prompt' | 'output';
@@ -180,6 +181,7 @@ const SecLabTerminal: React.FC<{
 
 interface CybersecurityData {
   ctfs: CtfEntry[];
+  platforms?: CyberPlatformProfile[];
 }
 
 interface CybersecuritySectionProps {
@@ -194,6 +196,7 @@ export const CybersecuritySection: React.FC<
   const [openCtf, setOpenCtf] = useState<CtfEntry | null>(null);
 
   const ctfs = cybersecurityData.ctfs;
+  const platforms = cybersecurityData.platforms || [];
 
   return (
     <section
@@ -259,9 +262,9 @@ export const CybersecuritySection: React.FC<
              ================================================== */}
           <div className="space-y-8">
             <div className="mb-2">
-              <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
+              {/*<h3 className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
                 {language === 'fr' ? 'CTFs' : 'CTFs'}
-              </h3>
+              </h3>*/}
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -379,6 +382,132 @@ export const CybersecuritySection: React.FC<
             </div>
           </div>
         </div>
+
+        {/* ==================================================
+              PRACTICE PLATFORMS & PROFILES
+             ================================================== */}
+          {platforms.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
+                    {language === 'fr'
+                      ? 'Plateformes'
+                      : 'Hands-on Platforms'}
+                  </h3>
+                  <p className="mt-1 text-xs text-[var(--color-text-muted)] sm:text-sm">
+                    {language === 'fr'
+                      ? 'Retrouvez mes environnements de pratique, scores et challenges en direct sur les plateformes dédiées.'
+                      : 'Explore my verified public profiles, challenge scores, and live practice environments directly.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {platforms.map((platform) => {
+                  const simpleIcon = platform.iconSlug
+                    ? getSimpleIcon(platform.iconSlug)
+                    : undefined;
+
+                  return (
+                    <a
+                      key={platform.id}
+                      href={platform.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="
+                        group relative flex flex-col justify-between
+                        rounded-2xl border border-[var(--color-border)]
+                        bg-[var(--color-bg-soft)]/60 p-5
+                        backdrop-blur-sm transition-all duration-300
+                        hover:-translate-y-1 hover:border-[var(--color-accent)]/50
+                        hover:bg-[var(--color-bg-panel)]
+                        hover:shadow-md
+                      "
+                    >
+                      {/* Top border glow on hover */}
+                      <div
+                        className="pointer-events-none absolute inset-x-0 top-0 h-[2px] rounded-t-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                        style={{
+                          background: `linear-gradient(90deg, transparent, ${
+                            platform.brandColor || 'var(--color-accent)'
+                          }, transparent)`,
+                        }}
+                      />
+
+                      <div className="flex flex-col gap-3">
+                        {/* Header: Icon + Badge */}
+                        <div className="flex items-center justify-between gap-3">
+                          <div
+                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-surface)] transition-transform duration-300 group-hover:scale-105"
+                            
+                          >
+                            {simpleIcon ? (
+                              <svg
+                                role="img"
+                                viewBox="0 0 24 24"
+                                className="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
+                                fill="currentColor"
+                                style={{
+                                  color:
+                                    platform.brandColor || `#${simpleIcon.hex}`,
+                                }}
+                              >
+                                <path d={simpleIcon.path} />
+                              </svg>
+                            ) : (
+                              <ShieldCheck
+                                className="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
+                                style={{
+                                  color:
+                                    platform.brandColor ||
+                                    'var(--color-accent)',
+                                }}
+                              />
+                            )}
+                          </div>
+
+                          
+                        </div>
+
+                        {/* Title & username */}
+                        <div>
+                          <h4 className="text-base font-bold text-[var(--color-text-main)] transition-colors group-hover:text-[var(--color-accent)]">
+                            {platform.name}
+                          </h4>
+                          <div className="mt-0.5 flex items-center gap-1.5 font-mono text-xs text-[var(--color-text-muted)]">
+                            <span className="select-none text-[var(--color-accent)] font-semibold">
+                              @
+                            </span>
+                            <span className="truncate transition-colors group-hover:text-[var(--color-text-main)]">
+                              {platform.username}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Description */}
+                        {platform.description && (
+                          <p className="line-clamp-2 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
+                            {platform.description[language]}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Footer CTA */}
+                      <div className="mt-4 flex items-center justify-between border-t border-[var(--color-border)] pt-3 text-xs font-semibold text-[var(--color-text-muted)] transition-colors group-hover:text-[var(--color-accent)]">
+                        <span>
+                          {language === 'fr'
+                            ? 'Consulter le profil'
+                            : 'View profile'}
+                        </span>
+                        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          )}
       </div>
 
       <CtfModal
@@ -386,6 +515,7 @@ export const CybersecuritySection: React.FC<
         language={language}
         onClose={() => setOpenCtf(null)}
       />
+
     </section>
   );
 };

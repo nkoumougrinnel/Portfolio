@@ -1,4 +1,4 @@
-import { Project, SkillCategory, ExperienceItem, EducationItem, ActivityItem, CertificationItem } from '../types';
+import { Project, SkillCategory, ExperienceItem, EducationItem, ActivityItem, CertificationItem, CyberPlatformProfile } from '../types';
 import { getSimpleIcon } from './simpleIcons';
 
 export const PROFILE_AVATAR = "/images/profile/avatar.jpeg";
@@ -928,9 +928,60 @@ export const CYBERSECURITY_DATA = {
     }
   ],
 
+  // PLATEFORMES & PROFILS PUBLICS — Preuves de pratique, CTFs et labs en direct
+  platforms: [
+    {
+      id: "cylab-academy",
+      name: "CyLab Security Academy",
+      url: "https://learn.cylabacademy.org/users/nkoumougrinnel",
+      username: "nkoumougrinnel",
+      badge: {
+        fr: "Labs & Formation",
+        en: "Labs & Training"
+      },
+      description: {
+        fr: "Parcours d'apprentissage, laboratoires pratiques et validation des compétences fondamentales en sécurité.",
+        en: "Learning pathways, practical labs, and foundational security skill validation."
+      },
+      brandColor: "#0284C7"
+    },
+    {
+      id: "tryhackme",
+      name: "TryHackMe",
+      url: "https://tryhackme.com/p/nkoumougrinnel",
+      username: "nkoumougrinnel",
+      badge: {
+        fr: "Profil Public",
+        en: "Public Profile"
+      },
+      description: {
+        fr: "Résolution de salles d'entraînement (Rooms), progression offensive & défensive, challenges Linux et réseau.",
+        en: "Hands-on security rooms, offensive & defensive progression, Linux and networking challenges."
+      },
+      iconSlug: "tryhackme",
+      brandColor: "#EA262A"
+    },
+    {
+      id: "hackthebox",
+      name: "Hack The Box CTF",
+      url: "https://ctf.hackthebox.com/user/profile/1140595",
+      username: "1140595",
+      badge: {
+        fr: "CTF Compétition",
+        en: "CTF Competition"
+      },
+      description: {
+        fr: "Challenges CTF compétitifs, exploitation de vulnérabilités, cryptographie et analyse de sécurité.",
+        en: "Competitive CTF challenges, vulnerability exploitation, cryptography, and security analysis."
+      },
+      iconSlug: "hackthebox",
+      brandColor: "#9FEF00"
+    }
+  ] as CyberPlatformProfile[],
+
   // CTFs — Challenges de différentes plateformes
   ctfs: [
-  {
+  /*{
     id: "le-chat-obeissant",
     title: {
       fr: "Le chat obéissant",
@@ -984,6 +1035,108 @@ export const CYBERSECURITY_DATA = {
     difficulty: "Facile",
     date: "Octobre 2026"
   },
+  {
+    id: "super-ssh",
+    title: {
+      fr: "Super SSH",
+      en: "Super SSH"
+    },
+    imageUrl: "/images/cybersecurity/ctf/super-ssh.png",
+    platform: "CyLab Security Academy",
+    category: "Compétences générales",
+    tags: ["SSH", "Connexion distante", "Terminal", "Réseau"],
+    description: {
+      fr: "Défi d'introduction à l'utilisation de SSH (Secure Shell) pour se connecter à un serveur distant. L'objectif consiste à établir une connexion SSH avec un nom d'utilisateur, un hôte et un port non standard, puis à récupérer le flag affiché après authentification.",
+      en: "An introductory challenge on using Secure Shell (SSH) to connect to a remote server. The goal is to establish an SSH connection with a given username, host, and non-standard port, then retrieve the flag displayed after authentication."
+    },
+    content: {
+      steps: [
+        {
+          command: "ssh ctf-player@chatelaine.cylabacademy.net -p 48969",
+          fr: "Établit une connexion SSH vers l'hôte fourni en utilisant le nom d'utilisateur ctf-player et le port 48969. L'option -p permet de spécifier un port différent du port par défaut (22).",
+          en: "Establishes an SSH connection to the provided host using the username ctf-player and port 48969. The -p option specifies a non-default port (default is 22)."
+        },
+        {
+          command: "yes",
+          fr: "Accepte l'empreinte numérique (fingerprint) du serveur lors de la première connexion. Cette étape confirme que tu fais confiance à l'identité du serveur distant.",
+          en: "Accepts the server's fingerprint on the first connection. This step confirms that you trust the identity of the remote server."
+        },
+        {
+          command: "fa1a82ad",
+          fr: "Saisit le mot de passe fourni. Les caractères ne s'affichent pas à l'écran pendant la saisie, ce qui est un comportement normal pour des raisons de sécurité.",
+          en: "Enters the provided password. Characters are not displayed on screen during input, which is normal behavior for security reasons."
+        },
+        {
+          command: "cat flag",
+          fr: "Affiche le contenu du fichier flag si celui-ci n'est pas affiché automatiquement après la connexion. Dans ce défi, le flag est généralement affiché immédiatement après l'authentification.",
+          en: "Displays the contents of the flag file if it is not shown automatically after login. In this challenge, the flag is usually displayed immediately after authentication."
+        }
+      ],
+      learned: {
+        fr: [
+          "Utiliser la commande ssh pour se connecter à un serveur distant.",
+          "Spécifier un port non standard avec l'option -p.",
+          "Comprendre le format utilisateur@hôte pour les connexions SSH."
+        ],
+        en: [
+          "Using the ssh command to connect to a remote server.",
+          "Specifying a non-standard port with the -p option.",
+          "Understanding the user@host format for SSH connections."
+        ]
+      }
+    },
+    writeupUrl: undefined,
+    difficulty: "Facile",
+    date: "Octobre 2026"
+  },
+  {
+    id: "whats-a-net-cat",
+    title: {
+      fr: "Qu'est-ce qu'un net cat ?",
+      en: "What's a net cat?"
+    },
+    imageUrl: "/images/cybersecurity/ctf/whats-a-net-cat.png",
+    platform: "CyLab Security Academy",
+    category: "Compétences générales",
+    tags: ["Netcat", "nc", "Réseau", "Connexion distante", "Terminal"],
+    description: {
+      fr: "Défi d'introduction à l'utilisation de Netcat (nc), un outil fondamental en cybersécurité pour établir des connexions réseau. L'objectif consiste à se connecter à un serveur distant sur un port spécifique afin de récupérer le flag transmis par le serveur.",
+      en: "An introductory challenge on using Netcat (nc), a fundamental tool in cybersecurity for establishing network connections. The goal is to connect to a remote server on a specific port to retrieve the flag transmitted by the server."
+    },
+    content: {
+      steps: [
+        {
+          command: "nc jupiter.challenges.picoctf.org 64287",
+          fr: "Établit une connexion TCP vers le serveur jupiter.challenges.picoctf.org sur le port 64287 en utilisant Netcat. La syntaxe générale est nc [hôte] [port]. Après la connexion, le serveur envoie un message contenant le flag.",
+          en: "Establishes a TCP connection to the server jupiter.challenges.picoctf.org on port 64287 using Netcat. The general syntax is nc [host] [port]. After connecting, the server sends a message containing the flag."
+        },
+        {
+          command: "cat",
+          fr: "Le flag est affiché directement dans le terminal après la connexion. Il n'est pas nécessaire d'exécuter une commande supplémentaire dans ce défi.",
+          en: "The flag is displayed directly in the terminal after connection. No additional command is required in this challenge."
+        }
+      ],
+      learned: {
+        fr: [
+          "Utiliser la commande nc pour se connecter à un serveur distant.",
+          "Comprendre la syntaxe de base de Netcat : nc [hôte] [port].",
+          "Établir une connexion TCP simple vers un service réseau.",
+          "Récupérer des données transmises par un serveur via Netcat.",
+          "Identifier Netcat comme un outil fondamental en cybersécurité."
+        ],
+        en: [
+          "Using the nc command to connect to a remote server.",
+          "Understanding the basic syntax of Netcat: nc [host] [port].",
+          "Establishing a simple TCP connection to a network service.",
+          "Retrieving data transmitted by a server via Netcat.",
+          "Identifying Netcat as a fundamental tool in cybersecurity."
+        ]
+      }
+    },
+    writeupUrl: undefined,
+    difficulty: "Facile",
+    date: "Octobre 2026"
+  }*/,
     // Placeholder for future CTF challenges - structure ready
     // {
     //   id: "auth-bypass",

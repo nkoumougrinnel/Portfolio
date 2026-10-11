@@ -216,3 +216,20 @@ export type CtfEntry = {
     learned?: { fr: string[]; en: string[] };
   };
 };
+
+export interface CyberPlatformProfile {
+  id: string;
+  name: string;
+  url: string;
+  username: string;
+  badge?: {
+    fr: string;
+    en: string;
+  };
+  description?: {
+    fr: string;
+    en: string;
+  };
+  iconSlug?: string; // slug in simple-icons, e.g. 'tryhackme', 'hackthebox'
+  brandColor?: string; // e.g. '#A40000', '#9FEF00'
+}
