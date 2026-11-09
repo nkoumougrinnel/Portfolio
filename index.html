@@ -3,20 +3,113 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nkoumou Tjade Grinnel Germain — Portfolio</title>
-    <meta name="description" content="Portfolio interactif de Nkoumou Tjade Grinnel Germain — Élève-ingénieur en télécommunications et développement logiciel." />
+
+    <!-- ── Référencement ─────────────────────────────────────────── -->
+    <title>Nkoumou Tjade Grinnel Germain — Élève ingénieur · Logiciel, Réseaux & Cybersécurité</title>
+    <meta
+      name="description"
+      content="Portfolio de Nkoumou Tjade Grinnel Germain, élève ingénieur en télécommunications à SUP'PTIC (Yaoundé) : développement logiciel, réseaux, systèmes embarqués et cybersécurité. Projets, expérience, CV et contact."
+    />
+    <meta name="author" content="Nkoumou Tjade Grinnel Germain" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://nkoumougrinnel.netlify.app/" />
+
+    <!-- ── Partage (LinkedIn, WhatsApp, X…) ──────────────────────── -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Nkoumou Tjade Grinnel Germain" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://nkoumougrinnel.netlify.app/" />
     <meta property="og:title" content="Nkoumou Tjade Grinnel Germain — Portfolio" />
-    <meta property="og:description" content="Portfolio interactif de Nkoumou Tjade Grinnel Germain — Élève-ingénieur en télécommunications et développement logiciel." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
+    <meta
+      property="og:description"
+      content="Élève ingénieur à SUP'PTIC : logiciel, réseaux, systèmes embarqués et cybersécurité."
+    />
+    <meta property="og:image" content="https://nkoumougrinnel.netlify.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Nkoumou Tjade Grinnel Germain — Portfolio" />
+    <meta property="profile:first_name" content="Grinnel Germain" />
+    <meta property="profile:last_name" content="Nkoumou Tjade" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nkoumou Tjade Grinnel Germain — Portfolio" />
+    <meta name="twitter:image" content="https://nkoumougrinnel.netlify.app/og-image.jpg" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#245EBA" />
+
+    <!-- ── Données structurées : relie le site à tes profils (GitHub, LinkedIn…) ── -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://nkoumougrinnel.netlify.app/#person",
+            "name": "Nkoumou Tjade Grinnel Germain",
+            "alternateName": ["Grinnel Germain Nkoumou Tjade", "Nkoumou Grinnel", "nkoumougrinnel"],
+            "givenName": "Grinnel Germain",
+            "familyName": "Nkoumou Tjade",
+            "url": "https://nkoumougrinnel.netlify.app/",
+            "image": "https://nkoumougrinnel.netlify.app/images/profile/avatar.jpeg",
+            "email": "mailto:nkoumougrinnel@gmail.com",
+            "jobTitle": "Élève ingénieur en télécommunications",
+            "description": "Élève ingénieur à SUP'PTIC, spécialité Informatique & Réseaux : développement logiciel, réseaux, systèmes embarqués et cybersécurité.",
+            "address": { "@type": "PostalAddress", "addressLocality": "Yaoundé", "addressCountry": "CM" },
+            "affiliation": {
+              "@type": "CollegeOrUniversity",
+              "name": "École Nationale Supérieure des Postes, des Télécommunications et des TIC (SUP'PTIC)"
+            },
+            "alumniOf": { "@type": "CollegeOrUniversity", "name": "Université de Yaoundé I" },
+            "knowsAbout": ["Développement logiciel", "Réseaux informatiques", "Cybersécurité", "Systèmes embarqués", "IoT", "Django", "React", "Python"],
+            "sameAs": [
+              "https://github.com/nkoumougrinnel",
+              "https://cm.linkedin.com/in/nkoumougrinnel",
+              "https://tryhackme.com/p/nkoumougrinnel",
+              "https://learn.cylabacademy.org/users/nkoumougrinnel",
+              "https://ctf.hackthebox.com/user/profile/1140595"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://nkoumougrinnel.netlify.app/#website",
+            "url": "https://nkoumougrinnel.netlify.app/",
+            "name": "Nkoumou Tjade Grinnel Germain — Portfolio",
+            "inLanguage": ["fr", "en"],
+            "author": { "@id": "https://nkoumougrinnel.netlify.app/#person" }
+          }
+        ]
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body class="bg-[var(--color-bg-main)] text-[var(--color-text-main)] antialiased">
-    <div id="root"></div>
+    <!--
+      Contenu statique lisible sans JavaScript (moteurs de recherche, aperçus de liens).
+      React le remplace par le site complet dès le chargement.
+    -->
+    <div id="root">
+      <main style="max-width: 42rem; margin: 0 auto; padding: 6rem 1.5rem; font-family: system-ui, sans-serif; line-height: 1.6">
+        <h1>Nkoumou Tjade Grinnel Germain</h1>
+        <p>
+          Élève ingénieur en télécommunications à SUP'PTIC (Yaoundé, Cameroun), spécialité Informatique &amp; Réseaux.
+          J'explore le développement logiciel, les réseaux, les systèmes embarqués et la cybersécurité.
+        </p>
+        <h2>Projets</h2>
+        <p>CarburFlow (stage CAMTEL), Lekki (Hackathon Cursor J.U.I.N 2026), Supone AI, Sango (HackVerse 2026), Relio, CampusFlow.</p>
+        <h2>Liens</h2>
+        <ul>
+          <li><a href="https://github.com/nkoumougrinnel">GitHub — nkoumougrinnel</a></li>
+          <li><a href="https://cm.linkedin.com/in/nkoumougrinnel">LinkedIn — nkoumougrinnel</a></li>
+          <li><a href="https://tryhackme.com/p/nkoumougrinnel">TryHackMe — nkoumougrinnel</a></li>
+          <li><a href="/cv/CV-Nkoumou-Tjade-Grinnel-Germain.pdf">CV (PDF)</a></li>
+          <li><a href="mailto:nkoumougrinnel@gmail.com">nkoumougrinnel@gmail.com</a></li>
+        </ul>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
