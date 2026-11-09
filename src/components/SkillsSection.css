@@ -3,13 +3,13 @@
   --skills-lane-height: 6.25rem;
   position: relative;
   isolation: isolate;
-  padding: 1.5rem 1.25rem;
+  padding: 4.5rem 1.25rem;
 }
 
 @media (min-width: 640px) {
   .skills-experience-section {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
   }
 }
 
@@ -23,10 +23,11 @@
 @media (min-width: 1024px) { .skills-inner { padding-inline: 1.5rem; } }
 
 .skills-heading-row {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
 }
 
 .skills-heading {
@@ -60,7 +61,7 @@
 
 @media (min-width: 1024px) {
   .skills-content-stage {
-    min-height: 38rem;
+    min-height: 34rem;
   }
 }
 
@@ -97,137 +98,92 @@
 @media (min-width: 640px) { .atomic-system-hitbox { --hitbox-size: 32rem; } }
 @media (min-width: 1024px) { .atomic-system-hitbox { --hitbox-size: 38rem; } }
 
-/* ─── Core ──────────────────────────────────────────────────────── */
-.atomic-core-point {
-  width: 1.25rem;
-  height: 1.25rem;
-  background: var(--color-accent);
-  border-radius: 50%;
-  box-shadow:
-    0 0 12px 4px color-mix(in srgb, var(--color-accent) 70%, transparent),
-    0 0 40px 16px color-mix(in srgb, var(--color-accent) 35%, transparent);
-  animation: core-pulse 2s ease-in-out infinite alternate;
+/* ─── Atome 3D ──────────────────────────────────────────────────── */
+.atomic-rings {
   position: absolute;
-  z-index: 20;
-}
-
-@keyframes core-pulse {
-  from { transform: scale(0.85); opacity: 0.75; }
-  to   { transform: scale(1.1);  opacity: 1; }
-}
-
-/* ─── Orbit container ───────────────────────────────────────────── */
-/*
-  CRITICAL: perspective must be on the direct parent of the transformed
-  elements, and transform-style:preserve-3d must propagate down the chain.
-*/
-.orbit-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 1200px;
-  /* preserve-3d so children are rendered in 3D space */
-  transform-style: preserve-3d;
-}
-
-/* ─── Orbit rings ───────────────────────────────────────────────── */
-.orbit-ring {
-  position: absolute;
-  border: 1px dashed transparent;
-  border-radius: 50%;
-  /* CRITICAL: preserve-3d so the electron children inherit the 3D transform */
-  transform-style: preserve-3d;
   pointer-events: none;
+  overflow: visible;
 }
-
-/*
-  Orbit sizes scaled for mobile. The electrons travel on these ellipses
-  so the ring size MUST match --orbit-radius in the electron animation.
-  We define --orbit-r as a CSS var to keep them in sync.
-*/
-.orbit-ring-0 {
-  --orbit-r: 8rem;
-  width: calc(var(--orbit-r) * 2);
-  height: calc(var(--orbit-r) * 2);
-  transform: rotateX(72deg) rotateY(20deg);
-  border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+.atomic-rings path {
+  fill: none;
+  stroke-width: 1.25;
+  stroke-opacity: 0.38;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
 }
-.orbit-ring-1 {
-  --orbit-r: 10rem;
-  width: calc(var(--orbit-r) * 2);
-  height: calc(var(--orbit-r) * 2);
-  transform: rotateX(68deg) rotateY(-40deg);
-  border-color: color-mix(in srgb, #00ffcc 30%, transparent);
+.atomic-nucleus {
+  position: absolute;
+  width: 2.75rem;
+  height: 2.75rem;
+  z-index: 1000;
+  animation: nucleus-spin 9s linear infinite;
 }
-.orbit-ring-2 {
-  --orbit-r: 12rem;
-  width: calc(var(--orbit-r) * 2);
-  height: calc(var(--orbit-r) * 2);
-  transform: rotateX(65deg) rotateY(65deg);
-  border-color: color-mix(in srgb, #cc66ff 30%, transparent);
+.atomic-nucleus::before {
+  content: "";
+  position: absolute;
+  inset: -2.25rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 38%, transparent), transparent 68%);
+  animation: core-pulse 2.4s ease-in-out infinite alternate;
 }
-
-@media (min-width: 640px) {
-  .orbit-ring-0 { --orbit-r: 10rem; }
-  .orbit-ring-1 { --orbit-r: 13rem; }
-  .orbit-ring-2 { --orbit-r: 16rem; }
+.atomic-nucleus span {
+  position: absolute;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #fff 0%, var(--color-accent) 45%, color-mix(in srgb, var(--color-accent) 60%, #000) 100%);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent) 60%, transparent);
 }
-
-@media (min-width: 1024px) {
-  .orbit-ring-0 { --orbit-r: 11rem; }
-  .orbit-ring-1 { --orbit-r: 14rem; }
-  .orbit-ring-2 { --orbit-r: 17rem; }
+.atomic-nucleus span:nth-child(1) { left: 0.35rem; top: 0.3rem; }
+.atomic-nucleus span:nth-child(2) { right: 0.3rem; top: 0.55rem; background: radial-gradient(circle at 32% 30%, #fff 0%, #14b8a6 45%, #0b5d55 100%); box-shadow: 0 0 14px rgba(20,184,166,.5); }
+.atomic-nucleus span:nth-child(3) { left: 0.6rem; bottom: 0.25rem; background: radial-gradient(circle at 32% 30%, #fff 0%, #a855f7 45%, #5b2391 100%); box-shadow: 0 0 14px rgba(168,85,247,.5); }
+.atomic-nucleus span:nth-child(4) { right: 0.55rem; bottom: 0.35rem; }
+@keyframes nucleus-spin { to { transform: rotate(360deg); } }
+@keyframes core-pulse {
+  from { transform: scale(0.85); opacity: 0.7; }
+  to   { transform: scale(1.12); opacity: 1; }
 }
-
-/* ─── Electrons ─────────────────────────────────────────────────── */
-/*
-  Strategy:
-  1. .electron-wrapper is centered at the orbit ring's origin (top:50%, left:50%)
-     and rotates around the Z axis of the ring's LOCAL 3D space.
-     Because the ring itself is tilted (rotateX/Y), Z-rotation in local space
-     traces an ellipse in screen space — exactly what we want.
-  2. .electron-arm translates the icon OUT along the local X axis by the orbit
-     radius. translateX(var(--orbit-r)) in the ring's local coordinate system
-     places the electron on the ring edge.
-  3. No counter-rotation needed: we let the icon face the viewer naturally.
-     The slight perspective tilt is the visual "3D" cue we want to keep.
-*/
-.electron-wrapper {
+.atomic-electron {
   position: absolute;
   top: 50%;
   left: 50%;
-  /* zero-size so it doesn't affect layout */
   width: 0;
   height: 0;
-  transform-style: preserve-3d;
-  /* Rotate in local Z = orbit motion in 3D tilt space */
-  animation: electron-spin linear infinite;
-  animation-duration: var(--orbit-duration, 20s);
-  animation-delay: var(--orbit-delay, 0s);
+  will-change: transform, opacity;
+  pointer-events: none;
 }
-
-@keyframes electron-spin {
-  from { transform: rotateZ(0deg); }
-  to   { transform: rotateZ(360deg); }
-}
-
-.electron-arm {
+.atomic-electron .electron-content {
   position: absolute;
-  /* Center the arm on the pivot point */
-  top: -1.625rem; /* half of icon-stage height */
-  left: -1.625rem; /* half of icon-stage width */
-  /* Push out to the ring radius along local X */
-  transform: translateX(var(--orbit-r, 10rem));
-  transform-style: preserve-3d;
+  top: -1.625rem;
+  left: -1.625rem;
 }
-
+.atomic-electron .skills-icon-stage {
+  box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.45);
+}
 .electron-content {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.atomic-system-hitbox { cursor: pointer; }
+.atomic-system-hitbox:focus-visible { outline: 2px dashed var(--color-accent); outline-offset: -2rem; }
+
+.skills-back {
+  position: absolute;
+  top: -2.75rem;
+  right: 0;
+  font-family: var(--font-technical);
+  font-size: 11px;
+  color: var(--color-text-subtle);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-soft);
+  transition: color .2s, border-color .2s;
+}
+.skills-back:hover, .skills-back:focus-visible { color: var(--color-accent); border-color: var(--color-accent); }
+@media (prefers-reduced-motion: reduce) {
+  .atomic-nucleus, .atomic-nucleus::before { animation: none; }
 }
 
 /* ─── Conveyor lanes ────────────────────────────────────────────── */
@@ -499,3 +455,28 @@
     transition: none !important;
   }
 }
+
+/* ─── Activation hint ──────────────────────────────────────────── */
+.atomic-hint {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  z-index: 30;
+  font-family: var(--font-technical);
+  font-size: 11px;
+  color: var(--color-text-subtle);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-soft);
+  max-width: calc(100% - 1.5rem);
+  white-space: normal;
+  text-align: center;
+  animation: atomic-hint-pulse 2.4s ease-in-out infinite;
+}
+.atomic-hint span { color: var(--color-accent); }
+.atomic-hint:hover, .atomic-hint:focus-visible { color: var(--color-accent); border-color: var(--color-accent); }
+@keyframes atomic-hint-pulse { 50% { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { .atomic-hint { animation: none; } }

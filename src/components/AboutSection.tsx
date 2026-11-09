@@ -5,66 +5,51 @@ interface AboutSectionProps {
   language: Language;
 }
 
-export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
-  return (
-    <section
-      id="about"
-      className="about-section px-5 py-10"
-    >
-      <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
-        <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
-            {language === 'fr' ? 'À propos de moi' : 'About Me'}
-          </h2>
-        </div>
-
-        <div className="space-y-6">
-          <div className="space-y-4 font-sans text-[13px] leading-relaxed text-[var(--color-text-muted)] text-justify">
-            {language === 'fr' ? (
-              <>
-                <p>
-                  Élève ingénieur à SUP’PTIC, je privilégie une approche
-                  concrète : concevoir des applications, configurer des
-                  infrastructures réseau et explorer les systèmes embarqués
-                  pour en maîtriser les contraintes et les vulnérabilités.
-                </p>
-
-                <p>
-                  Cette démarche d’expérimentation me permet d’appréhender les
-                  systèmes informatiques dans leur globalité, de la couche
-                  matérielle jusqu’à l’application, ce qui me permettra de
-                  relever les défis techniques liés à la sécurisation
-                  d’environnements complexes.
-                </p>
-
-                <p className="pt-4 italic opacity-80">
-                  En dehors de la technologie, je passe du temps à jouer aux jeux vidéo, regarder des anime, jouer aux échecs et faire du basketball.
-                </p>
-              </>
-            ) : (
-              <>
-                <p>
-                  Engineering student at SUP’PTIC, I favor a concrete approach:
-                  designing applications, configuring network infrastructure,
-                  and exploring embedded systems to master their constraints and
-                  vulnerabilities.
-                </p>
-
-                <p>
-                  This experimental approach lets me understand computer systems
-                  in their entirety, from the hardware layer up to the
-                  application, helping me tackle technical challenges related to
-                  securing complex environments.
-                </p>
-
-                <p className="pt-4 italic opacity-80">
-                  Outside of technology, I enjoy video games, anime, chess, and basketball.
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+const COPY = {
+  fr: [
+    'Je suis élève ingénieur en télécommunications à SUP’PTIC, spécialité Informatique & Réseaux. Avant ça, j’ai fait des mathématiques à l’Université de Yaoundé I — c’est de là que me vient l’envie de comprendre comment les choses fonctionnent vraiment, pas seulement comment s’en servir.',
+    'Aujourd’hui, je construis : des applications web et mobiles, des API, des prototypes embarqués sur Arduino ou ESP32, et des projets montés en temps limité lors de hackathons. Mon stage chez CAMTEL m’a fait passer de l’exercice au réel, avec CarburFlow, une plateforme pensée pour des données de sites télécoms en exploitation.',
+    'Le fil conducteur, c’est la sécurité. Plus je comprends comment un système est construit, du capteur jusqu’à l’application, mieux je vois où il peut céder. C’est ce que je creuse aujourd’hui, entre mes labs, TryHackMe et Hack The Box.',
+  ],
+  en: [
+    'I’m a telecommunications engineering student at SUP’PTIC, majoring in Computer Science & Networks. Before that, I studied mathematics at the University of Yaoundé I — which is where my urge to understand how things really work, not just how to use them, comes from.',
+    'Today, I build: web and mobile apps, APIs, embedded prototypes on Arduino or ESP32, and projects shipped against the clock at hackathons. My internship at CAMTEL took me from exercises to the real thing with CarburFlow, a platform designed around data from live telecom sites.',
+    'The common thread is security. The better I understand how a system is built, from the sensor up to the application, the better I see where it can break. That’s what I’m digging into now, between my own labs, TryHackMe and Hack The Box.',
+  ],
 };
+
+const INFO = [
+  { k: { fr: 'Formation', en: 'Education' }, v: { fr: 'SUP’PTIC · 3e année', en: 'SUP’PTIC · 3rd year' } },
+  { k: { fr: 'Spécialité', en: 'Major' }, v: { fr: 'Informatique & Réseaux', en: 'Computer Science & Networks' } },
+  { k: { fr: 'Basé à', en: 'Based in' }, v: { fr: 'Yaoundé, Cameroun', en: 'Yaoundé, Cameroon' } },
+  { k: { fr: 'Langues', en: 'Languages' }, v: { fr: 'Français · Anglais (B1)', en: 'French · English (B1)' } },
+  { k: { fr: 'Hors écran', en: 'Off screen' }, v: { fr: 'Échecs · Basket · Jeux vidéo · Anime', en: 'Chess · Basketball · Video games · Anime' } },
+];
+
+export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => (
+  <section id="about" className="section about-section">
+    <div className="section-inner">
+      <div className="section-head">
+        <span className="section-eyebrow">01 <span aria-hidden="true">/</span> about</span>
+        <h2 className="section-title">{language === 'fr' ? 'À propos' : 'About'}</h2>
+      </div>
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-16">
+        <div className="max-w-2xl space-y-5 text-[15px] leading-[1.8] text-[var(--color-text-muted)] sm:text-base">
+          {COPY[language].map((paragraph) => (
+            <p key={paragraph.slice(0, 20)}>{paragraph}</p>
+          ))}
+        </div>
+
+        <dl className="card self-start px-6 py-3">
+          {INFO.map((row) => (
+            <div key={row.k.en} className="info-row">
+              <dt>{row.k[language]}</dt>
+              <dd>{row.v[language]}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+);

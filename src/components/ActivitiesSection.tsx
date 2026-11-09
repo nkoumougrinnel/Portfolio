@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ArrowRight, Calendar } from 'lucide-react';
+import { localizePeriod } from '../data/site';
 import { Language, ActivityCategory, ActivityItem } from '../types';
 
 interface ActivitiesSectionProps {
@@ -27,85 +28,63 @@ export const ActivitiesSection: React.FC<ActivitiesSectionProps> = ({
   );
 
   return (
-    <section id="activities" className="px-5 py-10">
-      <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
-        <div className="flex items-center gap-2 mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
+    <section id="activities" className="section">
+      <div className="section-inner">
+        <div className="section-head">
+          <span className="section-eyebrow">08 <span aria-hidden="true">/</span> activities</span>
+          <h2 className="section-title">
             {language === 'fr' ? 'Activités & Leadership' : 'Activities & Leadership'}
           </h2>
         </div>
 
-        <div className="relative mb-6 -mx-5 sm:mx-0" aria-label={language === 'fr' ? 'Filtres des activités' : 'Activity filters'}>
-          <div className="flex gap-2 overflow-x-auto whitespace-nowrap px-5 pb-2 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {activityFilters.map((filter) => (
-              <button
-                key={filter}
-                type="button"
-                aria-pressed={activeFilter === filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${activeFilter === filter ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-lg shadow-[var(--color-accent)]/25' : 'border-[var(--color-border)]/50 bg-[var(--color-bg-soft)]/50 backdrop-blur-sm text-[var(--color-text-muted)] hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]'}`}
-              >
-                {activityLabels[filter][language]}
-              </button>
-            ))}
-          </div>
-          <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[var(--color-bg-main)]/95 to-transparent sm:hidden" />
+        <div className="chip-row" role="group" aria-label={language === 'fr' ? 'Filtres des activités' : 'Activity filters'}>
+          {activityFilters.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              aria-pressed={activeFilter === filter}
+              onClick={() => setActiveFilter(filter)}
+              className="chip"
+            >
+              {activityLabels[filter][language]}
+            </button>
+          ))}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredActivities.map((item) => (
             <article
               key={item.id}
+              role="button"
+              tabIndex={0}
               onClick={() => onSelectActivity(item)}
-              className="rounded-2xl glass-card overflow-hidden hover:shadow-md hover:border-[var(--color-accent)]/40 transition-all flex flex-col justify-between group cursor-pointer"
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  onSelectActivity(item);
+                }
+              }}
+              className="card card-interactive group flex h-full flex-col p-3"
             >
-              <div>
-                {/* Photo */}
-                <div className="w-full aspect-[16/9] overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-media-panel)] relative">
-                  <img
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
-                    src={item.imageUrl}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80';
-                    }}
-                  />
-                  {item.categories[0] && (
-                    <span className="absolute left-3 top-3 font-mono text-[10px] text-white px-2.5 py-1 rounded-md backdrop-blur-md border border-white/20 bg-black/40 shadow-sm">
-                      {activityLabels[item.categories[0]][language]}
-                    </span>
-                  )}
-                </div>
-
-                {/* Text content */}
-                <div className="p-4 sm:p-5">
-                  <h3 className="text-sm sm:text-base font-bold text-[var(--color-text-main)] group-hover:text-[var(--color-accent)] transition-colors line-clamp-1 mb-2">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-[12.5px] sm:text-[13px] text-[var(--color-text-muted)] leading-relaxed line-clamp-3">
-                    {item.description[language]}
-                  </p>
-                </div>
+              <div className="card-media">
+                <img alt={item.title} src={item.imageUrl} loading="lazy" />
+                {item.categories[0] && <span className="media-badge">{activityLabels[item.categories[0]][language]}</span>}
               </div>
 
-              {/* Bottom CTA */}
-              <div className="p-4 sm:px-5 pt-3 pb-4 flex items-center justify-between border-t border-[var(--color-border)]/80">
-                <span className="font-mono text-[11px] text-[var(--color-text-muted)]">
-                  {item.year}
-                </span>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSelectActivity(item);
-                  }}
-                  className="px-3.5 py-1.5 rounded-xl bg-[var(--color-bg-accent)]/50 hover:bg-[var(--color-accent)] hover:text-white text-[var(--color-accent)] border border-[var(--color-accent)]/25 text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 shadow-xs"
-                >
-                  <span>{language === 'fr' ? 'Détails' : 'Details'}</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </button>
+              <div className="card-body flex flex-1 flex-col px-2 pb-1 pt-4">
+                <h3 className="card-title">{item.title}</h3>
+                <p className="card-text mt-2 line-clamp-3">{item.description[language]}</p>
+
+                <div className="card-footer mt-5">
+                  <span className="meta">
+                    <Calendar />
+                    {localizePeriod(item.year.replace('present', 'Present'), language)}
+                  </span>
+                  <span className="btn-more">
+                    {language === 'fr' ? 'Détails' : 'Details'}
+                    <ArrowRight />
+                  </span>
+                </div>
               </div>
             </article>
           ))}

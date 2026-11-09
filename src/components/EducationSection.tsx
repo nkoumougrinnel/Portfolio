@@ -2,55 +2,46 @@ import React from 'react';
 import { GraduationCap } from 'lucide-react';
 import { Language } from '../types';
 import { EDUCATION_DATA } from '../data/portfolioData';
+import { localizePeriod } from '../data/site';
 
 interface EducationSectionProps {
   language: Language;
 }
 
-export const EducationSection: React.FC<EducationSectionProps> = ({ language }) => {
-  return (
-    <section id="education" className="px-5 py-10">
-      <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
-        <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
-            {language === 'fr' ? 'Formation Académique' : 'Education'}
-          </h2>
-        </div>
-
-        <div className="space-y-3">
-          {EDUCATION_DATA.map((edu, idx) => {
-            const isCurrent = idx === 0;
-            return (
-              <div
-                key={idx}
-                className={`p-4 sm:p-5 rounded-2xl glass-card transition-all hover:border-[var(--color-accent)]/40 ${
-                  isCurrent
-                    ? 'border-[var(--color-accent)]/30 ring-1 ring-[var(--color-accent)]/10'
-                    : 'border-[var(--color-border)]'
-                }`}
-              >
-                <div className="flex justify-between items-center text-[var(--color-accent)] text-[11px] mb-1 font-semibold">
-                  <span className="flex items-center gap-1.5">
-                    <GraduationCap className="w-4 h-4 text-[var(--color-accent)]" />
-                    {edu.institution}
-                  </span>
-                  <span className={`px-2 py-0.5 rounded-full ${isCurrent ? 'bg-[var(--color-bg-accent)]/40 text-[var(--color-accent)] font-bold' : 'text-[var(--color-text-muted)]'}`}>
-                    {edu.period}
-                  </span>
-                </div>
-
-                <h3 className="text-sm sm:text-base font-bold text-[var(--color-text-main)]">
-                  {edu.degree[language]}
-                </h3>
-
-                <p className="text-xs text-[var(--color-text-muted)] mt-0.5">
-                  {edu.specialty[language]}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+export const EducationSection: React.FC<EducationSectionProps> = ({ language }) => (
+  <section id="education" className="section">
+    <div className="section-inner">
+      <div className="section-head">
+        <span className="section-eyebrow">06 <span aria-hidden="true">/</span> education</span>
+        <h2 className="section-title">{language === 'fr' ? 'Formation' : 'Education'}</h2>
       </div>
-    </section>
-  );
-};
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        {EDUCATION_DATA.map((edu, idx) => {
+          const isCurrent = idx === 0;
+          return (
+            <article
+              key={edu.institution}
+              className={`card card-body flex flex-col p-6 ${isCurrent ? 'border-[color-mix(in_srgb,var(--color-accent)_40%,transparent)]' : ''}`}
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-accent)] text-[var(--color-accent)]">
+                  <GraduationCap className="h-5 w-5" />
+                </span>
+                {isCurrent ? (
+                  <span className="tag">{language === 'fr' ? 'En cours' : 'Current'}</span>
+                ) : null}
+              </div>
+              <h3 className="card-title mt-5">{edu.degree[language]}</h3>
+              <p className="mt-1 text-sm font-semibold text-[var(--color-accent)]">{edu.institution}</p>
+              <p className="card-text mt-2">{edu.specialty[language]}</p>
+              <div className="card-footer mt-5">
+                <span className="meta">{localizePeriod(edu.period, language)}</span>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+);

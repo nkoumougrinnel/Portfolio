@@ -11,19 +11,6 @@ export const CURSOR_HACKATHON_IMAGE = "/images/activities/cursor.jpg";
 
 export const CLUB_INFO_IMAGE = "/images/activities/club-info.jpeg";
 
-const DEMO_PROJECT_GALLERY = [
-  "/images/projects/relio.png",
-  "/images/projects/carburflow.png",
-  "/images/projects/lekki.png"
-];
-
-const DEMO_PROJECT_LINKS = [
-  { label: "GitHub (démo)", url: "https://example.com/github-demo", placeholder: true },
-  { label: "Démo en ligne (fictive)", url: "https://example.com/deployment-demo", placeholder: true }
-];
-
-const DEMO_PROJECT_VIDEO = "/video/video-test.mp4";
-
 export const PROJECTS: Project[] = [
   {
     id: "relio",
@@ -32,15 +19,12 @@ export const PROJECTS: Project[] = [
     categories: ["featured", "personal", "web"],
     status: "Active MVP",
     imageUrl: "/images/projects/relio.png",
+    mockup: "phone",
     role: {
       fr: "Proposition à confirmer : contribution à la conception de l’expérience mobile et à l’intégration des services de mise en relation.",
       en: "Draft to confirm: contribution to the mobile experience design and integration of the matching services."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     context: { fr: "Projet personnel", en: "Personal project" },
     description: {
       en: "An on-demand service marketplace designed to connect clients with the right service providers through a dynamic matching process. Currently developed as a working MVP focusing on service attribution and platform architecture.",
@@ -77,10 +61,7 @@ export const PROJECTS: Project[] = [
     categories: ["featured", "professional", "web", "network"],
     status: "Production Pilot",
     imageUrl: "/images/projects/carburflow.png",
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
+    mockup: "browser",
     context: { fr: "Stage académique chez CAMTEL", en: "Academic internship at CAMTEL" },
     role: {
       fr: "Lead technique : modélisation des données, logique métier, API, intégration frontend, détection d'anomalies et conteneurisation.",
@@ -119,12 +100,9 @@ export const PROJECTS: Project[] = [
     title: "Lekki",
     track: "engineering",
     categories: ["featured", "competition", "ai", "web"],
-    status: "Hackathon Winner / Active",
+    status: "Hackathon Project / Active",
     imageUrl: "/images/projects/lekki.png",
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
+    mockup: "browser",
     context: { fr: "Hackathon Cursor J.U.I.N 2026", en: "Cursor J.U.I.N Hackathon 2026" },
     role: {
       fr: "Développeur principal, responsable de l'architecture et de l'implémentation du pipeline RAG.",
@@ -160,15 +138,12 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "suponeai",
-    title: "Suponeai",
+    title: "Supone AI",
     track: "engineering",
     categories: ["featured", "academic", "ai"],
     status: "Deployed at SUP'PTIC",
     imageUrl: "/images/projects/suponeai.jpg",
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
+    mockup: "phone",
     context: { fr: "Projet académique pour SUP'PTIC", en: "Academic project for SUP'PTIC" },
     role: {
       fr: "Développement du moteur de recherche sémantique et intégration backend.",
@@ -202,18 +177,15 @@ export const PROJECTS: Project[] = [
     id: "media-cloud-center",
     title: "Media cloud center",
     track: "engineering",
-    categories: ["more", "personal", "network"],
+    categories: ["featured", "personal", "network"],
     status: "Completed",
     imageUrl: "/images/projects/mediacloudcenter.jpg",
+    mockup: "photo",
     role: {
       fr: "Proposition à confirmer : installation et configuration du serveur multimédia et des services accessibles sur le réseau local.",
       en: "Draft to confirm: installation and configuration of the media server and services available over the local network."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     context: { fr: "Projet personnel d'infrastructure réseau", en: "Personal network infrastructure project" },
     description: {
       en: "A local media server designed to stream and share files across a network without relying on an internet connection.",
@@ -232,15 +204,12 @@ export const PROJECTS: Project[] = [
     categories: ["more", "personal", "embedded", "ai"],
     status: "Prototype",
     imageUrl: "/images/projects/smart-trash.jpg",
+    mockup: "photo",
     role: {
       fr: "Proposition à confirmer : assemblage du prototype embarqué et participation à l’intégration de la reconnaissance des déchets.",
       en: "Draft to confirm: assembly of the embedded prototype and contribution to waste-recognition integration."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     context: { fr: "Prototype personnel", en: "Personal prototype" },
     description: {
       en: "A smart waste-sorting system combining AI and embedded hardware to recognize and classify waste.",
@@ -255,15 +224,12 @@ export const PROJECTS: Project[] = [
     categories: ["more", "academic", "web"],
     status: "In Progress",
     imageUrl: "/images/projects/campusflow.jpg",
+    mockup: "phone",
     role: {
       fr: "Proposition à confirmer : contribution au développement de l’interface et à l’intégration des modules de gestion du campus.",
       en: "Draft to confirm: contribution to the interface development and integration of campus management modules."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     context: { fr: "Projet académique", en: "Academic project" },
     description: {
       en: "A unified digital campus management platform connecting students, delegates, and faculty administration.",
@@ -278,10 +244,7 @@ export const PROJECTS: Project[] = [
     categories: ["early", "personal", "web"],
     status: "Completed",
     imageUrl: "/images/projects/tasktrack.jpg",
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
+    mockup: "window",
     context: { fr: "Projet personnel d'apprentissage", en: "Personal learning project" },
     role: {
       fr: "Développement d'une application desktop de gestion de tâches en Java.",
@@ -297,19 +260,16 @@ export const PROJECTS: Project[] = [
     id: "site-club-info",
     title: "Site officiel du club info",
     track: "engineering",
-    categories: ["more", "web"],
+    categories: ["featured", "web"],
     status: "Completed",
-    imageUrl: "/images/projects/siteclubinfo.png",
+    imageUrl: "/images/projects/siteclubinfo.jpg",
+    mockup: "browser",
     context: { fr: "Projet du Club Informatique de SUP’PTIC", en: "SUP’PTIC Computer Club project" },
     role: {
       fr: "Proposition à confirmer : participation au développement frontend et à la mise en ligne du site.",
       en: "Draft to confirm: contribution to frontend development and website deployment."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     description: {
       fr: "Développement et déploiement du site officiel du Club Informatique de SUP'PTIC pour centraliser les ressources et les informations pour les étudiants.",
       en: "Development and deployment of the official SUP'PTIC Computer Club website to centralize resources and information for students."
@@ -323,16 +283,13 @@ export const PROJECTS: Project[] = [
     categories: ["more", "ai", "network"],
     status: "In Progress",
     imageUrl: "/images/projects/sango.jpg",
+    mockup: "phone",
     context: { fr: "Projet en cours", en: "Ongoing project" },
     role: {
       fr: "Proposition à confirmer : exploration de l’interface de routage et de la visualisation des itinéraires pour les secours.",
       en: "Draft to confirm: exploration of the routing interface and emergency-route visualization."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     description: {
       fr: "Système de routage en temps réel pour ambulances et pompiers, capable de s'adapter aux conditions changeantes.",
       en: "A real-time routing system for ambulances and firefighters that adapts to changing conditions."
@@ -350,16 +307,13 @@ export const PROJECTS: Project[] = [
     categories: ["early", "training", "web"],
     status: "Completed",
     imageUrl: "/images/projects/shopkamer.jpg",
+    mockup: "browser",
     context: { fr: "Premier atelier du Club Informatique", en: "Computer Club’s first workshop" },
     role: {
       fr: "Proposition à confirmer : réalisation d’une interface e-commerce d’exercice et mise en pratique des bases web.",
       en: "Draft to confirm: building a practice e-commerce interface and applying web fundamentals."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     description: {
       fr: "Site e-commerce développé dans le cadre du premier atelier du Club pour mettre en pratique les bases du développement web.",
       en: "An e-commerce website developed during the Club's first workshop to practise web development fundamentals."
@@ -373,15 +327,12 @@ export const PROJECTS: Project[] = [
     categories: ["more", "training", "embedded"],
     status: "Completed",
     imageUrl: "/images/projects/bras-robotise.jpg",
+    mockup: "photo",
     role: {
       fr: "Proposition à confirmer : câblage des servomoteurs et mise en œuvre de la commande par potentiomètre sur Arduino.",
       en: "Draft to confirm: wiring the servomotors and implementing potentiometer control on Arduino."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     context: { fr: "Formation D-CLIC", en: "D-CLIC training" },
     description: {
       fr: "Bras mécanique contrôlé par servomoteurs et potentiomètre, piloté par Arduino.",
@@ -396,15 +347,12 @@ id: "robot-eviteur",
     categories: ["more", "training", "embedded"],
     status: "Completed",
     imageUrl: "/images/projects/robot-eviteur.jpg",
+    mockup: "photo",
     role: {
       fr: "Proposition à confirmer : intégration du capteur HC-SR04 et réglage de la logique d’évitement.",
       en: "Draft to confirm: integrating the HC-SR04 sensor and tuning the obstacle-avoidance logic."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     context: { fr: "Formation D-CLIC", en: "D-CLIC training" },
     description: {
       fr: "Robot autonome utilisant un capteur ultrason HC-SR04 pour détecter et éviter les obstacles.",
@@ -419,15 +367,12 @@ id: "robot-eviteur",
     categories: ["more", "training", "embedded"],
     status: "Completed",
     imageUrl: "/images/projects/compteur-7-segments.jpg",
+    mockup: "photo",
     role: {
       fr: "Proposition à confirmer : câblage du registre 74HC595 et programmation de l’affichage des chiffres.",
       en: "Draft to confirm: wiring the 74HC595 shift register and programming digit display."
     },
     draftDetails: true,
-    demoAssets: true,
-    gallery: DEMO_PROJECT_GALLERY,
-    videos: [DEMO_PROJECT_VIDEO],
-    links: DEMO_PROJECT_LINKS,
     context: { fr: "Formation D-CLIC", en: "D-CLIC training" },
     description: {
       fr: "Afficheur numérique piloté par registre à décalage 74HC595 et Arduino.",
@@ -456,6 +401,39 @@ export const CERTIFICATIONS_DATA: CertificationItem[] = [
     }
   },
   {
+    id: "coursera-iot-yonsei",
+    title: {
+      fr: "IoT Wireless & Cloud Computing Emerging Technologies",
+      en: "IoT Wireless & Cloud Computing Emerging Technologies"
+    },
+    issuer: { fr: "Yonsei University · Coursera", en: "Yonsei University · Coursera" },
+    kind: "completion",
+    period: "2025",
+    categories: ["course"],
+    imageUrl: "/images/certs/coursera-iot.jpg",
+    skills: ["IoT", "Réseaux sans fil", "Cloud computing"],
+    verifyUrl: "https://coursera.org/verify/FNMGIZ134A2Z",
+    description: {
+      fr: "Cours en ligne de Yonsei University (Pr Jong-Moon Chung), suivi sur Coursera, consacré aux technologies émergentes de l’IoT, des réseaux sans fil et du cloud computing. Certificat obtenu en septembre 2025.",
+      en: "Online course from Yonsei University (Prof. Jong-Moon Chung), taken on Coursera, covering emerging technologies in IoT, wireless networks and cloud computing. Certificate earned in September 2025."
+    }
+  },
+  {
+    id: "claude-code-in-action",
+    title: { fr: "Claude Code in Action", en: "Claude Code in Action" },
+    issuer: { fr: "Claude Academy · Anthropic", en: "Claude Academy · Anthropic" },
+    kind: "completion",
+    period: "2026",
+    categories: ["course"],
+    imageUrl: "/images/certs/claude-code-in-action.jpg",
+    skills: ["Claude Code", "Développement assisté par IA", "Workflows agentiques"],
+    verifyUrl: "https://academy.claude.com/verify/89a43278b91bec49f072007e5fa1ab2a",
+    description: {
+      fr: "Badge de fin de cours Claude Academy (Anthropic) consacré à Claude Code : utiliser un assistant de code agentique dans le terminal pour explorer, modifier et faire évoluer un projet logiciel. Obtenu en novembre 2026.",
+      en: "Claude Academy (Anthropic) course completion badge on Claude Code: using an agentic coding assistant in the terminal to explore, change and evolve a software project. Earned in November 2026."
+    }
+  },
+  {
     id: "cursor-hackathon-2026",
     title: { fr: "Cursor Hackathon J.U.I.N 2026", en: "Cursor Hackathon J.U.I.N 2026" },
     issuer: { fr: "Université de Yaoundé I", en: "University of Yaoundé I" },
@@ -480,6 +458,8 @@ export const CERTIFICATIONS_DATA: CertificationItem[] = [
     categories: ["competition"],
     imageUrl: "/images/certs/hackverse.jpeg",
     momentPhotos: ["/images/activities/hackverse.jpg"],
+    relatedProjectIds: ["sango"],
+    relatedProjectsContext: { fr: "Projet développé lors de cet événement", en: "Project developed during this event" },
     description: {
       fr: "Attestation officielle de participation au HackVerse 2026.",
       en: "Official certificate of participation in HackVerse 2026."
@@ -729,24 +709,25 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
       en: "Development team participant",
       fr: "Participant au sein de l'équipe développement"
     },
+    relatedProjectIds: ["sango"],
     description: {
       en: "Participation in a team development competition, in a short format that required designing and delivering a functional solution quickly.",
       fr: "Participation à une compétition de développement en équipe, dans un format court qui demandait de concevoir et livrer rapidement une solution fonctionnelle."
     },
     details: {
-      en: "HackVerse 2026 is a development hackathon where teams build software solutions within a 48-hour timeframe.",
-      fr: "HackVerse 2026 est un hackathon de développement où les équipes construisent des solutions logicielles en 48 heures."
+      en: "HackVerse 2026 is a development hackathon where teams build software solutions within a 48-hour timeframe. The project Sango, a real-time emergency routing system, was developed during this event.",
+      fr: "HackVerse 2026 est un hackathon de développement où les équipes construisent des solutions logicielles en 48 heures. Le projet Sango, un système de routage d'urgence en temps réel, a été développé dans ce cadre."
     },
     highlights: {
       en: [
         "Rapid prototyping and MVP development under time pressure",
         "Team coordination and delivery of a working solution",
-        "Problem-solving and technical implementation in a competitive environment"
+        "Built Sango: real-time emergency vehicle routing with traffic, weather & incident adaptation"
       ],
       fr: [
         "Prototypage rapide et développement d'une solution viable sous contrainte de temps",
         "Coordination d'équipe et livraison d'une application fonctionnelle",
-        "Résolution de problèmes techniques dans un environnement compétitif"
+        "Création de Sango : routage temps réel pour véhicules de secours avec adaptation trafic, météo et incidents"
       ]
     }
   },
@@ -775,12 +756,12 @@ export const ACTIVITIES_DATA: ActivityItem[] = [
       en: [
         "Architected complete RAG workflow (chunking, local embeddings & hybrid BM25 search)",
         "FastAPI asynchronous backend with sub-500ms inference responses",
-        "Awarded best enterprise software prototype by the technical evaluation panel"
+        "48h intensive build delivering a working MVP for sovereign knowledge management"
       ],
       fr: [
         "Conception de bout en bout du pipeline RAG (segmentation, embeddings et recherche hybride BM25)",
         "Développement d'une API backend asynchrone FastAPI répondant en moins de 500ms",
-        "Projet primé par le jury technique pour sa robustesse et son applicabilité industrielle"
+        "48h de code intensif pour livrer un MVP fonctionnel de gestion de connaissances souveraine"
       ]
     }
   },
