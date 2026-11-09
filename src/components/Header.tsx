@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, FileText, Globe, Moon, Sun } from 'lucide-react';
+import { Menu, X, Download, Moon, Sun } from 'lucide-react';
 import { Language } from '../types';
+import { CV_URL, CV_FILENAME } from '../data/site';
 
 interface HeaderProps {
   language: Language;
   onLanguageChange: (lang: Language) => void;
-  onOpenCvModal: () => void;
   avatarUrl: string;
   isDark: boolean;
   onToggleTheme: () => void;
@@ -14,7 +14,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   language,
   onLanguageChange,
-  onOpenCvModal,
   avatarUrl,
   isDark,
   onToggleTheme,
@@ -28,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
       setIsScrolled(window.scrollY > 20);
 
       // Determine active section based on scroll position
-      const sections = ['about', 'experience', 'projects', 'cybersecurity', 'skills', 'contact'];
+      const sections = ['hero', 'about', 'experience', 'projects', 'cybersecurity', 'skills', 'education', 'certifications', 'activities', 'contact'];
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -51,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
     { href: '#experience', label: language === 'fr' ? 'Expérience' : 'Experience' },
     { href: '#projects', label: language === 'fr' ? 'Projets' : 'Projects' },
     { href: '#cybersecurity', label: language === 'fr' ? 'Cybersécurité' : 'Cybersecurity' },
-    { href: '#skills', label: language === 'fr' ? 'Compétences' : 'Skills' },
+    { href: '#skills', label: language === 'fr' ? 'Stack' : 'Stack' },
     { href: '#contact', label: language === 'fr' ? 'Contact' : 'Contact' },
   ];
 
@@ -62,12 +61,10 @@ export const Header: React.FC<HeaderProps> = ({
     { href: '#experience', label: language === 'fr' ? 'Expérience' : 'Experience' },
     { href: '#projects', label: language === 'fr' ? 'Projets' : 'Projects' },
     { href: '#cybersecurity', label: language === 'fr' ? 'Cybersécurité' : 'Cybersecurity' },
-    { href: '#skills', label: language === 'fr' ? 'Compétences' : 'Skills' },
+    { href: '#skills', label: language === 'fr' ? 'Stack' : 'Stack' },
     { href: '#education', label: language === 'fr' ? 'Formation' : 'Education' },
     { href: '#certifications', label: language === 'fr' ? 'Certifications' : 'Certifications' },
     { href: '#activities', label: language === 'fr' ? 'Activités & Leadership' : 'Activities & Leadership' },
-    { href: '#direction', label: language === 'fr' ? 'Direction Actuelle' : 'Current Direction' },
-    { href: '#resources', label: language === 'fr' ? 'Ressources' : 'Resources' },
     { href: '#contact', label: language === 'fr' ? 'Contact' : 'Contact' },
   ];
 
@@ -92,10 +89,6 @@ export const Header: React.FC<HeaderProps> = ({
               alt="Nkoumou Tjade"
               className="h-9 w-9 rounded-full object-cover border border-[var(--color-border-muted)]/40 shadow-xs group-hover:scale-105 transition-transform"
               src={avatarUrl}
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
-              }}
             />
           </div>
           <div className="flex flex-col justify-center text-left">
@@ -131,39 +124,56 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Action Controls: Language, Theme, CV */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Language Toggle */}
-          <button
-            onClick={() => onLanguageChange(language === 'fr' ? 'en' : 'fr')}
-            title="Changer de langue / Switch language"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-sans font-semibold text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] bg-[var(--color-bg-soft)] border border-[var(--color-border)] rounded-md shadow-xs transition-colors"
-          >
-            <Globe className="w-3.5 h-3.5" />
-            <span>{language.toUpperCase()}</span>
-          </button>
+          {/* Langue + thème : un seul groupe compact */}
+          <div className="flex h-9 items-center gap-0.5 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-soft)] p-1 shadow-xs">
+            <div role="group" aria-label={language === 'fr' ? 'Langue' : 'Language'} className="relative flex h-full items-center">
+              <span
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1/2 rounded-full bg-[var(--color-accent)] transition-transform duration-300 ease-out"
+                style={{ transform: language === 'en' ? 'translateX(100%)' : 'none' }}
+              />
+              {(['fr', 'en'] as const).map((lang) => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => onLanguageChange(lang)}
+                  aria-pressed={language === lang}
+                  className={`relative z-10 h-full w-8 rounded-full font-mono text-[10.5px] font-semibold uppercase transition-colors ${
+                    language === lang ? 'text-white' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
+                  }`}
+                >
+                  {lang}
+                </button>
+              ))}
+            </div>
+            <span className="mx-1 h-4 w-px bg-[var(--color-border)]" aria-hidden="true" />
+            <button
+              type="button"
+              onClick={onToggleTheme}
+              aria-label={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+              title={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+              className="flex h-full w-7 items-center justify-center rounded-full text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-bg-accent)] hover:text-[var(--color-text-main)]"
+            >
+              {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+            </button>
+          </div>
 
-          {/* Theme Toggle */}
-          <button
-            onClick={onToggleTheme}
-            title={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
-            className="inline-flex items-center justify-center w-8 h-8 text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] bg-[var(--color-bg-soft)] border border-[var(--color-border)] rounded-md shadow-xs transition-colors"
+          {/* CV */}
+          <a
+            href={CV_URL}
+            download={CV_FILENAME}
+            title={language === 'fr' ? 'Télécharger mon CV (PDF)' : 'Download my resume (PDF)'}
+            className="btn btn-primary group !hidden !h-9 !gap-1.5 !pl-4 !pr-3.5 !text-xs sm:!inline-flex"
           >
-            {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-          </button>
-
-          {/* CV Button: separated, prioritized */}
-          <button
-            onClick={onOpenCvModal}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-mono font-semibold text-white bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] rounded-md shadow-sm transition-colors"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>CV</span>
-          </button>
+            CV
+            <Download className="!h-3.5 !w-3.5 transition-transform group-hover:translate-y-0.5" />
+          </a>
 
           {/* Hamburger Menu (mobile/tablet < lg) */}
           <button
             aria-label="Toggle Navigation Menu"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden w-8 h-8 rounded-md bg-[var(--color-bg-soft)] border border-[var(--color-border)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] shadow-xs transition-colors ml-1"
+            className="lg:hidden w-9 h-9 rounded-full bg-[var(--color-bg-soft)] border border-[var(--color-border)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] shadow-xs transition-colors"
           >
             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
@@ -174,6 +184,15 @@ export const Header: React.FC<HeaderProps> = ({
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-[var(--color-border)] bg-[var(--color-bg-main)]/98 px-5 py-4 font-sans text-xs text-[var(--color-text-muted)] shadow-lg animate-in fade-in duration-200">
           <div className="flex flex-col divide-y divide-[var(--color-border)]">
+            <a
+              href={CV_URL}
+              download={CV_FILENAME}
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between py-2.5 text-sm font-semibold text-[var(--color-accent)] sm:hidden"
+            >
+              {language === 'fr' ? 'Télécharger le CV' : 'Download resume'}
+              <Download className="h-4 w-4" />
+            </a>
             {mobileNavItems.map((item) => (
               <a
                 key={item.href}

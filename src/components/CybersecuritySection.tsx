@@ -1,180 +1,186 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Calendar, ExternalLink, ArrowUpRight, ShieldCheck } from 'lucide-react';
+import { Calendar, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { CtfEntry, CyberPlatformProfile, Language } from '../types';
 import { CtfModal } from './CtfModal';
-import { getSimpleIcon } from '../data/simpleIcons';
+import { BrandMark } from './BrandMark';
+
+const SEC_FOCUS = [
+  {
+    k: 'recon',
+    title: { fr: 'Reconnaissance réseau', en: 'Network recon' },
+    desc: { fr: 'Cartographier hôtes, ports et services.', en: 'Map hosts, ports and services.' },
+    tools: ['nmap'],
+  },
+  {
+    k: 'traffic',
+    title: { fr: 'Analyse de trafic', en: 'Traffic analysis' },
+    desc: { fr: 'Lire ce qui circule vraiment sur le réseau.', en: 'Read what actually crosses the wire.' },
+    tools: ['wireshark', 'tcpdump'],
+  },
+  {
+    k: 'linux',
+    title: { fr: 'Systèmes Linux', en: 'Linux systems' },
+    desc: { fr: 'Shell, droits, services et durcissement.', en: 'Shell, permissions, services, hardening.' },
+    tools: ['bash', 'permissions'],
+  },
+  {
+    k: 'ctf',
+    title: { fr: 'CTF & labs', en: 'CTFs & labs' },
+    desc: { fr: 'S’entraîner sur des cas concrets.', en: 'Practice on hands-on scenarios.' },
+    tools: ['TryHackMe', 'Hack The Box', 'CyLab'],
+  },
+] as const;
 
 type TerminalEntry = {
   kind: 'prompt' | 'output';
   text: string;
+  /** Ligne mise en évidence (résultat clé). */
+  hl?: boolean;
 };
 
 const TERMINAL_ENTRIES: TerminalEntry[] = [
-  { kind: 'prompt', text: 'ip addr' },
-  {
-    kind: 'output',
-    text: `eth0  192.168.56.101/24
-state UP`,
-  },
-
+  { kind: 'prompt', text: 'ip -br addr show eth0' },
+  { kind: 'output', text: 'eth0   UP   192.168.56.101/24' },
   { kind: 'prompt', text: 'nmap -sV 192.168.56.0/24' },
   {
     kind: 'output',
-    text: `22/tcp  open  ssh
-80/tcp  open  http
-443/tcp open  https
-
-3 hosts up`,
+    text: `PORT    STATE  SERVICE  VERSION
+22/tcp  open   ssh      OpenSSH 8.9p1
+80/tcp  open   http     nginx 1.18.0
+443/tcp open   https    nginx 1.18.0`,
   },
-
-  { kind: 'prompt', text: '' },
+  { kind: 'output', text: 'Nmap done: 256 IP addresses (3 hosts up)', hl: true },
+  { kind: 'prompt', text: 'sudo tcpdump -c 3 port 443' },
+  {
+    kind: 'output',
+    text: `IP lab.51544 > srv.https: Flags [S]
+IP srv.https > lab.51544: Flags [S.]
+3 packets captured`,
+  },
+  { kind: 'prompt', text: 'echo "understand it, then secure it."' },
+  { kind: 'output', text: 'understand it, then secure it.', hl: true },
 ];
 
-const SecLabTerminal: React.FC<{
-  language: Language;
-  isHovered: boolean;
-}> = ({ language, isHovered }) => {
-  const timerRef = useRef<number | null>(null);
+const Prompt: React.FC = () => (
+  <span className="select-none">
+    <span style={{ color: 'var(--term-prompt)' }}>grinnel@lab</span>
+    <span style={{ color: 'var(--term-dim)' }}>:</span>
+    <span style={{ color: 'var(--term-path)' }}>~</span>
+    <span style={{ color: 'var(--term-dim)' }}>$ </span>
+  </span>
+);
+
+const SecLabTerminal: React.FC<{ language: Language }> = ({ language }) => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [entryIndex, setEntryIndex] = useState(0);
   const [typedText, setTypedText] = useState('');
+  const reduceMotion =
+    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-  const currentEntry = TERMINAL_ENTRIES[entryIndex];
+  // Démarre quand le terminal devient visible, se met en pause hors écran.
+  useEffect(() => {
+    const node = rootRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), { threshold: 0.35 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
-  const clearTimer = () => {
-    if (timerRef.current !== null) {
-      window.clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  };
+  const done = entryIndex >= TERMINAL_ENTRIES.length;
+  const currentEntry = done ? undefined : TERMINAL_ENTRIES[entryIndex];
 
   useEffect(() => {
-    if (!isHovered || !currentEntry) return;
-
-    const targetLength = currentEntry.text.length;
-
-    if (typedText.length < targetLength) {
-      timerRef.current = window.setTimeout(() => {
-        setTypedText(
-          currentEntry.text.slice(0, typedText.length + 1)
-        );
-      }, currentEntry.kind === 'prompt' ? 35 : 12);
-
-      return () => clearTimer();
+    if (reduceMotion) {
+      setEntryIndex(TERMINAL_ENTRIES.length);
+      return;
     }
+    if (!isVisible) return;
 
-    timerRef.current = window.setTimeout(() => {
-      if (entryIndex < TERMINAL_ENTRIES.length - 1) {
-        setEntryIndex((current) => current + 1);
+    let timer: number;
+    if (done) {
+      // Pause puis relance la session.
+      timer = window.setTimeout(() => {
+        setEntryIndex(0);
         setTypedText('');
-      }
-    }, currentEntry.kind === 'prompt' ? 500 : 900);
+      }, 6000);
+    } else if (currentEntry && currentEntry.kind === 'prompt' && typedText.length < currentEntry.text.length) {
+      timer = window.setTimeout(
+        () => setTypedText(currentEntry.text.slice(0, typedText.length + 1)),
+        28 + Math.random() * 45,
+      );
+    } else {
+      timer = window.setTimeout(() => {
+        setEntryIndex((i) => i + 1);
+        setTypedText('');
+      }, currentEntry?.kind === 'prompt' ? 380 : 650);
+    }
+    return () => window.clearTimeout(timer);
+  }, [currentEntry, done, isVisible, reduceMotion, typedText]);
 
-    return () => clearTimer();
-  }, [currentEntry, entryIndex, isHovered, typedText]);
-
-  const completedEntries = TERMINAL_ENTRIES.slice(0, entryIndex);
+  const shown = TERMINAL_ENTRIES.slice(0, entryIndex);
 
   return (
     <div
-      className="
-        relative z-10
-        h-[270px] w-full
-        overflow-hidden
-        rounded-2xl
-        border border-[var(--color-border)]
-        bg-[var(--color-bg-soft)]
-        font-mono text-[10px]
-        shadow-sm
-        sm:text-[11px]
-      "
-      aria-label={language === 'fr' ? 'terminal' : 'terminal'}
+      ref={rootRef}
+      className="term relative z-10 w-full overflow-hidden rounded-2xl font-mono text-[9px] min-[380px]:text-[10px] sm:text-[11.5px]"
+      role="img"
+      aria-label={
+        language === 'fr'
+          ? 'Terminal animé : reconnaissance réseau sur un lab local (ip, nmap, tcpdump)'
+          : 'Animated terminal: network reconnaissance on a local lab (ip, nmap, tcpdump)'
+      }
     >
-      {/* Terminal header */}
-      <div
-        className="
-          flex h-10 items-center gap-2
-          border-b border-[var(--color-border)]
-          bg-[var(--color-bg-accent)]
-          px-4
-        "
-      >
+      <div className="flex h-9 items-center gap-2 border-b px-4" style={{ background: 'var(--term-bar)', borderColor: 'var(--term-border)' }}>
         <div className="flex gap-1.5" aria-hidden="true">
           <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
         </div>
-
-        <span className="ml-2 select-none text-[9px] tracking-widest text-[var(--color-text-faint)]">
-          terminal
+        <span className="ml-2 select-none text-[10px] tracking-wider" style={{ color: 'var(--term-dim)' }}>
+          grinnel@lab — bash — 80×24
         </span>
       </div>
 
-      {/* Terminal content */}
-      <div className="h-[230px] overflow-hidden p-4 sm:p-5">
-        <div className="space-y-1.5 leading-relaxed">
-          {completedEntries.map((entry, index) => (
-            <div
-              key={`${entryIndex}-${index}`}
-              className="whitespace-pre-line"
-            >
-              {entry.kind === 'prompt' && (
-                <span className="text-[var(--color-accent)]">
-                  {entry.text.length === 0
-                    ? 'grinnel@lab:~'
-                    : 'grinnel@lab:~$'}
-                  &nbsp;
-                </span>
-              )}
+      {/*
+        Hauteur fixée par une copie invisible de la session complète :
+        le terminal a d'emblée sa taille finale et ne défile jamais.
+      */}
+      <div className="relative p-4 sm:p-5" aria-hidden="true">
+        <div className="invisible space-y-1 leading-relaxed">
+          {TERMINAL_ENTRIES.map((entry, index) => (
+            <div key={index} className="whitespace-pre-wrap">
+              {entry.kind === 'prompt' ? <><Prompt />{entry.text}</> : entry.text}
+            </div>
+          ))}
+          <div><Prompt /></div>
+        </div>
 
-              <span
-                className={
-                  entry.kind === 'prompt'
-                    ? 'text-[var(--color-text-muted)]'
-                    : 'text-[var(--color-text-subtle)]'
-                }
-              >
-                {entry.text}
-              </span>
+        <div className="absolute inset-0 space-y-1 p-4 leading-relaxed sm:p-5">
+          {shown.map((entry, index) => (
+            <div key={index} className="whitespace-pre-wrap">
+              {entry.kind === 'prompt' ? (
+                <>
+                  <Prompt />
+                  <span>{entry.text}</span>
+                </>
+              ) : (
+                <span style={{ color: entry.hl ? 'var(--term-hl)' : 'var(--term-dim)' }}>{entry.text}</span>
+              )}
             </div>
           ))}
 
-          {currentEntry && (
-            <div className="whitespace-pre-line">
-              {currentEntry.kind === 'prompt' && (
-                <span className="text-[var(--color-accent)]">
-                  {currentEntry.text.length === 0
-                    ? 'grinnel@lab:~'
-                    : 'grinnel@lab:~$'}
-                  &nbsp;
-                </span>
-              )}
-
-              <span
-                className={
-                  currentEntry.kind === 'prompt'
-                    ? 'text-[var(--color-text-muted)]'
-                    : 'text-[var(--color-text-subtle)]'
-                }
-              >
-                {typedText}
-              </span>
-
-              <span
-                className="
-                  terminal-cursor
-                  ml-0.5
-                  inline-block
-                  h-3
-                  w-[6px]
-                  bg-[var(--color-accent)]
-                  align-middle
-                "
-                aria-hidden="true"
-              />
-            </div>
-          )}
+          <div className="whitespace-pre-wrap">
+            {(done || currentEntry?.kind === 'prompt') && <Prompt />}
+            {currentEntry?.kind === 'prompt' && <span>{typedText}</span>}
+            <span
+              className="terminal-cursor ml-0.5 inline-block h-3 w-[6px] align-middle"
+              style={{ background: 'var(--term-prompt)' }}
+            />
+          </div>
         </div>
       </div>
+      <div className="term-scanlines" aria-hidden="true" />
     </div>
   );
 };
@@ -192,7 +198,6 @@ interface CybersecuritySectionProps {
 export const CybersecuritySection: React.FC<
   CybersecuritySectionProps
 > = ({ language, cybersecurityData }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [openCtf, setOpenCtf] = useState<CtfEntry | null>(null);
 
   const ctfs = cybersecurityData.ctfs;
@@ -201,18 +206,15 @@ export const CybersecuritySection: React.FC<
   return (
     <section
       id="cybersecurity"
-      className="cybersecurity-section px-5 py-10"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className="section cybersecurity-section"
     >
-      <div className="mx-auto max-w-7xl px-0 sm:px-4 lg:px-6">
+      <div className="section-inner">
 
         {/* Section heading */}
-        <div className="mb-8 flex items-center gap-2">
-          <h2 className="text-lg font-bold tracking-tight text-[var(--color-text-main)] sm:text-xl">
-            {language === 'fr'
-              ? 'Cybersécurité'
-              : 'Cybersecurity'}
+        <div className="section-head">
+          <span className="section-eyebrow">04 <span aria-hidden="true">/</span> security</span>
+          <h2 className="section-title">
+            {language === 'fr' ? 'Cybersécurité' : 'Cybersecurity'}
           </h2>
         </div>
 
@@ -225,23 +227,22 @@ export const CybersecuritySection: React.FC<
           <div
             className="
               grid
-              items-start
+              items-center
               gap-8
               lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]
               lg:gap-12
             "
           >
             {/* Intro text */}
-            <div className="max-w-xl pt-1 lg:pt-2">
-              <p
-                className="
-                  max-w-lg
-                  text-sm
-                  leading-7
-                  text-[var(--color-text-muted)]
-                  sm:text-base
-                "
-              >
+            <div className="max-w-xl">
+              <p className="text-2xl font-extrabold leading-tight tracking-tight text-[var(--color-text-main)] sm:text-3xl">
+                {language === 'fr' ? (
+                  <>Comprendre comment un système est construit, <span className="text-[var(--color-accent)]">c’est voir où il peut céder.</span></>
+                ) : (
+                  <>Understanding how a system is built <span className="text-[var(--color-accent)]">shows you where it can break.</span></>
+                )}
+              </p>
+              <p className="mt-5 max-w-lg text-[15px] leading-[1.8] text-[var(--color-text-muted)] sm:text-base">
                 {language === 'fr'
                   ? "Je développe progressivement mes compétences en sécurité des systèmes et des réseaux à travers la pratique, l'expérimentation et l'analyse."
                   : 'I am progressively developing my skills in systems and network security through hands-on practice, experimentation, and analysis.'}
@@ -249,17 +250,37 @@ export const CybersecuritySection: React.FC<
             </div>
 
             {/* Compact terminal */}
-            <div className="w-full max-w-[420px] justify-self-end">
-              <SecLabTerminal
-                language={language}
-                isHovered={isHovered}
-              />
+            <div className="w-full lg:max-w-[420px] lg:justify-self-end">
+              <SecLabTerminal language={language} />
             </div>
           </div>
+
+          {/* Domaines de pratique : bande éditoriale en 4 colonnes */}
+          <ol className="card grid grid-cols-1 overflow-hidden sm:grid-cols-2 lg:grid-cols-4">
+            {SEC_FOCUS.map(({ k, title, desc, tools }, index) => (
+              <li
+                key={k}
+                className="group relative flex flex-col p-6 transition-colors hover:bg-[color-mix(in_srgb,var(--color-accent)_5%,transparent)] [&:not(:last-child)]:border-b [&:not(:last-child)]:border-[var(--color-border)] sm:[&:nth-child(odd)]:border-r lg:[&:not(:last-child)]:border-b-0 lg:[&:not(:last-child)]:border-r"
+              >
+                <span className="font-mono text-[12px] font-semibold text-[var(--color-accent)]">
+                  {String(index + 1).padStart(2, '0')}
+                  <span className="ml-2 inline-block h-px w-8 translate-y-[-3px] bg-[var(--color-accent)] opacity-40 transition-all group-hover:w-12 group-hover:opacity-100" aria-hidden="true" />
+                </span>
+                <h4 className="mt-4 text-[15px] font-bold text-[var(--color-text-main)]">{title[language]}</h4>
+                <p className="mt-1.5 text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">{desc[language]}</p>
+                <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
+                  {tools.map((tool) => (
+                    <span key={tool} className="tag tag-neutral">{tool}</span>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ol>
 
           {/* ==================================================
               CTFs
              ================================================== */}
+          {ctfs.length > 0 && (
           <div className="space-y-8">
             <div className="mb-2">
               {/*<h3 className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
@@ -267,240 +288,77 @@ export const CybersecuritySection: React.FC<
               </h3>*/}
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {ctfs.map((ctf) => (
                 <article
                   key={ctf.id}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setOpenCtf(ctf)}
-                  className="
-                    group
-                    flex h-full
-                    cursor-pointer
-                    flex-col
-                    justify-between
-                    gap-2
-                    rounded-2xl
-                    glass-card
-                    p-4
-                    transition-all
-                    hover:border-[var(--color-accent)]/40
-                    hover:shadow-md
-                    sm:p-5
-                  "
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      setOpenCtf(ctf);
+                    }
+                  }}
+                  className="card card-interactive group flex h-full flex-col p-3"
                 >
-                  <div className="flex flex-col gap-2">
-
-                    {/* CTF visual */}
-                    <div
-                      className="
-                        relative
-                        flex
-                        aspect-[16/9]
-                        w-full
-                        items-center
-                        justify-center
-                        overflow-hidden
-                        rounded-xl
-                        border
-                        border-[var(--color-border-muted)]/30
-                        bg-[var(--color-bg-panel)]
-                      "
-                    >                      <img
-                        src={ctf.imageUrl}
-                        alt={
-                          language === 'fr'
-                            ? 'Illustration du CTF'
-                            : 'Illustration of the CTF'
-                        }
-                        className="h-full w-full object-cover"
-                      />                      <span className="absolute left-3 top-3 rounded-md border border-white/20 bg-black/40 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-white backdrop-blur-md">
-                        {ctf.difficulty}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h4 className="text-base font-bold text-[var(--color-text-main)] transition-colors group-hover:text-[var(--color-accent)] sm:text-lg">
-                      {ctf.title[language]}
-                    </h4>
-
-                    {/* Description */}
-                    <p className="line-clamp-2 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
-                      {ctf.description[language]}
-                    </p>
+                  <div className="card-media">
+                    <img src={ctf.imageUrl} alt={ctf.title[language]} loading="lazy" />
+                    <span className="media-badge">{ctf.difficulty}</span>
                   </div>
-
-                  {/* Footer */}
-                  <div className="mt-1 flex items-center justify-between border-t border-[var(--color-border)] pt-3">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="flex items-center gap-1 truncate font-mono text-[10px] text-[var(--color-text-muted)]">
-                        <Calendar className="h-3 w-3 shrink-0 text-[var(--color-accent)]" />
-                        {ctf.date}
-                      </span>
-
-                      <span className="pl-4 text-[10px] font-medium text-[var(--color-text-faint)]">
-                        {ctf.platform}
+                  <div className="card-body flex flex-1 flex-col px-2 pb-1 pt-4">
+                    <h4 className="card-title">{ctf.title[language]}</h4>
+                    <p className="meta mt-1.5">{ctf.platform}</p>
+                    <p className="card-text mt-3 line-clamp-2">{ctf.description[language]}</p>
+                    <div className="card-footer mt-5">
+                      <span className="meta"><Calendar />{ctf.date}</span>
+                      <span className="btn-more">
+                        {language === 'fr' ? 'Détails' : 'Details'}
+                        <ArrowRight />
                       </span>
                     </div>
-
-                    <button
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setOpenCtf(ctf);
-                      }}
-                      className="
-                        ml-3
-                        inline-flex
-                        shrink-0
-                        items-center
-                        gap-1.5
-                        rounded-xl
-                        border
-                        border-[var(--color-accent)]/25
-                        bg-[var(--color-bg-accent)]/50
-                        px-3
-                        py-1
-                        text-xs
-                        font-semibold
-                        text-[var(--color-accent)]
-                        transition-all
-                        hover:bg-[var(--color-accent)]
-                        hover:text-white
-                      "
-                    >
-                      <span>
-                        {language === 'fr'
-                          ? 'Détails'
-                          : 'Details'}
-                      </span>
-
-                      <ExternalLink className="h-3 w-3" />
-                    </button>
                   </div>
                 </article>
               ))}
             </div>
           </div>
+          )}
         </div>
 
         {/* ==================================================
               PRACTICE PLATFORMS & PROFILES
              ================================================== */}
           {platforms.length > 0 && (
-            <div className="space-y-4">
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
-                    {language === 'fr'
-                      ? 'Plateformes'
-                      : 'Hands-on Platforms'}
-                  </h3>
-                  <p className="mt-1 text-xs text-[var(--color-text-muted)] sm:text-sm">
-                    {language === 'fr'
-                      ? 'Retrouvez mes environnements de pratique, scores et challenges en direct sur les plateformes dédiées.'
-                      : 'Explore my verified public profiles, challenge scores, and live practice environments directly.'}
-                  </p>
-                </div>
-              </div>
+            <div className="mt-16">
+              <h3 className="subsection-title">{language === 'fr' ? 'Plateformes de pratique' : 'Practice platforms'}</h3>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                 {platforms.map((platform) => {
-                  const simpleIcon = platform.iconSlug
-                    ? getSimpleIcon(platform.iconSlug)
-                    : undefined;
-
+                  const color = platform.brandColor || 'var(--color-accent)';
                   return (
                     <a
                       key={platform.id}
                       href={platform.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="
-                        group relative flex flex-col justify-between
-                        rounded-2xl border border-[var(--color-border)]
-                        bg-[var(--color-bg-soft)]/60 p-5
-                        backdrop-blur-sm transition-all duration-300
-                        hover:-translate-y-1 hover:border-[var(--color-accent)]/50
-                        hover:bg-[var(--color-bg-panel)]
-                        hover:shadow-md
-                      "
+                      className="card card-interactive card-body group relative flex flex-col overflow-hidden p-6"
                     >
-                      {/* Top border glow on hover */}
-                      <div
-                        className="pointer-events-none absolute inset-x-0 top-0 h-[2px] rounded-t-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        style={{
-                          background: `linear-gradient(90deg, transparent, ${
-                            platform.brandColor || 'var(--color-accent)'
-                          }, transparent)`,
-                        }}
-                      />
-
-                      <div className="flex flex-col gap-3">
-                        {/* Header: Icon + Badge */}
-                        <div className="flex items-center justify-between gap-3">
-                          <div
-                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-surface)] transition-transform duration-300 group-hover:scale-105"
-                            
-                          >
-                            {simpleIcon ? (
-                              <svg
-                                role="img"
-                                viewBox="0 0 24 24"
-                                className="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
-                                fill="currentColor"
-                                style={{
-                                  color:
-                                    platform.brandColor || `#${simpleIcon.hex}`,
-                                }}
-                              >
-                                <path d={simpleIcon.path} />
-                              </svg>
-                            ) : (
-                              <ShieldCheck
-                                className="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
-                                style={{
-                                  color:
-                                    platform.brandColor ||
-                                    'var(--color-accent)',
-                                }}
-                              />
-                            )}
-                          </div>
-
-                          
-                        </div>
-
-                        {/* Title & username */}
-                        <div>
-                          <h4 className="text-base font-bold text-[var(--color-text-main)] transition-colors group-hover:text-[var(--color-accent)]">
-                            {platform.name}
-                          </h4>
-                          <div className="mt-0.5 flex items-center gap-1.5 font-mono text-xs text-[var(--color-text-muted)]">
-                            <span className="select-none text-[var(--color-accent)] font-semibold">
-                              @
-                            </span>
-                            <span className="truncate transition-colors group-hover:text-[var(--color-text-main)]">
-                              {platform.username}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Description */}
-                        {platform.description && (
-                          <p className="line-clamp-2 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
-                            {platform.description[language]}
-                          </p>
-                        )}
+                      <span className="card-watermark-strip" style={{ background: color }} aria-hidden="true" />
+                      <BrandMark slug={platform.iconSlug} color={color} className="card-watermark" />
+                      <div className="relative">
+                        <h4 className="card-title">{platform.name}</h4>
+                        <p className="meta mt-1"><span className="meta-accent">@</span>{platform.username}</p>
                       </div>
-
-                      {/* Footer CTA */}
-                      <div className="mt-4 flex items-center justify-between border-t border-[var(--color-border)] pt-3 text-xs font-semibold text-[var(--color-text-muted)] transition-colors group-hover:text-[var(--color-accent)]">
-                        <span>
-                          {language === 'fr'
-                            ? 'Consulter le profil'
-                            : 'View profile'}
+                      {platform.description && (
+                        <p className="card-text relative mt-4 line-clamp-3 pr-6">{platform.description[language]}</p>
+                      )}
+                      <div className="card-footer relative mt-5">
+                        <span className="meta">{platform.badge?.[language] ?? ''}</span>
+                        <span className="btn-more">
+                          {language === 'fr' ? 'Profil' : 'Profile'}
+                          <ArrowUpRight />
                         </span>
-                        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                       </div>
                     </a>
                   );

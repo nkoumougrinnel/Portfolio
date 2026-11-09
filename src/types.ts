@@ -59,7 +59,8 @@ export interface Project {
   gallery?: string[];
   videos?: string[];
   links?: ProjectLink[];
-  demoAssets?: boolean;
+  /** Cadre d'affichage de l'image (navigateur par défaut). */
+  mockup?: 'browser' | 'window' | 'phone' | 'photo';
   draftDetails?: boolean;
   link?: string;
   github?: string;
@@ -161,6 +162,8 @@ export interface CertificationItem {
     en: string;
   };
   momentPhotos?: Array<string | CertificationMomentPhoto>;
+  /** Lien public de vérification (Coursera, Credly…). */
+  verifyUrl?: string;
 }
 
 export type ActivityCategory = 'competition' | 'leadership' | 'learning' | 'community';

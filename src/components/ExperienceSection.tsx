@@ -1,59 +1,50 @@
 import React from 'react';
-import { Building2, MapPin, Calendar } from 'lucide-react';
+import { Calendar, MapPin } from 'lucide-react';
 import { Language } from '../types';
 import { EXPERIENCE_DATA } from '../data/portfolioData';
+import { localizePeriod } from '../data/site';
 
 interface ExperienceSectionProps {
   language: Language;
 }
 
-export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }) => {
-  return (
-    <section id="experience" className="px-5 py-10">
-      <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
-        <div className="flex items-center gap-2 mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-[var(--color-text-main)] tracking-tight">
-            {language === 'fr' ? 'Expérience Professionnelle' : 'Experience'}
-          </h2>
-        </div>
-
-        {/* Timeline format matching layout */}
-        <div className="relative pl-5 sm:pl-6 border-l-2 border-[var(--color-accent)]/40 space-y-8">
-          {EXPERIENCE_DATA.map((exp, idx) => (
-            <div key={idx} className="relative flex flex-col gap-2 group glass-card p-4 sm:p-5 rounded-2xl">
-              {/* Timeline marker node */}
-              <div className="absolute -left-[28px] sm:-left-[32px] top-5 sm:top-6 w-3.5 h-3.5 rounded-full bg-[var(--color-bg-main)] border-2 border-[var(--color-accent)] shadow-xs group-hover:scale-125 transition-transform"></div>
-
-              {/* Company & Date */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                <span className="text-sm text-[var(--color-accent)] font-bold flex items-center gap-1.5">
-                  {exp.company}
-                </span>
-                <span className="text-[var(--color-text-muted)] text-[11px] flex items-center gap-1 bg-[var(--color-bg-soft)] px-2.5 py-0.5 rounded-full border border-[var(--color-border-muted)]/30 w-fit">
-                  <Calendar className="w-3 h-3 text-[var(--color-accent)]" />
-                  {exp.period}
-                </span>
-              </div>
-
-              {/* Role */}
-              <div className="text-sm sm:text-base font-bold text-[var(--color-text-main)]">
-                {exp.role[language]}
-              </div>
-
-              {/* Department & Location */}
-              <div className="text-[11px] text-[var(--color-text-muted)] flex items-center gap-1 leading-snug">
-                <MapPin className="w-3 h-3 text-[var(--color-accent)] shrink-0" />
-                <span>{exp.department[language]}</span>
-              </div>
-
-              {/* Description */}
-              <p className="text-[12.5px] sm:text-[13px] leading-relaxed text-[var(--color-text-muted)] mt-1 text-justify">
-                {exp.description[language]}
-              </p>
-            </div>
-          ))}
-        </div>
+export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ language }) => (
+  <section id="experience" className="section">
+    <div className="section-inner">
+      <div className="section-head">
+        <span className="section-eyebrow">02 <span aria-hidden="true">/</span> experience</span>
+        <h2 className="section-title">{language === 'fr' ? 'Expérience' : 'Experience'}</h2>
       </div>
-    </section>
-  );
-};
+
+      <ol className="relative space-y-6 border-l border-[var(--color-border)] pl-6 sm:pl-8">
+        {EXPERIENCE_DATA.map((exp) => (
+          <li key={exp.company + exp.period} className="relative">
+            <span
+              aria-hidden="true"
+              className="absolute -left-[31px] top-7 h-3 w-3 rounded-full border-2 border-[var(--color-accent)] bg-[var(--color-bg-main)] ring-4 ring-[var(--color-bg-main)] sm:-left-[39px]"
+            />
+            <article className="card p-6 sm:p-7">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-[var(--color-accent)]">{exp.company}</p>
+                  <h3 className="mt-1 text-lg font-bold tracking-tight text-[var(--color-text-main)] sm:text-xl">
+                    {exp.role[language]}
+                  </h3>
+                </div>
+                <span className="meta shrink-0 sm:pt-1">
+                  <Calendar />
+                  {localizePeriod(exp.period, language)}
+                </span>
+              </div>
+              <p className="mt-3 flex items-start gap-1.5 text-[13px] leading-snug text-[var(--color-text-subtle)]">
+                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-accent)]" />
+                <span>{exp.department[language]}</span>
+              </p>
+              <p className="card-text mt-4 max-w-4xl">{exp.description[language]}</p>
+            </article>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+);
